@@ -47,14 +47,17 @@
         <form action="/getdeal" method="get" accept-charset="utf-8">
           <table>
               <tr>
-                  <td><input type="radio" id="123do" name="123do" value="http://123do.vn/"/>http://123do.vn/</td>
+                  <td><input type="radio" id="123do" name="123do" value=""/>http://123do.vn/</td>
               </tr>
               <tr>
-                  <td><input type="radio" id="hotdeal" name="hotdeal" value="http://www.hotdeal.vn"/>http://www.hotdeal.vn</td>
+                  <td><input type="radio" id="hotdeal" name="hotdeal" value=""/>http://www.hotdeal.vn</td>
               </tr>
-            <tr>
-              <td align="right"><input type="submit" value="Lọc thông tin" /></td>
-            </tr>
+              <tr>
+                  <td><label for="link">URL: </label><input type="text" id="link" name="link" /></td>
+              </tr>
+              <tr>
+                <td align="right"><input type="submit" value="Lọc thông tin" /></td>
+              </tr>
           </table>
         </form>
     </div>

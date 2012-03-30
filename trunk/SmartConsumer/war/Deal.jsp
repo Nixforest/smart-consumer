@@ -46,7 +46,7 @@
     </div>
     <div style="clear: both;"></div>
     Number of Deals: <%=deals.size() %>
-    
+    <a href="/GetDeal.jsp">Cập nhật</a>
     <table>
         <tr>
             <th>Tiêu đề</th>

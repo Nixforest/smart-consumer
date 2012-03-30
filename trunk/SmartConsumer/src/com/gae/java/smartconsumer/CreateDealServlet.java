@@ -26,11 +26,16 @@ public class CreateDealServlet extends HttpServlet {
         //Timer remainTime = String..valueOf(req.getParameter("remainTime"));
         boolean isVoucher = Boolean.parseBoolean(req.getParameter("isVoucher"));
         
-        Dao.INSTANCE.insert(title, description, address, link,
-                imageLink, price, basicPrice, unitPrice, save,
-                numberBuyer,
-                //remainTime, 
-                true);
+        try {
+            Dao.INSTANCE.insert(title, description, address, link,
+                    imageLink, price, basicPrice, unitPrice, save,
+                    numberBuyer,
+                    //remainTime, 
+                    true);
+        } catch (Exception ex) {
+            // TODO Auto-generated catch block
+            ex.printStackTrace();
+        }
         
         resp.sendRedirect("/Deal.jsp");
     }

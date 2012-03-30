@@ -32,7 +32,7 @@ public enum Dao {
                         float save,
                         int numberBuyer,
                         //Timer remainTime,
-                        boolean isVoucher) {
+                        boolean isVoucher) throws Exception {
         synchronized (this) {
             EntityManager em = EMFService.get().createEntityManager();
             Deal deal = new Deal(title, description, address, link,
@@ -40,7 +40,9 @@ public enum Dao {
                     numberBuyer,
                     //remainTime, 
                     isVoucher);
-            em.persist(deal);
+            if (!isExist(deal)) {   //
+                em.persist(deal);
+            }
             em.close();
         }
     }
@@ -54,5 +56,14 @@ public enum Dao {
             // TODO: handle exception
             em.close();
         }
+    }
+    
+    public boolean isExist(Deal deal) {
+        for (Deal item : this.listDeals()) {
+            if (deal.getTitle().equals(item.getTitle())) {
+                return true;
+            }
+        }
+        return false;        
     }
 }
