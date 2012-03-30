@@ -1,6 +1,13 @@
 package com.gae.java.smartconsumer.util;
 
 import java.io.IOException;
+import java.util.ArrayList;
+
+import java.util.List;
+
+import com.gae.java.smartconsumer.dao.Dao;
+import com.gae.java.smartconsumer.model.Deal;
+
 import org.w3c.dom.*;
 
 /**
@@ -17,7 +24,8 @@ public class GetDealFunction {
      * @param location
      * @return
      */
-    private static String getTagValue(String sTag, Element eElement, int location) {
+    private static String VOUCHER = "(Giao Voucher)"; 
+    public static String getTagValue(String sTag, Element eElement, int location) {
         NodeList nlList = eElement.getElementsByTagName(sTag).item(0).getChildNodes();
         Node nValue = (Node)nlList.item(location);
         return nValue.getNodeValue();
@@ -26,15 +34,26 @@ public class GetDealFunction {
     /**
      * Get deal information from http://www.hotdeal.vn
      * [Give the description for method].
-     * @param link
+     * @param url
      * @return
      */
-    private String getFromHotDealVn(String link){
+    public static String getFromHotDealVn(String url){
         String content = "";
+        String title = "";
+        String description = "";
+        String address = "";
+        String link = "";
+        String imageLink = "";
+        double price = 0;
+        double basicPrice = 0;
+        String unitPrice = "";
+        float save = 0;
+        int numberBuyer = 0;
+        boolean isVoucher = true;
         try{
             UtilHtmlToXML util = new UtilHtmlToXML();
             // Lấy toàn bộ nội dung HTML và chuyển sang XML
-            String html = util.HtmlToXML(link);
+            String html = util.HtmlToXML(url);
             
             UtilReadXML reader = new UtilReadXML();
             Document document = reader.ReadContentXML(html);
@@ -59,17 +78,20 @@ public class GetDealFunction {
                                 // Lấy tiêu đề
                                 Element element = (Element) nList.item(i + 1);                                
                                 content = content + "Tiêu đề: " + getTagValue("a", element, 0).trim() + "\n";
+                                title = getTagValue("a", element, 0).trim();
                                 
                                 // Lấy phương thức
                                 element = (Element)nList.item(i+2);
                                 content = content + "Phương thức: " + element.getTextContent().trim() + "\n";
+                                isVoucher = VOUCHER.equals(element.getTextContent().trim());
                                 
                                 // Lấy Link
                                 element = (Element)nList.item(i + 3);
                                 NamedNodeMap attx = element.getElementsByTagName("a").item(0).getAttributes();
                                 for (int k = 0; k < attx.getLength(); k++) {
                                     if ("href".equals(attx.item(k).getNodeName())) {                                        
-                                        content = content + "Link gốc: " + link + attx.item(k).getTextContent().trim() + "\n";
+                                        content = content + "Link gốc: " + url + attx.item(k).getTextContent().trim() + "\n";
+                                        link = url + attx.item(k).getTextContent().trim();
                                     }
                                 }
                                 
@@ -83,6 +105,7 @@ public class GetDealFunction {
                                 for (int k = 0; k < attx.getLength(); k++) {
                                     if ("src".equals(attx.item(k).getNodeName())) {                                        
                                         content = content + "Link ảnh: " + attx.item(k).getTextContent().trim() + "\n";
+                                        imageLink = attx.item(k).getTextContent().trim();
                                     }
                                 }
                                 // Lấy mô tả
@@ -91,30 +114,45 @@ public class GetDealFunction {
                                 for (int k = 0; k < attx.getLength(); k++) {
                                     if ("title".equals(attx.item(k).getNodeName())) {                                        
                                         content = content + "Mô tả: " + attx.item(k).getTextContent().trim() + "\n";
+                                        description = attx.item(k).getTextContent().trim();
                                         break;
                                     }
                                 }
                                 // Lấy giá                                
                                 element = (Element)nList.item(i + 7);
                                 content = content + "Giá : " + nList.item(i + 7).getTextContent().trim() + "\n";
+                                String priceString = nList.item(i + 7).getTextContent().trim();
+                                price = getPriceFromString(priceString);
+                                
+                                // Đơn vị
+                                unitPrice = priceString.substring(priceString.length() - 3);
                                 
                                 // Lấy giá gốc                         
                                 element = (Element)nList.item(i + 8);
                                 content = content + "Giá gốc: " + getTagValue("em", element, 0).trim() + "\n";
+                                basicPrice = getPriceFromString(getTagValue("em", element, 0).trim());
                                 
                                 // Lấy Tiết kiệm
                                 element = (Element)nList.item(i + 12);
                                 content = content + nList.item(i + 12).getTextContent().trim() + "\n";
+                                String saveString = nList.item(i + 12).getTextContent().trim();
+                                save = Float.parseFloat(saveString.substring(9, saveString.length() - 1));
                                 
                                 // Lấy Số người mua
                                 element = (Element)nList.item(i + 13);
                                 content = content + nList.item(i + 13).getTextContent().trim() + "\n";
+                                numberBuyer = Integer.parseInt(nList.item(i + 13).getTextContent().trim().substring(15).trim());
                                 
                                 // Lấy Thời gian còn lại
                                 element = (Element)nList.item(i + 16);
                                 content = content + "Thời gian còn lại: " + nList.item(i + 16).getTextContent().trim() + "\n";
+                                
                                 // Kết thúc một item
                                 content = content + "______________\n";
+                                Dao.INSTANCE.insert(title, description,
+                                        address, link, imageLink, price,
+                                        basicPrice, unitPrice, save, 
+                                        numberBuyer, isVoucher);
                             }
                         }
                     }
@@ -129,22 +167,34 @@ public class GetDealFunction {
     /**
      * Get deal information from http://123do.vn
      * [Give the description for method].
-     * @param link
+     * @param url
      * @return
      */
-    private String getFrom123doVn(String link){
+    public static String getFrom123doVn(String url){
         String content = "";
+        String title = "";
+        String description = "";
+        String address = "";
+        String link = "";
+        String imageLink = "";
+        double price = 0;
+        double basicPrice = 0;
+        String unitPrice = "";
+        float save = 0;
+        int numberBuyer = 0;
+        boolean isVoucher = true;
+        //Deal deal;
         try{
             UtilHtmlToXML util = new UtilHtmlToXML();
             // Lấy toàn bộ nội dung HTML và chuyển sang XML
-            String html = util.HtmlToXML(link);
+            String html = util.HtmlToXML(url);
             
             UtilReadXML reader = new UtilReadXML();
             Document document = reader.ReadContentXML(html);
             
             // Duyệt danh sách tất cả các thẻ div
             NodeList divList = document.getElementsByTagName("div");
-            content = content + link + "\n";
+            content = content + url + "\n";
             int item = 0;
             for (int i = 0; i < divList.getLength(); i++) {
                 // Kiểm tra nếu thẻ div không rỗng
@@ -165,6 +215,7 @@ public class GetDealFunction {
                                     for (int k = 0; k < divContentList.getLength(); k++) {
                                         if ("src".equals(divContentList.item(k).getNodeName())) {
                                             content = content + "Link ảnh: " + divContentList.item(k).getTextContent().trim() + "\n";
+                                            imageLink = divContentList.item(k).getTextContent().trim();
                                         }
                                     }
 
@@ -181,12 +232,14 @@ public class GetDealFunction {
                                                     if ("titlemaildealteamnext".equals(divContentList.item(l).getTextContent())
                                                             || "titlemaildealteamcurrent".equals(divContentList.item(l).getTextContent())) {
                                                         content = content + "Tiêu đề: " + divContentListX.item(k).getTextContent().trim() + "\n";
+                                                        title = divContentListX.item(k).getTextContent().trim();
                                                     }
                                                     
                                                     // Mô tả
                                                     if ("systemreviewdealnext".equals(divContentList.item(l).getTextContent())
                                                             || "systemreviewdealcurrent".equals(divContentList.item(l).getTextContent())) {
                                                         content = content + "Mô tả: " + divContentListX.item(k).getTextContent().trim() + "\n";
+                                                        description = divContentListX.item(k).getTextContent().trim();
                                                     }
                                                     
                                                     // Link gốc
@@ -197,6 +250,7 @@ public class GetDealFunction {
                                                         for (int m = 0; m < attxy.getLength(); m++) {
                                                             if ("href".equals(attxy.item(m).getNodeName())) {
                                                                 content = content + "Link gốc: " + "http://123do.vn" + attxy.item(m).getTextContent().trim() + "\n";
+                                                                link = "http://123do.vn" + attxy.item(m).getTextContent().trim();
                                                             }
                                                         }
                                                     }
@@ -204,14 +258,21 @@ public class GetDealFunction {
                                                     // Giá
                                                     if ("pricemaindealteamnext".equals(divContentList.item(l).getTextContent())
                                                             || "pricemaindealteamcurrent".equals(divContentList.item(l).getTextContent())) {
-                                                        content = content + "Giá: " + divContentListX.item(k).getTextContent().trim() + "\n";  
+                                                        content = content + "Giá: " + divContentListX.item(k).getTextContent().trim() + "\n";
+                                                        String priceString = divContentListX.item(k).getTextContent().trim();
+                                                        price = getPriceFromString(priceString);
+                                                        // Đơn vị
+                                                        unitPrice = priceString.substring(priceString.length() - 3);
                                                     }
+                                                    
                                                     
                                                     // Tiết kiệm
                                                     if ("dismaindealteamnext".equals(divContentList.item(l).getTextContent())
                                                             || "dismaindealteamcurrent".equals(divContentList.item(l).getTextContent())) {
                                                         element = (Element) divContentListX.item(k + 1);
                                                         content = content + "Tiết kiệm: " + getTagValue("span", element, 0).trim() + "\n";
+                                                        String saveString = getTagValue("span", element, 0).trim();
+                                                        save = Float.parseFloat(saveString.substring(0, saveString.length() - 1));
                                                     }
                                                     
                                                     // Số người mua
@@ -219,6 +280,7 @@ public class GetDealFunction {
                                                             || "buyermaindealteamnext".equals(divContentList.item(l).getTextContent())) {
                                                         element = (Element) divContentListX.item(k + 1);
                                                         content = content + "Số người mua: " + getTagValue("span", element, 0).trim() + "\n";
+                                                        numberBuyer = Integer.parseInt(getTagValue("span", element, 0).trim());
                                                     }
                                                     
                                                     // Thời gian còn lại
@@ -232,6 +294,7 @@ public class GetDealFunction {
                                                     // Giá gốc
                                                     if ("text-decoration:line-through".equals(divContentList.item(l).getTextContent())) {
                                                         content = content + "Giá gốc: " + divContentListX.item(k).getTextContent().trim() + "\n";
+                                                        basicPrice = getPriceFromString(divContentListX.item(k).getTextContent().trim());
                                                     }
                                                 }
                                             }
@@ -240,6 +303,19 @@ public class GetDealFunction {
                                     
                                     // Kết thúc một item
                                     content = content + "______________\n";
+                                    /*deal = new Deal(title, 
+                                            description, 
+                                            address, link, 
+                                            imageLink, price,
+                                            basicPrice, unitPrice,
+                                            save, numberBuyer,
+                                            isVoucher);*/
+                                    Dao.INSTANCE.insert(title, 
+                                            description, address, 
+                                            link, imageLink, 
+                                            price, basicPrice,
+                                            unitPrice, save,
+                                            numberBuyer, isVoucher);
                                 }
                                 item++;                                
                             }
@@ -252,4 +328,18 @@ public class GetDealFunction {
         }
         return content;
     }
+    
+    public static double getPriceFromString(String price) {
+        double result = 0;
+        try {
+        price = price.substring(0, price.length() - 3);
+        price = price.replace(",", "");
+        price = price.replace(".", "");
+        result = Double.parseDouble(price.trim());
+        } catch (Exception e) {
+            System.out.println(e.toString());
+        }
+        return result;
+    }
+    
 }
