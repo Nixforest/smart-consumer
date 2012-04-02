@@ -24,6 +24,60 @@ public class GetDealFunction {
         return nValue.getNodeValue();
     }
     
+    public static String getAddressFrom123doVn(String url) {
+        String result = "";
+        try {
+            UtilHtmlToXML util = new UtilHtmlToXML();
+            // Lấy toàn bộ nội dung HTML và chuyển sang XML
+            String html = util.HtmlToXML(url);
+            
+            UtilReadXML reader = new UtilReadXML();
+            Document document = reader.ReadContentXML(html);
+            
+            // Duyệt danh sách thẻ div
+            NodeList divList = document.getElementsByTagName("div");
+            for (int i = 0; i < divList.getLength(); i++) {
+                // Kiểm tra nếu thẻ div không rỗng
+                if (divList.item(i).hasAttributes()) {
+                    // Lấy các thuộc tính của thẻ div hiện thời
+                    NamedNodeMap divContent = divList.item(i).getAttributes();
+                    
+                    // Duyệt qua các thuộc tính
+                    for (int j = 0; j < divContent.getLength(); j++) {
+                        if ("style".equals(divContent.item(j).getNodeName())) {
+                            if ("margin: 25px 15px 6px 15px;overflow:hidden; width:179px".equals(divContent.item(j).getTextContent())) {
+                                Element element = (Element)divList.item(i);
+                                result += getTagValue("p", element, 0);
+                                
+                            }
+                        }
+                        /*if ("style".equals(divContent.item(j).getNodeName())) {
+                            if ("margin: 25px 15px 6px 15px;overflow:hidden; width:179px".equals(divContent.item(j).getTextContent())) {
+                                Element element = (Element) divList.item(i);
+                                NodeList divContentList = element.getElementsByTagName("div");
+                                for (int k = 0; k < divContentList.getLength(); k++) {
+                                    NamedNodeMap divChildContent = divContentList.item(k).getAttributes();
+                                    for (int l = 0; l < divChildContent.getLength(); l++) {
+                                        if ("class".equals(divChildContent.item(l).getNodeName())
+                                                && "normal compact".equals(divChildContent.item(l).getTextContent())) {
+                                            result += divContentList.item(k).getTextContent();
+                                        }
+                                    }
+                                    
+                                }
+                                //result += divContentList.getTextContent();
+                                
+                            }
+                        }*/
+                    }
+                }
+            }
+        } catch(Exception ex) {
+            System.out.println(ex.toString());
+        }
+        return result;
+    }
+    
     public static String getAddressFromHotDealVn(String url) {
         String result = "";
         try {
@@ -140,11 +194,11 @@ public class GetDealFunction {
                                     if ("href".equals(attx.item(k).getNodeName())) {                                        
                                         content = content + "Link gốc: " + "http://www.hotdeal.vn" + attx.item(k).getTextContent().trim() + "\n";
                                         link = "http://www.hotdeal.vn" + attx.item(k).getTextContent().trim();
+                                        // Lấy địa chỉ
+                                        address = getAddressFromHotDealVn(link);
                                     }
                                 }
                                 
-                                // Lấy địa chỉ
-                                address = getAddressFromHotDealVn(link);
                                 
                                 // Lấy ảnh
                                 attx = element.getElementsByTagName("img").item(0).getAttributes();
@@ -304,9 +358,12 @@ public class GetDealFunction {
                                                             if ("href".equals(attxy.item(m).getNodeName())) {
                                                                 content = content + "Link gốc: " + "http://123do.vn" + attxy.item(m).getTextContent().trim() + "\n";
                                                                 link = "http://123do.vn" + attxy.item(m).getTextContent().trim();
+                                                                // Lấy địa chỉ
+                                                                address = getAddressFrom123doVn(link);
                                                             }
                                                         }
                                                     }
+                                                    
                                                     
                                                     // Giá
                                                     if ("pricemaindealteamnext".equals(divContentList.item(l).getTextContent())
