@@ -8,15 +8,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.gae.java.smartconsumer.dao.DealDAO;
 
-public class RemoveDealServlet extends HttpServlet {
-
-    /**  . */
-    private static final long serialVersionUID = 1L;
-    
+public class RemoveAllDealServlet extends HttpServlet {
     public void doGet(HttpServletRequest req, HttpServletResponse resp)
         throws IOException {
-        String id = req.getParameter("id");
-        DealDAO.INSTANCE.remove(Long.parseLong(id));
+        DealDAO.INSTANCE.removeAll();
         resp.sendRedirect("/Deal.jsp");
     }
 }

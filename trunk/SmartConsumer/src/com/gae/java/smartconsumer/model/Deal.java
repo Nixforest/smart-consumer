@@ -1,11 +1,16 @@
 package com.gae.java.smartconsumer.model;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Timer;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+
+import com.gae.java.smartconsumer.util.GeneralUtil;
 
 /**
  * Model class which will store the Deal Items
@@ -29,15 +34,16 @@ public class Deal {
     private String unitPrice;
     private float save;
     private int numberBuyer;
-    //private Timer remainTime;
+    private String remainTime;
     private boolean isVoucher;
+    private java.util.Date updateDate;
     
     // Constructor
     public Deal(String title, String description, String address,
             String link, String imageLink, double price,
             double basicPrice, String unitPrice, float save,
             int numberBuyer, 
-            //Timer remainTime, 
+            String remainTime, 
             boolean isVoucher) {
         this.title = title;
         this.description = description;
@@ -49,8 +55,9 @@ public class Deal {
         this.unitPrice = unitPrice;
         this.save = save;
         this.numberBuyer = numberBuyer;
-        //this.remainTime = remainTime;
-        this.isVoucher = isVoucher;        
+        this.remainTime = remainTime;
+        this.isVoucher = isVoucher;
+        this.updateDate = java.util.Calendar.getInstance().getTime();
     }
     
     /**
@@ -217,17 +224,17 @@ public class Deal {
      * Get value of remainTime.
      * @return the remainTime
      */
-    /*public Timer getRemainTime() {
+    public String getRemainTime() {
         return remainTime;
-    }*/
+    }
 
     /**
      * Set the value for remainTime.
      * @param remainTime the remainTime to set
      */
-    /*public void setRemainTime(Timer remainTime) {
+    public void setRemainTime(String remainTime) {
         this.remainTime = remainTime;
-    }*/
+    }
 
     /**
      * Get value of isVoucher.
@@ -247,5 +254,13 @@ public class Deal {
 
     public Long getId() {
         return id;
+    }
+
+    public java.util.Date getUpdateDate() {
+        return updateDate;
+    }
+
+    public void setUpdateDate(java.util.Date updateDate) {
+        this.updateDate = updateDate;
     }
 }

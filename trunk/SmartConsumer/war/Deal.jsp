@@ -3,10 +3,11 @@
 <%@page import="com.google.appengine.api.users.UserService"%>
 <%@page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8" %>
 
-<%@  page import="com.gae.java.smartconsumer.dao.Dao" %>
+<%@  page import="com.gae.java.smartconsumer.dao.DealDAO" %>
 <%@  page import="com.gae.java.smartconsumer.model.Deal" %>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
+<%@page import="com.gae.java.smartconsumer.util.GeneralUtil" %>
 
 <html>
 <head>
@@ -17,8 +18,9 @@
         href="css/main.css"/>
 </head>
 <body>
+    <%=GeneralUtil.now("yyyy-MM-dd hh:mm:ss")%>
     <%
-        Dao dao = Dao.INSTANCE;
+        DealDAO dao = DealDAO.INSTANCE;
         UserService userService = UserServiceFactory.getUserService();
         User user = userService.getCurrentUser();
     
@@ -27,10 +29,10 @@
         List<Deal> deals = new ArrayList<Deal>();
         
         if (user != null) {
-            url = userService.createLogoutURL(request.getRequestURI());
-            urlLinktext = "Logout";
+          url = userService.createLogoutURL(request.getRequestURI());
+          urlLinktext = "Logout";
         }
-        deals = dao.listDeals();
+        deals = dao.listDealsSortByUpdateDate();
     %>
     <div style="width: 100%;">
       <div class="line"></div>
@@ -46,9 +48,11 @@
     </div>
     <div style="clear: both;"></div>
     Number of Deals: <%=deals.size() %>
-    <a href="/GetDeal.jsp">Cập nhật</a>
+    [<a href="/GetDeal.jsp">Cập nhật</a>]
+    [<a href="/removeall">Xóa tất cả</a>]
     <table>
         <tr>
+            <th>Id</th>
             <th>Tiêu đề</th>
             <th>Mô tả</th>
             <th>Địa chỉ</th>
@@ -58,13 +62,16 @@
             <th>Giá gốc</th>
             <th>Tiết kiệm</th>
             <th>Người mua</th>
-            <th>IsVoucher</th>
+            <th>Thời gian</th>
+            <!-- <th>IsVoucher</th> -->
+            <th>Cập nhật</th>
             <th>Remove</th>
         </tr>
         <%
             for (Deal deal : deals) {
         %>
         <tr>
+            <td><%=deal.getId() %></td>
             <td><%=deal.getTitle() %></td>
             <td><%=deal.getDescription() %></td>
             <td><%=deal.getAddress() %></td>
@@ -74,7 +81,9 @@
             <td><%=deal.getBasicPrice() + " " + deal.getUnitPrice() %></td>
             <td><%=deal.getSave() + "%" %></td>
             <td><%=deal.getNumberBuyer() %></td>
-            <td><%=deal.isVoucher() %></td>
+            <td><%=deal.getRemainTime() %></td>
+            <%-- <td><%=deal.isVoucher() %></td> --%>
+            <td width="30px"><%=deal.getUpdateDate()%></td>
       <td><a class="done" href="/remove?id=<%=deal.getId() %>">Remove</a></td>
         </tr>
         <%
@@ -127,6 +136,10 @@
                 <tr>
                     <td><label for="numberBuyer">Người mua</label></td>
                     <td><input type="number" name="numberBuyer" id="numberBuyer" size="65"/></td>
+                </tr>
+                <tr>
+                    <td><label for="remainTime">Thời gian còn lại</label></td>
+                    <td><input type="text" name="remainTime" id="remainTime" size="65"/></td>
                 </tr>
                 <tr>
                     <td><label for="isVoucher">Phương thức</label></td>

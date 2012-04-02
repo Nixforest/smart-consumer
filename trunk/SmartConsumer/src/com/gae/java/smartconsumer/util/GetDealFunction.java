@@ -1,13 +1,6 @@
 package com.gae.java.smartconsumer.util;
 
-import java.io.IOException;
-import java.util.ArrayList;
-
-import java.util.List;
-
-import com.gae.java.smartconsumer.dao.Dao;
-import com.gae.java.smartconsumer.model.Deal;
-
+import com.gae.java.smartconsumer.dao.DealDAO;
 import org.w3c.dom.*;
 
 /**
@@ -31,6 +24,60 @@ public class GetDealFunction {
         return nValue.getNodeValue();
     }
     
+    public static String getAddressFromHotDealVn(String url) {
+        String result = "";
+        try {
+            UtilHtmlToXML util = new UtilHtmlToXML();
+            // Lấy toàn bộ nội dung HTML và chuyển sang XML
+            String html = util.HtmlToXML(url);
+            
+            UtilReadXML reader = new UtilReadXML();
+            Document document = reader.ReadContentXML(html);
+            
+            // Duyệt danh sách thẻ div
+            NodeList divList = document.getElementsByTagName("div");
+            for (int i = 0; i < divList.getLength(); i++) {
+                // Kiểm tra nếu thẻ div không rỗng
+                if (divList.item(i).hasAttributes()) {
+                    // Lấy các thuộc tính của thẻ div hiện thời
+                    NamedNodeMap divContent = divList.item(i).getAttributes();
+                    
+                    // Duyệt qua các thuộc tính
+                    for (int j = 0; j < divContent.getLength(); j++) {
+                        /*if ("id".equals(divContent.item(j).getNodeName())) {
+                            if ("team_partner_side_1".equals(divContent.item(j).getTextContent())) {
+                                
+                                        result += divList.item(i).getTextContent();
+                                
+                            }
+                        }*/
+                        if ("id".equals(divContent.item(j).getNodeName())) {
+                            if ("side-Business".equals(divContent.item(j).getTextContent())) {
+                                Element element = (Element) divList.item(i);
+                                NodeList divContentList = element.getElementsByTagName("div");
+                                for (int k = 0; k < divContentList.getLength(); k++) {
+                                    NamedNodeMap divChildContent = divContentList.item(k).getAttributes();
+                                    for (int l = 0; l < divChildContent.getLength(); l++) {
+                                        if ("style".equals(divChildContent.item(l).getNodeName())
+                                                && "margin-top:10px;".equals(divChildContent.item(l).getTextContent())) {
+                                            result += divContentList.item(k).getTextContent();
+                                        }
+                                    }
+                                    
+                                }
+                                
+                            }
+                        }
+                    }
+                }
+            }
+        } catch(Exception ex) {
+            System.out.println(ex.toString());
+        }
+        return result;
+    }
+    
+    
     /**
      * Get deal information from http://www.hotdeal.vn
      * [Give the description for method].
@@ -49,6 +96,7 @@ public class GetDealFunction {
         String unitPrice = "";
         float save = 0;
         int numberBuyer = 0;
+        String remainTime = "";
         boolean isVoucher = true;
         try{
             UtilHtmlToXML util = new UtilHtmlToXML();
@@ -90,10 +138,13 @@ public class GetDealFunction {
                                 NamedNodeMap attx = element.getElementsByTagName("a").item(0).getAttributes();
                                 for (int k = 0; k < attx.getLength(); k++) {
                                     if ("href".equals(attx.item(k).getNodeName())) {                                        
-                                        content = content + "Link gốc: " + url + attx.item(k).getTextContent().trim() + "\n";
-                                        link = url + attx.item(k).getTextContent().trim();
+                                        content = content + "Link gốc: " + "http://www.hotdeal.vn" + attx.item(k).getTextContent().trim() + "\n";
+                                        link = "http://www.hotdeal.vn" + attx.item(k).getTextContent().trim();
                                     }
                                 }
+                                
+                                // Lấy địa chỉ
+                                address = getAddressFromHotDealVn(link);
                                 
                                 // Lấy ảnh
                                 attx = element.getElementsByTagName("img").item(0).getAttributes();
@@ -146,13 +197,14 @@ public class GetDealFunction {
                                 // Lấy Thời gian còn lại
                                 element = (Element)nList.item(i + 16);
                                 content = content + "Thời gian còn lại: " + nList.item(i + 16).getTextContent().trim() + "\n";
+                                remainTime = nList.item(i + 16).getTextContent().trim();
                                 
                                 // Kết thúc một item
                                 content = content + "______________\n";
-                                Dao.INSTANCE.insert(title, description,
+                                DealDAO.INSTANCE.insert(title, description,
                                         address, link, imageLink, price,
                                         basicPrice, unitPrice, save, 
-                                        numberBuyer, isVoucher);
+                                        numberBuyer, remainTime, isVoucher);
                             }
                         }
                     }
@@ -182,6 +234,7 @@ public class GetDealFunction {
         String unitPrice = "";
         float save = 0;
         int numberBuyer = 0;
+        String remainTime = "";
         boolean isVoucher = true;
         //Deal deal;
         try{
@@ -288,6 +341,7 @@ public class GetDealFunction {
                                                             || "timemaindealteamnext".equals(divContentList.item(l).getTextContent())) {
                                                         element = (Element) divContentListX.item(k + 1);
                                                         content = content + "Thời gian còn lại: " + divContentListX.item(k + 1).getTextContent().trim() + "\n";
+                                                        remainTime = divContentListX.item(k + 1).getTextContent().trim();
                                                     }
                                                 }
                                                 if ("style".equals(divContentList.item(l).getNodeName())) {
@@ -303,19 +357,12 @@ public class GetDealFunction {
                                     
                                     // Kết thúc một item
                                     content = content + "______________\n";
-                                    /*deal = new Deal(title, 
-                                            description, 
-                                            address, link, 
-                                            imageLink, price,
-                                            basicPrice, unitPrice,
-                                            save, numberBuyer,
-                                            isVoucher);*/
-                                    Dao.INSTANCE.insert(title, 
+                                    DealDAO.INSTANCE.insert(title, 
                                             description, address, 
                                             link, imageLink, 
                                             price, basicPrice,
                                             unitPrice, save,
-                                            numberBuyer, isVoucher);
+                                            numberBuyer, remainTime, isVoucher);
                                 }
                                 item++;                                
                             }

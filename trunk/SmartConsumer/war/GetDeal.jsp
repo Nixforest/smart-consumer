@@ -3,7 +3,7 @@
 <%@page import="com.google.appengine.api.users.UserServiceFactory"%>
 <%@page import="com.google.appengine.api.users.User"%>
 <%@page import="com.google.appengine.api.users.UserService"%>
-<%@page import="com.gae.java.smartconsumer.dao.Dao" %>
+<%@page import="com.gae.java.smartconsumer.dao.DealDAO" %>
 <%@  page import="com.gae.java.smartconsumer.model.Deal" %>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
@@ -17,19 +17,19 @@
 </head>
 <body>
     <%
-        Dao dao = Dao.INSTANCE;
-        UserService userService = UserServiceFactory.getUserService();
-        User user = userService.getCurrentUser();
-    
-        String url = userService.createLoginURL(request.getRequestURI());
-        String urlLinktext = "Login";
-        List<Deal> deals = new ArrayList<Deal>();
+        DealDAO dao = DealDAO.INSTANCE;
+            UserService userService = UserServiceFactory.getUserService();
+            User user = userService.getCurrentUser();
         
-        if (user != null) {
-            url = userService.createLogoutURL(request.getRequestURI());
-            urlLinktext = "Logout";
-        }
-        deals = dao.listDeals();
+            String url = userService.createLoginURL(request.getRequestURI());
+            String urlLinktext = "Login";
+            List<Deal> deals = new ArrayList<Deal>();
+            
+            if (user != null) {
+        url = userService.createLogoutURL(request.getRequestURI());
+        urlLinktext = "Logout";
+            }
+            deals = dao.listDeals();
     %>
     <div style="width: 100%;">
       <div class="line"></div>

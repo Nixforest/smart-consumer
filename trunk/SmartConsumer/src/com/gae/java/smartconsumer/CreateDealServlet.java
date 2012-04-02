@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.gae.java.smartconsumer.dao.Dao;
+import com.gae.java.smartconsumer.dao.DealDAO;
 
 @SuppressWarnings("serial")
 public class CreateDealServlet extends HttpServlet {
@@ -23,14 +23,14 @@ public class CreateDealServlet extends HttpServlet {
         String unitPrice = checkNull(req.getParameter("unitPrice"));
         float save = Float.parseFloat(req.getParameter("save"));
         int numberBuyer = Integer.parseInt(req.getParameter("numberBuyer"));
-        //Timer remainTime = String..valueOf(req.getParameter("remainTime"));
+        String remainTime = String.valueOf(req.getParameter("remainTime"));
         boolean isVoucher = Boolean.parseBoolean(req.getParameter("isVoucher"));
         
         try {
-            Dao.INSTANCE.insert(title, description, address, link,
+            DealDAO.INSTANCE.insert(title, description, address, link,
                     imageLink, price, basicPrice, unitPrice, save,
                     numberBuyer,
-                    //remainTime, 
+                    remainTime, 
                     true);
         } catch (Exception ex) {
             // TODO Auto-generated catch block
