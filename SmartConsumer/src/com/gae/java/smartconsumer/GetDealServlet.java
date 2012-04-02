@@ -12,14 +12,16 @@ public class GetDealServlet extends HttpServlet {
     public void doGet(HttpServletRequest req, HttpServletResponse resp)
         throws IOException {
         String link = req.getParameter("link");
-        //System.out.println(GetDealFunction.getFrom123doVn(link));
-        //System.out.println(req.getParameter("123do"));
-        //System.out.println(req.getParameter("hotdeal"));
+        
         if (req.getParameter("123do") == "") {
             GetDealFunction.getFrom123doVn("http://123do.vn/");
         }
         if (req.getParameter("hotdeal") == "") {
-            System.out.println(GetDealFunction.getFromHotDealVn("http://www.hotdeal.vn"));
+            GetDealFunction.getFromHotDealVn("http://www.hotdeal.vn");
+            GetDealFunction.getFromHotDealVn("http://www.hotdeal.vn/ho-chi-minh/?page=2");
+            GetDealFunction.getFromHotDealVn("http://www.hotdeal.vn/ha-noi/");
+            GetDealFunction.getFromHotDealVn("http://www.hotdeal.vn/ha-noi/?page=2");
+            GetDealFunction.getFromHotDealVn("http://www.hotdeal.vn/ha-noi/?page=3");            
         }
         resp.sendRedirect("/Deal.jsp");
     }
