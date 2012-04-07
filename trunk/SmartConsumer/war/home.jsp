@@ -1,3 +1,6 @@
+<%@page import="java.util.Calendar"%>
+<%@page import="java.util.Date"%>
+<%@page import="java.text.SimpleDateFormat"%>
 <%@page import="com.gae.java.smartconsumer.util.GeneralUtil"%>
 <%@page import="com.google.appengine.api.users.UserServiceFactory"%>
 <%@page import="com.google.appengine.api.users.User"%>
@@ -28,10 +31,11 @@
             List<Deal> deals = new ArrayList<Deal>();
             
             if (user != null) {
-        url = userService.createLogoutURL(request.getRequestURI());
-        urlLinktext = "Logout";
+              url = userService.createLogoutURL(request.getRequestURI());
+              urlLinktext = "Logout";
             }
             deals = dao.listDealsSortByUpdateDate();
+            
     %>
     <div style="width: 100%;">
       <div class="line"></div>
@@ -128,7 +132,7 @@
                               </div>
                               <div class="small-box-timer">
                                   <span>Thời gian còn lại</span>
-                                  <span class="number"><%=deal.getRemainTime() %></span>
+                                  <span class="number"><%=GeneralUtil.getRemainTime(deal.getEndTime()) %></span>
                               </div>
                           </div>
                       </div>
@@ -139,6 +143,7 @@
           </div>
         </div>
       </div>
+    </div>
     </div>
 </body>
 </html>

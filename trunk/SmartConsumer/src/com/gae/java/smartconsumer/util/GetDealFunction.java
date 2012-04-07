@@ -1,5 +1,8 @@
 package com.gae.java.smartconsumer.util;
 
+import java.util.Calendar;
+import java.util.Date;
+
 import com.gae.java.smartconsumer.dao.DealDAO;
 import org.w3c.dom.*;
 
@@ -17,12 +20,7 @@ public class GetDealFunction {
      * @param location
      * @return
      */
-    private static String VOUCHER = "(Giao Voucher)"; 
-    public static String getTagValue(String sTag, Element eElement, int location) {
-        NodeList nlList = eElement.getElementsByTagName(sTag).item(0).getChildNodes();
-        Node nValue = (Node)nlList.item(location);
-        return nValue.getNodeValue();
-    }
+    private static String VOUCHER = "(Giao Voucher)";
     
     public static String getAddressFrom123doVn(String url) {
         String result = "";
@@ -47,7 +45,7 @@ public class GetDealFunction {
                         if ("style".equals(divContent.item(j).getNodeName())) {
                             if ("margin: 25px 15px 6px 15px;overflow:hidden; width:179px".equals(divContent.item(j).getTextContent())) {
                                 Element element = (Element)divList.item(i);
-                                result += getTagValue("p", element, 0);
+                                result += GeneralUtil.getTagValue("p", element, 0);
                                 
                             }
                         }
@@ -151,6 +149,7 @@ public class GetDealFunction {
         float save = 0;
         int numberBuyer = 0;
         String remainTime = "";
+        java.util.Date endTime = Calendar.getInstance().getTime();
         boolean isVoucher = true;
         try{
             UtilHtmlToXML util = new UtilHtmlToXML();
@@ -179,8 +178,8 @@ public class GetDealFunction {
                                 item++;
                                 // Lấy tiêu đề
                                 Element element = (Element) nList.item(i + 1);                                
-                                content = content + "Tiêu đề: " + getTagValue("a", element, 0).trim() + "\n";
-                                title = getTagValue("a", element, 0).trim();
+                                content = content + "Tiêu đề: " + GeneralUtil.getTagValue("a", element, 0).trim() + "\n";
+                                title = GeneralUtil.getTagValue("a", element, 0).trim();
                                 
                                 // Lấy phương thức
                                 element = (Element)nList.item(i+2);
@@ -227,15 +226,15 @@ public class GetDealFunction {
                                 element = (Element)nList.item(i + 7);
                                 content = content + "Giá : " + nList.item(i + 7).getTextContent().trim() + "\n";
                                 String priceString = nList.item(i + 7).getTextContent().trim();
-                                price = getPriceFromString(priceString);
+                                price = GeneralUtil.getPriceFromString(priceString);
                                 
                                 // Đơn vị
                                 unitPrice = priceString.substring(priceString.length() - 3);
                                 
                                 // Lấy giá gốc                         
                                 element = (Element)nList.item(i + 8);
-                                content = content + "Giá gốc: " + getTagValue("em", element, 0).trim() + "\n";
-                                basicPrice = getPriceFromString(getTagValue("em", element, 0).trim());
+                                content = content + "Giá gốc: " + GeneralUtil.getTagValue("em", element, 0).trim() + "\n";
+                                basicPrice = GeneralUtil.getPriceFromString(GeneralUtil.getTagValue("em", element, 0).trim());
                                 
                                 // Lấy Tiết kiệm
                                 element = (Element)nList.item(i + 12);
@@ -252,13 +251,14 @@ public class GetDealFunction {
                                 element = (Element)nList.item(i + 16);
                                 content = content + "Thời gian còn lại: " + nList.item(i + 16).getTextContent().trim() + "\n";
                                 remainTime = nList.item(i + 16).getTextContent().trim();
+                                endTime = GeneralUtil.getEndTime(remainTime);
                                 
                                 // Kết thúc một item
                                 content = content + "______________\n";
                                 DealDAO.INSTANCE.insert(title, description,
                                         address, link, imageLink, price,
                                         basicPrice, unitPrice, save, 
-                                        numberBuyer, remainTime, isVoucher);
+                                        numberBuyer, endTime, isVoucher);
                             }
                         }
                     }
@@ -289,6 +289,7 @@ public class GetDealFunction {
         float save = 0;
         int numberBuyer = 0;
         String remainTime = "";
+        java.util.Date endTime = Calendar.getInstance().getTime();
         boolean isVoucher = true;
         //Deal deal;
         try{
@@ -370,7 +371,7 @@ public class GetDealFunction {
                                                             || "pricemaindealteamcurrent".equals(divContentList.item(l).getTextContent())) {
                                                         content = content + "Giá: " + divContentListX.item(k).getTextContent().trim() + "\n";
                                                         String priceString = divContentListX.item(k).getTextContent().trim();
-                                                        price = getPriceFromString(priceString);
+                                                        price = GeneralUtil.getPriceFromString(priceString);
                                                         // Đơn vị
                                                         unitPrice = priceString.substring(priceString.length() - 3);
                                                     }
@@ -380,8 +381,8 @@ public class GetDealFunction {
                                                     if ("dismaindealteamnext".equals(divContentList.item(l).getTextContent())
                                                             || "dismaindealteamcurrent".equals(divContentList.item(l).getTextContent())) {
                                                         element = (Element) divContentListX.item(k + 1);
-                                                        content = content + "Tiết kiệm: " + getTagValue("span", element, 0).trim() + "\n";
-                                                        String saveString = getTagValue("span", element, 0).trim();
+                                                        content = content + "Tiết kiệm: " + GeneralUtil.getTagValue("span", element, 0).trim() + "\n";
+                                                        String saveString = GeneralUtil.getTagValue("span", element, 0).trim();
                                                         save = Float.parseFloat(saveString.substring(0, saveString.length() - 1));
                                                     }
                                                     
@@ -389,8 +390,8 @@ public class GetDealFunction {
                                                     if ("buyermaindealteamcurrent".equals(divContentList.item(l).getTextContent())
                                                             || "buyermaindealteamnext".equals(divContentList.item(l).getTextContent())) {
                                                         element = (Element) divContentListX.item(k + 1);
-                                                        content = content + "Số người mua: " + getTagValue("span", element, 0).trim() + "\n";
-                                                        numberBuyer = Integer.parseInt(getTagValue("span", element, 0).trim());
+                                                        content = content + "Số người mua: " + GeneralUtil.getTagValue("span", element, 0).trim() + "\n";
+                                                        numberBuyer = Integer.parseInt(GeneralUtil.getTagValue("span", element, 0).trim());
                                                     }
                                                     
                                                     // Thời gian còn lại
@@ -399,13 +400,14 @@ public class GetDealFunction {
                                                         element = (Element) divContentListX.item(k + 1);
                                                         content = content + "Thời gian còn lại: " + divContentListX.item(k + 1).getTextContent().trim() + "\n";
                                                         remainTime = divContentListX.item(k + 1).getTextContent().trim();
+                                                        endTime = GeneralUtil.getEndTime(remainTime);
                                                     }
                                                 }
                                                 if ("style".equals(divContentList.item(l).getNodeName())) {
                                                     // Giá gốc
                                                     if ("text-decoration:line-through".equals(divContentList.item(l).getTextContent())) {
                                                         content = content + "Giá gốc: " + divContentListX.item(k).getTextContent().trim() + "\n";
-                                                        basicPrice = getPriceFromString(divContentListX.item(k).getTextContent().trim());
+                                                        basicPrice = GeneralUtil.getPriceFromString(divContentListX.item(k).getTextContent().trim());
                                                     }
                                                 }
                                             }
@@ -419,7 +421,7 @@ public class GetDealFunction {
                                             link, imageLink, 
                                             price, basicPrice,
                                             unitPrice, save,
-                                            numberBuyer, remainTime, isVoucher);
+                                            numberBuyer, endTime, isVoucher);
                                 }
                                 item++;                                
                             }
@@ -433,17 +435,6 @@ public class GetDealFunction {
         return content;
     }
     
-    public static double getPriceFromString(String price) {
-        double result = 0;
-        try {
-        price = price.substring(0, price.length() - 3);
-        price = price.replace(",", "");
-        price = price.replace(".", "");
-        result = Double.parseDouble(price.trim());
-        } catch (Exception e) {
-            System.out.println(e.toString());
-        }
-        return result;
-    }
+    
     
 }
