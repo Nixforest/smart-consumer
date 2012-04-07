@@ -8,10 +8,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.gae.java.smartconsumer.util.GetDealFunction;
 
+@SuppressWarnings("serial")
 public class GetDealServlet extends HttpServlet {
     public void doGet(HttpServletRequest req, HttpServletResponse resp)
         throws IOException {
-        String link = req.getParameter("link");
         
         if (req.getParameter("123do") == "") {
             GetDealFunction.getFrom123doVn("http://123do.vn/");

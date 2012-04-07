@@ -1,6 +1,6 @@
 package com.gae.java.smartconsumer.dao;
 
-import java.util.Timer;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -63,14 +63,14 @@ public enum DealDAO {
                         String unitPrice,
                         float save,
                         int numberBuyer,
-                        String remainTime,
+                        Date endTime,
                         boolean isVoucher) throws Exception {
         synchronized (this) {
             EntityManager em = EMFService.get().createEntityManager();
             Deal deal = new Deal(title, description, address, link,
                     imageLink, price, basicPrice, unitPrice, save, 
                     numberBuyer,
-                    remainTime, 
+                    endTime,
                     isVoucher);
             if (!isExist(deal)) {   //
                 em.persist(deal);
@@ -107,7 +107,7 @@ public enum DealDAO {
     
     public boolean isExist(Deal deal) {
         for (Deal item : this.listDeals()) {
-            if (deal.getTitle().equals(item.getTitle())) {
+            if (deal.getLink().equals(item.getLink())) {
                 return true;
             }
         }

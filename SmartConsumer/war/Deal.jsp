@@ -18,7 +18,6 @@
         href="css/main.css"/>
 </head>
 <body>
-    <%=GeneralUtil.now("yyyy-MM-dd hh:mm:ss")%>
     <%
         DealDAO dao = DealDAO.INSTANCE;
         UserService userService = UserServiceFactory.getUserService();
@@ -81,7 +80,7 @@
             <td><%=deal.getBasicPrice() + " " + deal.getUnitPrice() %></td>
             <td><%=deal.getSave() + "%" %></td>
             <td><%=deal.getNumberBuyer() %></td>
-            <td><%=deal.getRemainTime() %></td>
+            <td><%=GeneralUtil.getRemainTime(deal.getEndTime()) %></td>
             <%-- <td><%=deal.isVoucher() %></td> --%>
             <td width="30px"><%=deal.getUpdateDate()%></td>
       <td><a class="done" href="/remove?id=<%=deal.getId() %>">Remove</a></td>

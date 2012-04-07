@@ -1,7 +1,8 @@
 package com.gae.java.smartconsumer;
 
 import java.io.IOException;
-import java.util.Timer;
+import java.util.Calendar;
+import java.util.Date;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -23,15 +24,15 @@ public class CreateDealServlet extends HttpServlet {
         String unitPrice = checkNull(req.getParameter("unitPrice"));
         float save = Float.parseFloat(req.getParameter("save"));
         int numberBuyer = Integer.parseInt(req.getParameter("numberBuyer"));
-        String remainTime = String.valueOf(req.getParameter("remainTime"));
+        //Date remainTime = Calendar.getInstance().
         boolean isVoucher = Boolean.parseBoolean(req.getParameter("isVoucher"));
         
         try {
-            DealDAO.INSTANCE.insert(title, description, address, link,
+            /*DealDAO.INSTANCE.insert(title, description, address, link,
                     imageLink, price, basicPrice, unitPrice, save,
                     numberBuyer,
                     remainTime, 
-                    true);
+                    true);*/
         } catch (Exception ex) {
             // TODO Auto-generated catch block
             ex.printStackTrace();

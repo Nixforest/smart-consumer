@@ -1,9 +1,7 @@
 package com.gae.java.smartconsumer.model;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+
 import java.util.Date;
-import java.util.Timer;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,6 +9,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import com.gae.java.smartconsumer.util.GeneralUtil;
+import com.gae.java.smartconsumer.util.Status;
+
 
 /**
  * Model class which will store the Deal Items
@@ -24,26 +24,27 @@ public class Deal {
     private Long id;
     
     // Properties    
-    private String title;
-    private String description;
-    private String address;
-    private String link;
-    private String imageLink;
-    private double price;
-    private double basicPrice;
-    private String unitPrice;
-    private float save;
-    private int numberBuyer;
-    private String remainTime;
-    private boolean isVoucher;
-    private java.util.Date updateDate;
+    private String title;                       // Title of deal
+    private String description;                 // Description of deal
+    private String address;                     // Address of deal
+    private String link;                        // Url of deal
+    private String imageLink;                   // Url of deal's image
+    private double price;                       // Price of deal
+    private double basicPrice;                  // Basic price of deal
+    private String unitPrice;                   // Unit price of deal
+    private float save;                         // Save of deal
+    private int numberBuyer;                    // Number of buyer for deal
+    private java.util.Date endTime;             // End time of deal
+    private boolean isVoucher;                  // Method of delivery
+    private java.util.Date updateDate;          // Updated date
+    private Integer status;                         // Status of record
     
     // Constructor
     public Deal(String title, String description, String address,
             String link, String imageLink, double price,
             double basicPrice, String unitPrice, float save,
             int numberBuyer, 
-            String remainTime, 
+            Date endTime,
             boolean isVoucher) {
         this.title = title;
         this.description = description;
@@ -55,22 +56,23 @@ public class Deal {
         this.unitPrice = unitPrice;
         this.save = save;
         this.numberBuyer = numberBuyer;
-        this.remainTime = remainTime;
+        this.endTime = endTime;
         this.isVoucher = isVoucher;
-        this.updateDate = java.util.Calendar.getInstance().getTime();
+        this.setUpdateDate(java.util.Calendar.getInstance().getTime());
+        this.status = Status.SELLING.ordinal();
     }
     
     /**
-     * Get value of title.
-     * @return the title
+     * Get value of Title.
+     * @return the Title
      */
     public String getTitle() {
         return title;
     }
 
     /**
-     * Set the value for title.
-     * @param title the title to set
+     * Set the value for Title.
+     * @param title the Title to set
      */
     public void setTitle(String title) {
         this.title = title;
@@ -221,19 +223,19 @@ public class Deal {
     }
 
     /**
-     * Get value of remainTime.
-     * @return the remainTime
-     */
-    public String getRemainTime() {
-        return remainTime;
+    * Get value of endTime.
+    * @return the endTime
+    */
+    public java.util.Date getEndTime() {
+        return endTime;
     }
 
     /**
-     * Set the value for remainTime.
-     * @param remainTime the remainTime to set
+     * Set the value for endTime.
+     * @param endTime the endTime to set
      */
-    public void setRemainTime(String remainTime) {
-        this.remainTime = remainTime;
+    public void setEndTime(java.util.Date endTime) {
+        this.endTime = endTime;
     }
 
     /**
@@ -252,15 +254,43 @@ public class Deal {
         this.isVoucher = isVoucher;
     }
 
-    public Long getId() {
-        return id;
-    }
-
+    /**
+    * Get value of updateDate.
+    * @return the updateDate
+    */
     public java.util.Date getUpdateDate() {
         return updateDate;
     }
 
+    /**
+     * Set the value for updateDate.
+     * @param updateDate the updateDate to set
+     */
     public void setUpdateDate(java.util.Date updateDate) {
         this.updateDate = updateDate;
     }
+
+    /**
+    * Get value of status.
+    * @return the status
+    */
+    public int getStatus() {
+        return status;
+    }
+
+    /**
+     * Set the value for status.
+     * @param status the status to set
+     */
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    /**
+    * Get value of id.
+    * @return the id
+    */
+    public Long getId() {
+        return id;
+    }    
 }
