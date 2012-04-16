@@ -17,10 +17,10 @@ import com.gae.java.smartconsumer.util.Status;
  * @author Nixforest
  *
  */
-@Entity
+@Entity(name="Deal")
 public class Deal {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY, generator="DealID")
     private Long id;
     
     // Properties    

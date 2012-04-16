@@ -14,7 +14,8 @@ public class GetDealServlet extends HttpServlet {
         throws IOException {
         
         if (req.getParameter("123do") == "") {
-            GetDealFunction.getFrom123doVn("http://123do.vn/");
+            //GetDealFunction.getFrom123doVn("http://123do.vn/");
+            System.out.println(GetDealFunction.getFromMuaChungVn());
         }
         if (req.getParameter("hotdeal") == "") {
             GetDealFunction.getFromHotDealVn("http://www.hotdeal.vn");
@@ -23,6 +24,6 @@ public class GetDealServlet extends HttpServlet {
             GetDealFunction.getFromHotDealVn("http://www.hotdeal.vn/ha-noi/?page=2");
             GetDealFunction.getFromHotDealVn("http://www.hotdeal.vn/ha-noi/?page=3");            
         }
-        resp.sendRedirect("/Deal.jsp");
+        resp.sendRedirect("/deal");
     }
 }

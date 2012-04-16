@@ -7,6 +7,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import com.gae.java.smartconsumer.model.Deal;
+import com.gae.java.smartconsumer.util.Status;
 
 public enum DealDAO {
     INSTANCE;
@@ -26,11 +27,31 @@ public enum DealDAO {
         return deals;
     }
     
+    /**
+     * 
+     * Method get all deals.
+     * @return List of deals sort by updatedate
+     */
     public List<Deal> listDealsSortByUpdateDate() {
         EntityManager em = EMFService.get().createEntityManager();
         
         // Read the existing entries
         Query q = em.createQuery("select m from Deal m order by m.updateDate desc");
+        List<Deal> deals = q.getResultList();
+        
+        return deals;
+    }
+    
+    /**
+     * 
+     * Method get all deals.
+     * @return List of deals sort by EndTime
+     */
+    public List<Deal> listDealsSortByEndTime() {
+        EntityManager em = EMFService.get().createEntityManager();
+        
+        // Read the existing entries
+        Query q = em.createQuery("select m from Deal m order by m.endTime desc");
         List<Deal> deals = q.getResultList();
         
         return deals;
@@ -79,6 +100,10 @@ public enum DealDAO {
         }
     }
     
+    /**
+     * 
+     * Remove all record in deal table.
+     */
     public void removeAll() {
         EntityManager em = EMFService.get().createEntityManager();
         
@@ -94,7 +119,12 @@ public enum DealDAO {
         
     }
     
-    public void remove(long id) {
+    /**
+     * 
+     * Remove a record by ID.
+     * @param id id of record
+     */
+    public void delete(long id) {
         EntityManager em = EMFService.get().createEntityManager();
         try {
             Deal deal = em.find(Deal.class, id);
@@ -103,8 +133,44 @@ public enum DealDAO {
             // TODO: handle exception
             em.close();
         }
+    }    
+    /**
+     * 
+     * Method represent a delete method by change Status of deal to DELETE.
+     * @param id object's id
+     */
+    public void deleteByChangeStatus(long id) {
+        EntityManager em = EMFService.get().createEntityManager();
+        try {
+            Deal deal = em.find(Deal.class, id);
+            deal.setStatus(Status.DELETE.ordinal());
+            //em.persist(deal);
+        } finally {
+            em.close();
+        }
+    }
+    /**
+     * 
+     * Method represent a restore method by change Status of deal to SELLING.
+     * @param id object's id
+     */
+    public void restoreChangeStatus(long id) {
+        EntityManager em = EMFService.get().createEntityManager();
+        try {
+            Deal deal = em.find(Deal.class, id);
+            deal.setStatus(Status.SELLING.ordinal());
+            //em.persist(deal);
+        } finally {
+            em.close();
+        }
     }
     
+    /**
+     * 
+     * Check if a deal exist.
+     * @param deal object need to check
+     * @return True if deal existed, false otherwise.
+     */
     public boolean isExist(Deal deal) {
         for (Deal item : this.listDeals()) {
             if (deal.getLink().equals(item.getLink())) {

@@ -4,10 +4,13 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.gae.java.smartconsumer.blo.DealBLO;
 import com.gae.java.smartconsumer.dao.DealDAO;
 
 @SuppressWarnings("serial")
@@ -38,7 +41,7 @@ public class CreateDealServlet extends HttpServlet {
             ex.printStackTrace();
         }
         
-        resp.sendRedirect("/Deal.jsp");
+        resp.sendRedirect("/deal");
     }
 
     private String checkNull(String s) {
@@ -47,5 +50,12 @@ public class CreateDealServlet extends HttpServlet {
             return "";
         }
         return s;
+    }
+    
+    public void doGet(HttpServletRequest req, HttpServletResponse resp)
+            throws IOException, ServletException {
+        RequestDispatcher view = req.getRequestDispatcher("Deal.jsp");
+        req.setAttribute("listDeals", DealBLO.INSTANCE.getListAllDeals());
+        view.forward(req, resp);
     }
 }
