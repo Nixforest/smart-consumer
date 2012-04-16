@@ -12,6 +12,6 @@ public class RemoveAllDealServlet extends HttpServlet {
     public void doGet(HttpServletRequest req, HttpServletResponse resp)
         throws IOException {
         DealDAO.INSTANCE.removeAll();
-        resp.sendRedirect("/Deal.jsp");
+        resp.sendRedirect("/deal");
     }
 }

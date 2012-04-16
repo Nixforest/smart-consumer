@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.gae.java.smartconsumer.blo.DealBLO;
 import com.gae.java.smartconsumer.dao.DealDAO;
 
 public class RemoveDealServlet extends HttpServlet {
@@ -15,8 +16,14 @@ public class RemoveDealServlet extends HttpServlet {
     
     public void doGet(HttpServletRequest req, HttpServletResponse resp)
         throws IOException {
-        String id = req.getParameter("id");
-        DealDAO.INSTANCE.remove(Long.parseLong(id));
-        resp.sendRedirect("/Deal.jsp");
+        Long id = Long.parseLong(req.getParameter("id"));
+        String opt = req.getParameter("opt");
+        
+        if (opt.equals("Remove")) {
+            DealBLO.INSTANCE.delete(id);
+        } else {
+            DealBLO.INSTANCE.restore(id);
+        }
+        resp.sendRedirect("/deal");
     }
 }

@@ -1,3 +1,4 @@
+<%@page import="com.gae.java.smartconsumer.util.Status"%>
 <%@page import="com.google.appengine.api.users.UserServiceFactory"%>
 <%@page import="com.google.appengine.api.users.User"%>
 <%@page import="com.google.appengine.api.users.UserService"%>
@@ -19,19 +20,17 @@
 </head>
 <body>
     <%
-        DealDAO dao = DealDAO.INSTANCE;
         UserService userService = UserServiceFactory.getUserService();
         User user = userService.getCurrentUser();
     
         String url = userService.createLoginURL(request.getRequestURI());
         String urlLinktext = "Login";
-        List<Deal> deals = new ArrayList<Deal>();
+        List<Deal> deals = (List<Deal>) (request.getAttribute("listDeals"));
         
         if (user != null) {
           url = userService.createLogoutURL(request.getRequestURI());
           urlLinktext = "Logout";
         }
-        deals = dao.listDealsSortByUpdateDate();
     %>
     <div style="width: 100%;">
       <div class="line"></div>
@@ -56,14 +55,13 @@
             <th>Mô tả</th>
             <th>Địa chỉ</th>
             <th>Link</th>
-            <th>Ảnh</th>
             <th>Giá</th>
             <th>Giá gốc</th>
             <th>Tiết kiệm</th>
             <th>Người mua</th>
             <th>Thời gian</th>
-            <!-- <th>IsVoucher</th> -->
             <th>Cập nhật</th>
+            <th>Status</th>
             <th>Remove</th>
         </tr>
         <%
@@ -75,15 +73,21 @@
             <td><%=deal.getDescription() %></td>
             <td><%=deal.getAddress() %></td>
             <td><%=deal.getLink() %></td>
-            <td><%=deal.getImageLink() %></td>
             <td><%=deal.getPrice() + " " + deal.getUnitPrice() %></td>
             <td><%=deal.getBasicPrice() + " " + deal.getUnitPrice() %></td>
             <td><%=deal.getSave() + "%" %></td>
             <td><%=deal.getNumberBuyer() %></td>
             <td><%=GeneralUtil.getRemainTime(deal.getEndTime()) %></td>
             <%-- <td><%=deal.isVoucher() %></td> --%>
-            <td width="30px"><%=deal.getUpdateDate()%></td>
-      <td><a class="done" href="/remove?id=<%=deal.getId() %>">Remove</a></td>
+            <td><%=deal.getUpdateDate()%></td>
+            <td><%=Status.values()[deal.getStatus()] %></td>
+            <%
+            String statusRemove = "";
+            statusRemove = (deal.getStatus() != Status.DELETE.ordinal())?("Remove"):("Restore");
+            %>
+            <td>
+              <a class="done" href="/remove?id=<%=deal.getId() %>&opt=<%=statusRemove %>"><%=statusRemove %></a>
+            </td>
         </tr>
         <%
             }
@@ -94,7 +98,7 @@
     
     <div class="main">
         <div class="headline">New deal</div>
-        <form action="/new" method="post" accept-charset="utf-8">
+        <form action="/deal" method="post" accept-charset="utf-8">
             <table>
                 <tr>
                     <td><label for="title">Tiêu đề</label></td>
