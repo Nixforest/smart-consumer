@@ -33,6 +33,7 @@ import org.w3c.dom.NodeList;
 
 import com.gae.java.smartconsumer.blo.DealBLO;
 import com.gae.java.smartconsumer.model.Deal;
+import com.google.appengine.api.datastore.Text;
 
 /**
  * @author Nixforest
@@ -257,10 +258,10 @@ public class GetDealFunction {
                                 // Kết thúc một item
                                 content = content + "______________\n";
                                 title = URLEncoder.encode(title, "UTF-8");
-                                description = URLEncoder.encode(description, "UTF-8");
+                                //description = URLEncoder.encode(description, "UTF-8");
                                 address = URLEncoder.encode(address, "UTF-8");
                                 unitPrice = URLEncoder.encode(unitPrice, "UTF-8");
-                                Deal deal = new Deal(title, description, address, link, imageLink, price, basicPrice,
+                                Deal deal = new Deal(title, new Text(description), address, link, imageLink, price, basicPrice,
                                         unitPrice, save, numberBuyer, endTime, isVoucher);
                                 DealBLO.INSTANCE.insert(deal);
                             }
@@ -459,10 +460,10 @@ public class GetDealFunction {
                                     // Kết thúc một item
                                     content = content + "______________\n";
                                     title = URLEncoder.encode(title, "UTF-8");
-                                    description = URLEncoder.encode(description, "UTF-8");
+                                    //description = URLEncoder.encode(description, "UTF-8");
                                     address = URLEncoder.encode(address, "UTF-8");
                                     unitPrice = URLEncoder.encode(unitPrice, "UTF-8");
-                                    Deal deal = new Deal(title, description, address, link, imageLink, price,
+                                    Deal deal = new Deal(title,  new Text(description), address, link, imageLink, price,
                                             basicPrice, unitPrice, save, numberBuyer, endTime, isVoucher);
                                     DealBLO.INSTANCE.insert(deal);
                                 }
@@ -564,10 +565,10 @@ public class GetDealFunction {
                     content += "\n=================================" + String.valueOf(count);
 
                     title = URLEncoder.encode(title, "UTF-8");
-                    description = URLEncoder.encode(description, "UTF-8");
+                    //description = URLEncoder.encode(description, "UTF-8");
                     address = URLEncoder.encode(address, "UTF-8");
                     unitPrice = URLEncoder.encode(unitPrice, "UTF-8");
-                    Deal deal = new Deal(title, description, address, link, imageLink, price, basicPrice, unitPrice,
+                    Deal deal = new Deal(title,  new Text(description), address, link, imageLink, price, basicPrice, unitPrice,
                             save, numberBuyer, endTime, isVoucher);
                     DealBLO.INSTANCE.insert(deal);
                 }

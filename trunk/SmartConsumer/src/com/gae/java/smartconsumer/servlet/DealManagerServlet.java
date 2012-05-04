@@ -30,6 +30,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.gae.java.smartconsumer.blo.DealBLO;
 import com.gae.java.smartconsumer.model.Deal;
 import com.gae.java.smartconsumer.util.GeneralUtil;
+import com.google.appengine.api.datastore.Text;
 
 /**
  * @author Nixforest
@@ -63,7 +64,7 @@ public class DealManagerServlet extends HttpServlet {
             Date endTime = GeneralUtil.getEndTime(req.getParameter("remainTime"));
             //Date remainTime = Calendar.getInstance().
             boolean isVoucher = Boolean.parseBoolean(req.getParameter("isVoucher"));
-            Deal deal = new Deal(title, description, address,
+            Deal deal = new Deal(title,  new Text(description), address,
                     link, imageLink, price, basicPrice, 
                     unitPrice, save, numberBuyer, endTime,
                     isVoucher);
