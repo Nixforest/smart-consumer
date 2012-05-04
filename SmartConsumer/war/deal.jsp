@@ -160,7 +160,7 @@ function IsNumberInt(str) {
         <tr>
             <td><%=deal.getId() %></td>
             <td><%=URLDecoder.decode(deal.getTitle(), "UTF-8") %></td>
-            <td><%=URLDecoder.decode(deal.getDescription(), "UTF-8") %></td>
+            <td><%=deal.getDescription().getValue() %></td>
             <td><%=URLDecoder.decode(deal.getAddress(), "UTF-8") %></td>
             <td><%=deal.getLink() %></td>
             <td><%=deal.getPrice() + " " + URLDecoder.decode(deal.getUnitPrice(), "UTF-8") %></td>

@@ -68,8 +68,7 @@ public class DealCollectorServlet extends HttpServlet {
             if (req.getParameter("test").isEmpty()) {
                 throw new Exception("Lỗi rồi!");
             }
-        } catch (Exception ex) {
-            
+        } catch (Exception ex) {            
             String error = ex.toString();
             req.setAttribute("error", error);
         }

@@ -634,7 +634,7 @@ public class UtilHtmlToXML {
 
         String encoding = "";
 
-        /*if (s.charAt(0) == 0xEF && s.charAt(1) == 0xBB && s.charAt(2) == 0xBF) {
+        if (s.charAt(0) == 0xEF && s.charAt(1) == 0xBB && s.charAt(2) == 0xBF) {
 
             encoding = "utf-8";
 
@@ -646,9 +646,9 @@ public class UtilHtmlToXML {
 
             start = 0;
 
-        }*/
-        encoding = "utf-8";
-        start = 0;
+        }
+        //encoding = "utf-8";
+        //start = 0;
 
         for (int i = start; i < limit && ((r2.equals("") && r.equals("")) || !opentags.empty()); i++) {
 

@@ -78,7 +78,7 @@
                       %>
                       <div class="<%=itemclass %>">
                           <div class="deal_list_title">
-                              <a title="<%=URLDecoder.decode(deal.getDescription(), "UTF-8") %>"
+                              <a title="<%=deal.getDescription().getValue() %>"
                                   href="<%=deal.getLink() %>">
                                   <%=GeneralUtil.getSubString(URLDecoder.decode(deal.getTitle(), "UTF-8"), 25) %>    
                               </a>
@@ -106,7 +106,7 @@
                               </a>
                           </div>
                           <div class="deal_list_desc">
-                              <%=GeneralUtil.getSubString(URLDecoder.decode(deal.getDescription(), "UTF-8"), 90) %>
+                              <%=GeneralUtil.getSubString(deal.getDescription().getValue(), 90) %>
                           </div>
                           <div style="width:150px; float:left;">
                               <div class="deal_list_view_price">
@@ -119,7 +119,7 @@
                                   <span style="font-size:13px;">
                                       Giá gốc:
                                       <em style="text-decoration:line-through;font-size:13px; color:#666; font-style:normal; ">
-                                          <%=deal.getBasicPrice() + " " + deal.getUnitPrice() %>
+                                          <%=deal.getBasicPrice() + " " + URLDecoder.decode(deal.getUnitPrice()) %>
                                       </em> 
                                   </span>
                               </div>
