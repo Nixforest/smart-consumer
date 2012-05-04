@@ -9,50 +9,50 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 		<servlet-class>com.gae.java.smartconsumer.SmartConsumerServlet</servlet-class>
 	</servlet>
     <servlet>
-        <servlet-name>CreateNewDeal</servlet-name>
-        <servlet-class>com.gae.java.smartconsumer.CreateDealServlet</servlet-class>
+        <servlet-name>DealManager</servlet-name>
+        <servlet-class>com.gae.java.smartconsumer.servlet.DealManagerServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DealCollector</servlet-name>
+        <servlet-class>com.gae.java.smartconsumer.servlet.DealCollectorServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>RemoveDeal</servlet-name>
-        <servlet-class>com.gae.java.smartconsumer.RemoveDealServlet</servlet-class>
+        <servlet-class>com.gae.java.smartconsumer.servlet.RemoveDealServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>RemoveAllDeal</servlet-name>
-        <servlet-class>com.gae.java.smartconsumer.RemoveAllDealServlet</servlet-class>
+        <servlet-class>com.gae.java.smartconsumer.servlet.RemoveAllDealServlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>GetDeal</servlet-name>
-        <servlet-class>com.gae.java.smartconsumer.GetDealServlet</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>Home</servlet-name>
-        <servlet-class>com.gae.java.smartconsumer.HomeServlet</servlet-class>
+        <servlet-name>Test</servlet-name>
+        <servlet-class>com.gae.java.smartconsumer.servlet.TestServlet</servlet-class>
     </servlet>
 	<servlet-mapping>
 		<servlet-name>SmartConsumer</servlet-name>
 		<url-pattern>/smartconsumer</url-pattern>
 	</servlet-mapping>
     <servlet-mapping>
-        <servlet-name>CreateNewDeal</servlet-name>
-        <url-pattern>/deal</url-pattern>
+        <servlet-name>DealManager</servlet-name>
+        <url-pattern>/dealmanager</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>RemoveDeal</servlet-name>
-        <url-pattern>/remove</url-pattern>
+        <servlet-name>DealCollector</servlet-name>
+        <url-pattern>/getdeal</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>RemoveAllDeal</servlet-name>
         <url-pattern>/removeall</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>GetDeal</servlet-name>
-        <url-pattern>/getdeal</url-pattern>
+        <servlet-name>SmartConsumer</servlet-name>
+        <url-pattern>/smartconsumer</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>Home</servlet-name>
-        <url-pattern>/home</url-pattern>
+        <servlet-name>Test</servlet-name>
+        <url-pattern>/test</url-pattern>
     </servlet-mapping>
-	<welcome-file-list>
-		<welcome-file>home</welcome-file>
-	</welcome-file-list>
+    <welcome-file-list>
+        <welcome-file>smartconsumer</welcome-file>
+    </welcome-file-list>
 </web-app>
