@@ -26,6 +26,7 @@ import javax.persistence.Query;
 
 import com.gae.java.smartconsumer.model.Deal;
 import com.gae.java.smartconsumer.util.Status;
+import com.google.appengine.api.datastore.Text;
 
 /**
  * @author Nixforest

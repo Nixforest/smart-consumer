@@ -24,6 +24,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 
 import com.gae.java.smartconsumer.util.Status;
 
@@ -39,6 +40,7 @@ public class Deal {
     
     // Properties
     private String title;                       // Title of deal
+    @Lob
     private String description;                 // Description of deal
     private String address;                     // Address of deal
     private String link;                        // Url of deal
