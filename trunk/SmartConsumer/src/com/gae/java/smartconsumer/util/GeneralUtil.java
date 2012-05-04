@@ -1,3 +1,21 @@
+/**
+ * Licensed to Open-Ones Group under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Open-Ones Group licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
 package com.gae.java.smartconsumer.util;
 
 import java.text.SimpleDateFormat;
@@ -33,9 +51,11 @@ public class GeneralUtil {
     public static String getSubString(String str, int maxLength) {
         String result = str;
         if (str.length() >= maxLength) {
-            str = str.substring(0, maxLength);
+            str = str.substring(0, maxLength - 1);
             int index = str.lastIndexOf(" ");
-            result = str.substring(0, index) + "...";
+            if (index != -1) {
+                result = str.substring(0, index) + "...";
+            }
         }
         return result;
     }
@@ -48,10 +68,11 @@ public class GeneralUtil {
     public static double getPriceFromString(String price) {
         double result = 0;
         try {
-        price = price.substring(0, price.length() - 3);
-        price = price.replace(",", "");
-        price = price.replace(".", "");
-        result = Double.parseDouble(price.trim());
+            price = price.substring(0, price.length() - 4);
+            price = price.replace(",", "");
+            price = price.replace(".", "").trim();
+            //price = price.replace(" VNĐ", "");
+            result = Double.parseDouble(price.trim());
         } catch (Exception e) {
             System.out.println(e.toString());
         }
@@ -109,6 +130,21 @@ public class GeneralUtil {
         difmillisecond = difmillisecond - minute*60*1000;
         int second = (int) (difmillisecond/1000);
         result = String.valueOf(hour) + ":" + String.valueOf(minute) + ":" + String.valueOf(second);
+        return result;
+    }
+    
+
+    /**
+     * Check if a string can convert to a number
+     * @param s string input
+     * @return return string s if it's not null
+     */
+    public static String checkNumber(final String s) {
+        String result = s;
+        if (result == null || result == "") {
+            return "0";
+        }
+        result = result.replace(",", "");
         return result;
     }
 }
