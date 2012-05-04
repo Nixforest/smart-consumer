@@ -46,6 +46,7 @@ public class DealCollectorServlet extends HttpServlet {
     
     public void doPost(HttpServletRequest req, HttpServletResponse resp)
         throws IOException, ServletException {
+        RequestDispatcher view = req.getRequestDispatcher("getdeal.jsp");
         try {
             if (req.getParameter("123do") == "") {
                     GetDealFunction.getFrom123doVn("http://123do.vn/");
@@ -68,11 +69,11 @@ public class DealCollectorServlet extends HttpServlet {
                 throw new Exception("Lỗi rồi!");
             }
         } catch (Exception ex) {
-            /*RequestDispatcher view = req.getRequestDispatcher("getdeal.jsp");
-            String error = ex.getMessage();
+            
+            String error = ex.toString();
             req.setAttribute("error", error);
-            view.forward(req, resp);*/
         }
-        resp.sendRedirect("/dealmanager");
+        view.forward(req, resp);
+        //resp.sendRedirect("/getdeal");
     }
 }

@@ -141,8 +141,9 @@ public class GetDealFunction {
      * Get deal information from http://www.hotdeal.vn [Give the description for method].
      * @param url
      * @return
+     * @throws Exception 
      */
-    public static String getFromHotDealVn(String url) {
+    public static String getFromHotDealVn(String url) throws Exception {
         String content = "";
         String title = "";
         String description = "";
@@ -268,7 +269,7 @@ public class GetDealFunction {
                 }
             }
         } catch (Exception ex) {
-            content = content + "Lỗi rồi: " + ex.toString();
+            throw ex;
         }
         return content;
     }
@@ -472,12 +473,12 @@ public class GetDealFunction {
                 }
             }
         } catch (Exception ex) {
-            content += "Lỗi rồi: " + ex.getMessage();
+            throw ex;
         }
         return content;
     }
 
-    public static String getFromMuaChungVn() {
+    public static String getFromMuaChungVn() throws Exception {
         String content = "";
         String title = "";
         String description = "";
@@ -572,7 +573,7 @@ public class GetDealFunction {
                 }
             }
         } catch (Exception ex) {
-            content += "Lỗi rồi: " + ex.getMessage();
+            throw ex;
         }
         return content;
     }
