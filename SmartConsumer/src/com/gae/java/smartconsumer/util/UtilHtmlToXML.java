@@ -25,6 +25,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Stack;
+import java.util.concurrent.Future;
+
+import com.google.appengine.api.urlfetch.HTTPMethod;
+import com.google.appengine.api.urlfetch.HTTPRequest;
+import com.google.appengine.api.urlfetch.HTTPResponse;
+import com.google.appengine.api.urlfetch.URLFetchService;
+import com.google.appengine.api.urlfetch.URLFetchServiceFactory;
 /**
  * @author Nixforest
  *
@@ -634,7 +641,7 @@ public class UtilHtmlToXML {
 
         String encoding = "";
 
-        if (s.charAt(0) == 0xEF && s.charAt(1) == 0xBB && s.charAt(2) == 0xBF) {
+        /*if (s.charAt(0) == 0xEF && s.charAt(1) == 0xBB && s.charAt(2) == 0xBF) {
 
             encoding = "utf-8";
 
@@ -646,9 +653,9 @@ public class UtilHtmlToXML {
 
             start = 0;
 
-        }
-        //encoding = "utf-8";
-        //start = 0;
+        }*/
+        encoding = "utf-8";
+        start = 0;
 
         for (int i = start; i < limit && ((r2.equals("") && r.equals("")) || !opentags.empty()); i++) {
 
@@ -1712,14 +1719,27 @@ public class UtilHtmlToXML {
    }
    /*HTML to XML*/
    public String HtmlToXML(String address)throws Exception{
-       URL url = new URL(address);
+       // C1
+       /*URL url = new URL(address);
        BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
        String temp = "";
        StringBuffer stringHtml = new StringBuffer();
        while((temp = br.readLine()) != null){
            stringHtml.append(temp);
        }
-       return Convert2XML(stringHtml.toString());
+       return Convert2XML(stringHtml.toString());*/
+       
+       // C2
+       HTTPRequest request = new HTTPRequest(new URL(address), HTTPMethod.POST);
+       URLFetchService service = URLFetchServiceFactory.getURLFetchService();
+       // sync
+       //HTTPResponse response = service.fetch(request);
+       
+       // async
+       Future<HTTPResponse> future = service.fetchAsync(request);
+       HTTPResponse response = future.get();
+       return Convert2XML(new String(response.getContent()));
+       
    }
    
    public static String recodeToUTF(String source) {

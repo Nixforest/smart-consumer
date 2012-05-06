@@ -19,8 +19,11 @@
 package com.gae.java.smartconsumer.util;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.SocketTimeoutException;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.Calendar;
 import java.util.regex.Matcher;
@@ -34,6 +37,11 @@ import org.w3c.dom.NodeList;
 import com.gae.java.smartconsumer.blo.DealBLO;
 import com.gae.java.smartconsumer.model.Deal;
 import com.google.appengine.api.datastore.Text;
+import com.google.appengine.api.urlfetch.HTTPMethod;
+import com.google.appengine.api.urlfetch.HTTPRequest;
+import com.google.appengine.api.urlfetch.HTTPResponse;
+import com.google.appengine.api.urlfetch.URLFetchService;
+import com.google.appengine.api.urlfetch.URLFetchServiceFactory;
 
 /**
  * @author Nixforest
@@ -257,12 +265,9 @@ public class GetDealFunction {
 
                                 // Kết thúc một item
                                 content = content + "______________\n";
-                                title = URLEncoder.encode(title, "UTF-8");
-                                //description = URLEncoder.encode(description, "UTF-8");
-                                address = URLEncoder.encode(address, "UTF-8");
-                                unitPrice = URLEncoder.encode(unitPrice, "UTF-8");
-                                Deal deal = new Deal(title, new Text(description), address, link, imageLink, price, basicPrice,
+                                Deal deal = new Deal(title, description, address, link, imageLink, price, basicPrice,
                                         unitPrice, save, numberBuyer, endTime, isVoucher);
+                                //deal = GeneralUtil.encodeDeal(deal);
                                 DealBLO.INSTANCE.insert(deal);
                             }
                         }
@@ -459,12 +464,9 @@ public class GetDealFunction {
 
                                     // Kết thúc một item
                                     content = content + "______________\n";
-                                    title = URLEncoder.encode(title, "UTF-8");
-                                    //description = URLEncoder.encode(description, "UTF-8");
-                                    address = URLEncoder.encode(address, "UTF-8");
-                                    unitPrice = URLEncoder.encode(unitPrice, "UTF-8");
-                                    Deal deal = new Deal(title,  new Text(description), address, link, imageLink, price,
+                                    Deal deal = new Deal(title, description, address, link, imageLink, price,
                                             basicPrice, unitPrice, save, numberBuyer, endTime, isVoucher);
+                                    //deal = GeneralUtil.encodeDeal(deal);
                                     DealBLO.INSTANCE.insert(deal);
                                 }
                                 item++;
@@ -473,11 +475,42 @@ public class GetDealFunction {
                     }
                 }
             }
+        } catch(SocketTimeoutException ex) {
+            getFrom123doVn(url);
+        } catch (IOException ex) {
+            getFrom123doVn(url);
         } catch (Exception ex) {
-            throw ex;
+            //throw ex;
+            content += ex.getMessage();
         }
         return content;
     }
+    
+    public static String getFrom123doVnY(String address) throws Exception {
+        /*URL url = new URL(address);
+        BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
+        String temp = "";
+        StringBuffer stringHtml = new StringBuffer();
+        while((temp = br.readLine()) != null){
+            stringHtml.append(temp);
+        }
+        br.close();
+        return stringHtml.toString();*/
+        HTTPRequest request = new HTTPRequest(new URL(address), HTTPMethod.GET);
+        URLFetchService service = URLFetchServiceFactory.getURLFetchService();
+        HTTPResponse response = service.fetch(request);
+        //service.f
+        return new String(response.getContent());
+    }
+    
+    public static String getFrom123doVnX(String url) throws Exception {        
+        UtilHtmlToXML util = new UtilHtmlToXML();
+        // Lấy toàn bộ nội dung HTML và chuyển sang XML
+        String html = util.HtmlToXML(url);
+        return html;
+    }
+    
+    
 
     public static String getFromMuaChungVn() throws Exception {
         String content = "";
@@ -564,12 +597,10 @@ public class GetDealFunction {
                     content += "\nSold: " + numberBuyer;
                     content += "\n=================================" + String.valueOf(count);
 
-                    title = URLEncoder.encode(title, "UTF-8");
-                    //description = URLEncoder.encode(description, "UTF-8");
-                    address = URLEncoder.encode(address, "UTF-8");
-                    unitPrice = URLEncoder.encode(unitPrice, "UTF-8");
-                    Deal deal = new Deal(title,  new Text(description), address, link, imageLink, price, basicPrice, unitPrice,
+
+                    Deal deal = new Deal(title,  description, address, link, imageLink, price, basicPrice, unitPrice,
                             save, numberBuyer, endTime, isVoucher);
+                    //deal = GeneralUtil.encodeDeal(deal);
                     DealBLO.INSTANCE.insert(deal);
                 }
             }
