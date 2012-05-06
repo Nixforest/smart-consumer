@@ -48,8 +48,13 @@ public class DealCollectorServlet extends HttpServlet {
         throws IOException, ServletException {
         RequestDispatcher view = req.getRequestDispatcher("getdeal.jsp");
         try {
+            if (req.getParameter("url") == "") {
+                //throw new Exception(req.getParameter("link"));
+                throw new Exception(GetDealFunction.getFrom123doVnY(req.getParameter("link")));
+            }
             if (req.getParameter("123do") == "") {
-                    GetDealFunction.getFrom123doVn("http://123do.vn/");
+                System.out.println(GetDealFunction.getFrom123doVn("http://123do.vn/"));
+               //throw new Exception(GetDealFunction.getFrom123doVnY("http://123do.vn/"));
             }
             //System.out.println(req.getParameter("hotdeal"));
             if (req.getParameter("hotdeal") == "") {
@@ -66,13 +71,13 @@ public class DealCollectorServlet extends HttpServlet {
                 System.out.println(GetDealFunction.getFromCungMuaCom());
             }
             if (req.getParameter("test").isEmpty()) {
-                throw new Exception("Lỗi rồi!");
+                throw new Exception(GetDealFunction.getFrom123doVnX("http://123do.vn/"));
             }
-        } catch (Exception ex) {            
-            String error = ex.toString();
+        } catch (Exception ex) {
+            //ex.printStackTrace();
+            String error = "<code>" + ex.getMessage() + "</code>";
             req.setAttribute("error", error);
         }
         view.forward(req, resp);
-        //resp.sendRedirect("/getdeal");
     }
 }

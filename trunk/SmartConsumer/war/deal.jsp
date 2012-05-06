@@ -156,15 +156,16 @@ function IsNumberInt(str) {
         </tr>
         <%
             for (Deal deal : deals) {
+                //deal = GeneralUtil.decodeDeal(deal);
         %>
         <tr>
             <td><%=deal.getId() %></td>
-            <td><%=URLDecoder.decode(deal.getTitle(), "UTF-8") %></td>
-            <td><%=deal.getDescription().getValue() %></td>
-            <td><%=URLDecoder.decode(deal.getAddress(), "UTF-8") %></td>
+            <td><%=deal.getTitle() %></td>
+            <td><%=deal.getDescription() %></td>
+            <td><%=deal.getAddress() %></td>
             <td><%=deal.getLink() %></td>
-            <td><%=deal.getPrice() + " " + URLDecoder.decode(deal.getUnitPrice(), "UTF-8") %></td>
-            <td><%=deal.getBasicPrice() + " " + URLDecoder.decode(deal.getUnitPrice(), "UTF-8") %></td>
+            <td><%=deal.getPrice() + " " + deal.getUnitPrice() %></td>
+            <td><%=deal.getBasicPrice() + " " + deal.getUnitPrice() %></td>
             <td><%=deal.getSave() + "%" %></td>
             <td><%=deal.getNumberBuyer() %></td>
             <td><%=GeneralUtil.getRemainTime(deal.getEndTime()) %></td>

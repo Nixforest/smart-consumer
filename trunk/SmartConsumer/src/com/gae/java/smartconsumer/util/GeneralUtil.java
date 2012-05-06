@@ -18,6 +18,8 @@
  */
 package com.gae.java.smartconsumer.util;
 
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -25,6 +27,8 @@ import java.util.Date;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
+import com.gae.java.smartconsumer.model.Deal;
 
 /**
  * @author Nixforest
@@ -146,5 +150,56 @@ public class GeneralUtil {
         }
         result = result.replace(",", "");
         return result;
+    }
+    public static String cutOff(String str) {
+        if (str.length() >= 500) {
+            str = str.substring(0, 499);
+        }
+        return str;
+    }
+    public static Deal encodeDeal(Deal deal) throws Exception {
+        try {
+            String title = URLEncoder.encode(deal.getTitle(), "UTF-8");            
+            deal.setTitle(cutOff(title));
+            
+            String description = URLEncoder.encode(deal.getDescription(), "UTF-8");
+            deal.setDescription(cutOff(description));
+            
+            String address = URLEncoder.encode(deal.getAddress(), "UTF-8");
+            deal.setAddress(cutOff(address));
+
+            String unit = URLEncoder.encode(deal.getUnitPrice(), "UTF-8");
+            deal.setUnitPrice(cutOff(unit));
+            return deal;
+        } catch (Exception ex) {
+            throw ex;
+        }
+    }
+    /*public static Deal encodeDeal(Deal deal) throws Exception {
+        try {
+            String title = URLEncoder.encode(deal.getTitle(), "UTF-8");
+            if (title.length() >= 500) {
+                title.substring(0, 499);
+            }
+            deal.setTitle(title);
+            deal.setDescription(URLEncoder.encode(deal.getDescription(), "UTF-8"));
+            deal.setAddress(URLEncoder.encode(deal.getAddress(), "UTF-8"));
+            deal.setUnitPrice(URLEncoder.encode(deal.getUnitPrice(), "UTF-8"));
+            return deal;
+        } catch (Exception ex) {
+            throw ex;
+        }
+    }*/
+    
+    public static Deal decodeDeal(Deal deal) throws Exception {
+        try {
+            deal.setTitle(URLDecoder.decode(deal.getTitle(), "UTF-8"));
+            deal.setDescription(URLDecoder.decode(deal.getDescription(), "UTF-8"));
+            deal.setAddress(URLDecoder.decode(deal.getAddress(), "UTF-8"));
+            deal.setUnitPrice(URLDecoder.decode(deal.getUnitPrice(), "UTF-8"));
+            return deal;
+        } catch (Exception ex) {
+            throw ex;
+        }
     }
 }

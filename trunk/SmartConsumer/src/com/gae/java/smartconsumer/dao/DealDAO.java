@@ -111,7 +111,7 @@ public enum DealDAO {
      * @throws Exception
      */    
     public void insert(String title,
-                        Text description,
+            String description,
                         String address,
                         String link,
                         String imageLink,

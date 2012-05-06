@@ -70,6 +70,7 @@
                   String itemclass = "";
                   for (int i = 0; i < deals.size(); i++) {
                       Deal deal = deals.get(i);
+                      //deal = GeneralUtil.decodeDeal(deals.get(i));
                       if (((i + 1) % 3) == 0) {
                           itemclass = "deal_list deal_list_end";
                       } else {
@@ -78,9 +79,9 @@
                       %>
                       <div class="<%=itemclass %>">
                           <div class="deal_list_title">
-                              <a title="<%=deal.getDescription().getValue() %>"
+                              <a title="<%=deal.getDescription() %>"
                                   href="<%=deal.getLink() %>">
-                                  <%=GeneralUtil.getSubString(URLDecoder.decode(deal.getTitle(), "UTF-8"), 25) %>    
+                                  <%=GeneralUtil.getSubString(deal.getTitle(), 25) %>    
                               </a>
                               <div style="font-size:11px; font-style:italic;">
                                   <%
@@ -106,20 +107,20 @@
                               </a>
                           </div>
                           <div class="deal_list_desc">
-                              <%=GeneralUtil.getSubString(deal.getDescription().getValue(), 90) %>
+                              <%=GeneralUtil.getSubString(deal.getDescription(), 90) %>
                           </div>
                           <div style="width:150px; float:left;">
                               <div class="deal_list_view_price">
                                   <div class="number">
                                       <%=deal.getPrice() %>
-                                      <span><%=URLDecoder.decode(deal.getUnitPrice(), "UTF-8") %></span>
+                                      <span><%=deal.getUnitPrice() %></span>
                                   </div>
                               </div>
                               <div style="margin-top:0px; float:left; font-style:normal">
                                   <span style="font-size:13px;">
                                       Giá gốc:
                                       <em style="text-decoration:line-through;font-size:13px; color:#666; font-style:normal; ">
-                                          <%=deal.getBasicPrice() + " " + URLDecoder.decode(deal.getUnitPrice()) %>
+                                          <%=deal.getBasicPrice() + " " + deal.getUnitPrice() %>
                                       </em> 
                                   </span>
                               </div>

@@ -42,7 +42,7 @@ public class Deal {
     // Properties
     private String title;                       // Title of deal
     
-    private Text description;                 // Description of deal
+    private String description;                 // Description of deal
     private String address;                     // Address of deal
     private String link;                        // Url of deal
     private String imageLink;                   // Url of deal's image
@@ -57,7 +57,7 @@ public class Deal {
     private Integer status;                         // Status of record
     
     // Constructor
-    public Deal(String title, Text description, String address,
+    public Deal(String title, String description, String address,
             String link, String imageLink, double price,
             double basicPrice, String unitPrice, float save,
             int numberBuyer, 
@@ -99,7 +99,7 @@ public class Deal {
      * Get value of description.
      * @return the description
      */
-    public Text getDescription() {
+    public String getDescription() {
         return description;
     }
 
@@ -107,7 +107,7 @@ public class Deal {
      * Set the value for description.
      * @param description the description to set
      */
-    public void setDescription(Text description) {
+    public void setDescription(String description) {
         this.description = description;
     }
 

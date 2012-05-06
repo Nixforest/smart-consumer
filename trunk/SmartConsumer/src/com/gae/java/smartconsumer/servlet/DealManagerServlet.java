@@ -64,11 +64,12 @@ public class DealManagerServlet extends HttpServlet {
             Date endTime = GeneralUtil.getEndTime(req.getParameter("remainTime"));
             //Date remainTime = Calendar.getInstance().
             boolean isVoucher = Boolean.parseBoolean(req.getParameter("isVoucher"));
-            Deal deal = new Deal(title,  new Text(description), address,
+            Deal deal = new Deal(title, description, address,
                     link, imageLink, price, basicPrice, 
                     unitPrice, save, numberBuyer, endTime,
                     isVoucher);
-            
+
+            deal = GeneralUtil.encodeDeal(deal);
             DealBLO.INSTANCE.insert(deal);
         } catch (Exception ex) {
             RequestDispatcher view = req.getRequestDispatcher("deal.jsp");

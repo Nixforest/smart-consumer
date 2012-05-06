@@ -28,6 +28,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.gae.java.smartconsumer.dao.DealDAO;
 
+
 /**
  * @author Nixforest
  *
@@ -42,13 +43,14 @@ public class TestServlet extends HttpServlet {
     }
     public void doPost(HttpServletRequest req, HttpServletResponse resp)
         throws IOException, ServletException {
+        RequestDispatcher view = req.getRequestDispatcher("testpage.jsp");
+            
         try {
-            throw new Exception("Lỗi rồi!");
+            throw new Exception("Lỗi rồi!");            
         } catch (Exception ex) {
-            RequestDispatcher view = req.getRequestDispatcher("testpage.jsp");
             String error = ex.getMessage();
             req.setAttribute("error", error);
-            view.forward(req, resp);
         }
+        view.forward(req, resp);
     }
 }

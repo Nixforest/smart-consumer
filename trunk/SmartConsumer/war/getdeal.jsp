@@ -75,7 +75,10 @@
                   <td><input type="checkbox" id="test" name="test" value=""/>Test</td>
               </tr>
               <tr>
-                  <td><label for="link">URL: </label><input type="text" id="link" name="link" /></td>
+                  <td>
+                    <input type="checkbox" id="url" name="url" value=""/>
+                    <label for="link">URL: </label><input type="text" id="link" name="link" />
+                  </td>
               </tr>
               <tr>
                 <td align="right"><input type="submit" value="Lọc thông tin" /></td>
