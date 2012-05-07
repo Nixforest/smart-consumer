@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.SocketTimeoutException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.Calendar;
@@ -487,27 +488,43 @@ public class GetDealFunction {
     }
     
     public static String getFrom123doVnY(String address) throws Exception {
-        /*URL url = new URL(address);
-        BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
+        URL url = new URL(address);
+        URLConnection connection = url.openConnection();
+        connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded; charset=ISO-8859-1");
+        connection.setRequestProperty("Content-Encoding", "ISO-8859-1");
+
+        BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
         String temp = "";
         StringBuffer stringHtml = new StringBuffer();
         while((temp = br.readLine()) != null){
             stringHtml.append(temp);
         }
         br.close();
-        return stringHtml.toString();*/
-        HTTPRequest request = new HTTPRequest(new URL(address), HTTPMethod.GET);
+        //return stringHtml.toString();
+        //return connection.getInputStream().
+        return "Content type = " + connection.getContentType() + " and Content encoding = " + connection.getContentEncoding();
+        /*HTTPRequest request = new HTTPRequest(new URL(address), HTTPMethod.GET);
         URLFetchService service = URLFetchServiceFactory.getURLFetchService();
         HTTPResponse response = service.fetch(request);
         //service.f
-        return new String(response.getContent());
+        String str = new String(response.getContent());
+        return new String(str.getBytes("UTF-8"));*/
     }
     
-    public static String getFrom123doVnX(String url) throws Exception {        
-        UtilHtmlToXML util = new UtilHtmlToXML();
-        // Lấy toàn bộ nội dung HTML và chuyển sang XML
-        String html = util.HtmlToXML(url);
-        return html;
+    public static String getFrom123doVnX(String address) throws Exception {        
+        URL url = new URL("http://123do.vn/");
+        URLConnection connection = url.openConnection();
+        connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded; charset=ISO-8859-1");
+        connection.setRequestProperty("Content-Encoding", "ISO-8859-1");
+
+        BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
+        String temp = "";
+        StringBuffer stringHtml = new StringBuffer();
+        while((temp = br.readLine()) != null){
+            stringHtml.append(temp);
+        }
+        br.close();
+        return new UtilHtmlToXML().Convert2XML(stringHtml.toString());
     }
     
     
@@ -589,7 +606,7 @@ public class GetDealFunction {
                     content += "\nPrice: " + price + " " + unitPrice;
 
                     String basicPriceString = match.group(41);
-                    basicPrice = Double.parseDouble(basicPriceString.substring(0, basicPriceString.length() - 6).trim()
+                    basicPrice = Double.parseDouble(basicPriceString.substring(0, basicPriceString.lastIndexOf(" ") - 1).trim()
                             .replace(".", ""));
                     content += "\nReal price: " + basicPrice + " " + unitPrice;
 

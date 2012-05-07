@@ -20,6 +20,7 @@ package com.gae.java.smartconsumer.util;
 
 import java.io.*;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -45,7 +46,7 @@ public class UtilHtmlToXML {
     private static List<String> emptytags = new ArrayList<String>();
     private static HashMap<String, List<String>> autoclosetags = new HashMap<String, List<String>>();
 
-    private String Convert2XML(String s) {
+    public String Convert2XML(String s) {
 
         namedentities.put("AElig", 198);
 
@@ -1720,17 +1721,22 @@ public class UtilHtmlToXML {
    /*HTML to XML*/
    public String HtmlToXML(String address)throws Exception{
        // C1
-       /*URL url = new URL(address);
-       BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
+       URL url = new URL(address);
+       URLConnection connection = url.openConnection();
+       connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded; charset=ISO-8859-1");
+       connection.setRequestProperty("Content-Encoding", "ISO-8859-1");
+
+       BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
        String temp = "";
        StringBuffer stringHtml = new StringBuffer();
        while((temp = br.readLine()) != null){
            stringHtml.append(temp);
        }
-       return Convert2XML(stringHtml.toString());*/
+       br.close();
+       return Convert2XML(stringHtml.toString());
        
        // C2
-       HTTPRequest request = new HTTPRequest(new URL(address), HTTPMethod.POST);
+       /*HTTPRequest request = new HTTPRequest(new URL(address), HTTPMethod.POST);
        URLFetchService service = URLFetchServiceFactory.getURLFetchService();
        // sync
        //HTTPResponse response = service.fetch(request);
@@ -1738,7 +1744,7 @@ public class UtilHtmlToXML {
        // async
        Future<HTTPResponse> future = service.fetchAsync(request);
        HTTPResponse response = future.get();
-       return Convert2XML(new String(response.getContent()));
+       return Convert2XML(new String(response.getContent()));*/
        
    }
    

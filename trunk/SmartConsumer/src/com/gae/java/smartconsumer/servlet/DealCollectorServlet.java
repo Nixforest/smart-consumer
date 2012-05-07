@@ -48,30 +48,31 @@ public class DealCollectorServlet extends HttpServlet {
         throws IOException, ServletException {
         RequestDispatcher view = req.getRequestDispatcher("getdeal.jsp");
         try {
-            if (req.getParameter("url") == "") {
-                //throw new Exception(req.getParameter("link"));
-                throw new Exception(GetDealFunction.getFrom123doVnY(req.getParameter("link")));
-            }
             if (req.getParameter("123do") == "") {
-                System.out.println(GetDealFunction.getFrom123doVn("http://123do.vn/"));
+                GetDealFunction.getFrom123doVn("http://123do.vn/");
                //throw new Exception(GetDealFunction.getFrom123doVnY("http://123do.vn/"));
             }
             //System.out.println(req.getParameter("hotdeal"));
             if (req.getParameter("hotdeal") == "") {
-                    System.out.println(GetDealFunction.getFromHotDealVn("http://www.hotdeal.vn"));
-                    //System.out.println(GetDealFunction.getFromHotDealVn("http://www.hotdeal.vn/ho-chi-minh/?page=2"));
-                    /*GetDealFunction.getFromHotDealVn("http://www.hotdeal.vn/ha-noi/");
-                    GetDealFunction.getFromHotDealVn("http://www.hotdeal.vn/ha-noi/?page=2");
-                    GetDealFunction.getFromHotDealVn("http://www.hotdeal.vn/ha-noi/?page=3");*/
+                System.out.println(GetDealFunction.getFromHotDealVn("http://www.hotdeal.vn"));
+                //System.out.println(GetDealFunction.getFromHotDealVn("http://www.hotdeal.vn/ho-chi-minh/?page=2"));
+                /*GetDealFunction.getFromHotDealVn("http://www.hotdeal.vn/ha-noi/");
+                GetDealFunction.getFromHotDealVn("http://www.hotdeal.vn/ha-noi/?page=2");
+                GetDealFunction.getFromHotDealVn("http://www.hotdeal.vn/ha-noi/?page=3");*/
             }
             if (req.getParameter("muachung") == "") {
-                System.out.println(GetDealFunction.getFromMuaChungVn());
+                //throw new Exception(GetDealFunction.getFrom123doVnY(req.getParameter("link")));
+                GetDealFunction.getFromMuaChungVn();
             }
             if (req.getParameter("cungmua") == "") {
                 System.out.println(GetDealFunction.getFromCungMuaCom());
             }
             if (req.getParameter("test").isEmpty()) {
-                throw new Exception(GetDealFunction.getFrom123doVnX("http://123do.vn/"));
+                //throw new Exception(GetDealFunction.getFrom123doVnX("http://123do.vn/"));
+            }
+            if (req.getParameter("url") == "") {
+                //throw new Exception(req.getParameter("link"));
+                //throw new Exception(GetDealFunction.getFrom123doVnY(req.getParameter("link")));
             }
         } catch (Exception ex) {
             //ex.printStackTrace();

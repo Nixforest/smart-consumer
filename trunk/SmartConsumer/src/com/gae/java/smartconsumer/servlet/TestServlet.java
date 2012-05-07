@@ -19,6 +19,8 @@
 package com.gae.java.smartconsumer.servlet;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -27,6 +29,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.gae.java.smartconsumer.dao.DealDAO;
+import com.google.appengine.api.urlfetch.HTTPMethod;
+import com.google.appengine.api.urlfetch.HTTPRequest;
+import com.google.appengine.api.urlfetch.URLFetchService;
+import com.google.appengine.api.urlfetch.URLFetchServiceFactory;
 
 
 /**
@@ -37,10 +43,33 @@ public class TestServlet extends HttpServlet {
     public void doGet(HttpServletRequest req, HttpServletResponse resp)
         throws IOException, ServletException {
         RequestDispatcher view = req.getRequestDispatcher("testpage.jsp");
-        String error = "Không lỗi!";
+        //String error = "Không lỗi!";
+        
+        long startTime = System.currentTimeMillis();
+        URLFetchService fetcher = URLFetchServiceFactory.getURLFetchService();
+        fetcher.fetchAsync(makeGuestbookPostRequest("Async", "At" + startTime));
+        long totalProcessingTime = System.currentTimeMillis() - startTime;
+        resp.setContentType("text/html");
+        String error = "<h1>Asynchronous fetch demo</h1><br/>" + "<p>Total processing time: " + totalProcessingTime + "ms</p>";
+        //resp.getWriter().println("<h1>Asynchronous fetch demo</h1>");
+        //resp.getWriter().println("<p>Total processing time: " + totalProcessingTime + "ms</p>");
         req.setAttribute("error", error);
         view.forward(req, resp);
     }
+    public static HTTPRequest makeGuestbookPostRequest(String name, String content) {
+        HTTPRequest request = null;
+        URL url;
+        try {
+            url = new URL("http://123do.vn/");
+            request = new HTTPRequest(url, HTTPMethod.POST);
+            String body = "name=" + name + "&amp;content=" + content;
+            request.setPayload(body.getBytes());
+        } catch (MalformedURLException e) {
+        }
+        return request;
+
+    }
+
     public void doPost(HttpServletRequest req, HttpServletResponse resp)
         throws IOException, ServletException {
         RequestDispatcher view = req.getRequestDispatcher("testpage.jsp");
