@@ -49,12 +49,13 @@ public class DealCollectorServlet extends HttpServlet {
         RequestDispatcher view = req.getRequestDispatcher("getdeal.jsp");
         try {
             if (req.getParameter("123do") == "") {
-                GetDealFunction.getFrom123doVn("http://123do.vn/");
+                GetDealFunction.getFrom123doVn("http://123do.vn/", 0);
+                GetDealFunction.getFrom123doVn("http://123do.vn/dealhot.php", 1);
                //throw new Exception(GetDealFunction.getFrom123doVnY("http://123do.vn/"));
             }
             //System.out.println(req.getParameter("hotdeal"));
             if (req.getParameter("hotdeal") == "") {
-                System.out.println(GetDealFunction.getFromHotDealVn("http://www.hotdeal.vn"));
+                System.out.println(GetDealFunction.getFromHotDealVn("http://www.hotdeal.vn/ho-chi-minh/"));
                 //System.out.println(GetDealFunction.getFromHotDealVn("http://www.hotdeal.vn/ho-chi-minh/?page=2"));
                 /*GetDealFunction.getFromHotDealVn("http://www.hotdeal.vn/ha-noi/");
                 GetDealFunction.getFromHotDealVn("http://www.hotdeal.vn/ha-noi/?page=2");
