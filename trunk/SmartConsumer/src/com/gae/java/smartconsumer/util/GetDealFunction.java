@@ -148,7 +148,7 @@ public class GetDealFunction {
     }
 
     /**
-     * Get deal information from http://www.hotdeal.vn [Give the description for method].
+     * Get deal information from http://www.hotdeal.vn.
      * @param url
      * @return
      * @throws Exception 
@@ -275,19 +275,26 @@ public class GetDealFunction {
                     }
                 }
             }
+        } catch(SocketTimeoutException ex) {
+            getFromHotDealVn(url);
+        } catch (IOException ex) {
+            getFromHotDealVn(url);
         } catch (Exception ex) {
-            throw ex;
+            //throw ex;
+            ex.printStackTrace();
+            //System.out.println(ex.toString());;
         }
         return content;
     }
 
     /**
-     * Get deal information from http://123do.vn [Give the description for method].
-     * @param url
-     * @return
+     * Get deal information from http://123do.vn.
+     * @param url Address to get content
+     * @param type If 0: http://123do.vn/, or 1: http://123do.vn/dealhot.php 
+     * @return Content
      * @throws Exception 
      */
-    public static String getFrom123doVn(String url) throws Exception {
+    public static String getFrom123doVn(String url, int type) throws Exception {
         String content = "";
         String title = "";
         String description = "";
@@ -326,8 +333,10 @@ public class GetDealFunction {
                         if ("class".equals(divContent.item(j).getNodeName())) {
                             // Lấy thẻ có class = "deal_list"
                             if ("box-white".equals(divContent.item(j).getTextContent())) {
-                                if (item != 1 && item != 0) {
+                                if ((item != 1 && item != 0 && type == 0)
+                                        || (type == 1 && item != 0)) {
                                     content = content + Integer.toString(item) + ": \n";
+                                    
                                     // Lấy Link ảnh
                                     Element element = (Element) divList.item(i);
                                     NamedNodeMap divContentList = element.getElementsByTagName("img").item(0)
@@ -341,8 +350,6 @@ public class GetDealFunction {
                                     }
 
                                     // Lấy Tiêu đề
-                                    // element = (Element) nList.item(i + 6);
-                                    // content = content + "Tiêu đề: " + element.getTextContent().trim() + "\n";
                                     NodeList divContentListX = element.getElementsByTagName("div");
                                     for (int k = 0; k < divContentListX.getLength(); k++) {
                                         if (divContentListX.item(k).hasAttributes()) {
@@ -412,11 +419,11 @@ public class GetDealFunction {
                                                             || "dismaindealteamcurrent".equals(divContentList.item(l)
                                                                     .getTextContent())) {
                                                         element = (Element) divContentListX.item(k + 1);
-                                                        content = content + "Tiết kiệm: "
-                                                                + GeneralUtil.getTagValue("span", element, 0).trim()
-                                                                + "\n";
                                                         String saveString = GeneralUtil.getTagValue("span", element, 0)
                                                                 .trim();
+                                                        content = content + "Tiết kiệm: "
+                                                                + saveString
+                                                                + "\n";
                                                         save = Float.parseFloat(saveString.substring(0,
                                                                 saveString.length() - 1));
                                                     }
@@ -477,9 +484,9 @@ public class GetDealFunction {
                 }
             }
         } catch(SocketTimeoutException ex) {
-            getFrom123doVn(url);
+            getFrom123doVn(url, type);
         } catch (IOException ex) {
-            getFrom123doVn(url);
+            getFrom123doVn(url, type);
         } catch (Exception ex) {
             //throw ex;
             content += ex.getMessage();

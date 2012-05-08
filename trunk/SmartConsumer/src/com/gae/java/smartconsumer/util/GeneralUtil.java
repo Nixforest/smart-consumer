@@ -68,17 +68,18 @@ public class GeneralUtil {
      * [Give the description for method].
      * @param price
      * @return
+     * @throws Exception 
      */
-    public static double getPriceFromString(String price) {
+    public static double getPriceFromString(String price) throws Exception {
         double result = 0;
         try {
-            price = price.substring(0, price.length() - 4);
+            price = price.substring(0, price.lastIndexOf("0") + 1);
             price = price.replace(",", "");
             price = price.replace(".", "").trim();
             //price = price.replace(" VNĐ", "");
             result = Double.parseDouble(price.trim());
         } catch (Exception e) {
-            System.out.println(e.toString());
+            throw e;
         }
         return result;
     }
