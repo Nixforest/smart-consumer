@@ -69,7 +69,7 @@ public class DealManagerServlet extends HttpServlet {
                     unitPrice, save, numberBuyer, endTime,
                     isVoucher);
 
-            deal = GeneralUtil.encodeDeal(deal);
+            //deal = GeneralUtil.encodeDeal(deal);
             DealBLO.INSTANCE.insert(deal);
         } catch (Exception ex) {
             RequestDispatcher view = req.getRequestDispatcher("deal.jsp");

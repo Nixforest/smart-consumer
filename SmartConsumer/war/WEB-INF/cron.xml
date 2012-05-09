@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <cronentries>
     <cron>
-        <url>/getdeal?123do=</url>
-        <description>Reload Deal.jsp</description>
-        <schedule>every 2 minutes</schedule>
+        <url>/autocollector</url>
+        <description>Automatic run collector</description>
+        <schedule>every 6 hours</schedule>
+    </cron>
+    <cron>
+        <url>/autoupdate</url>
+        <description>Automatic update deal status</description>
+        <schedule>every 5 minutes</schedule>
     </cron>
 </cronentries>
