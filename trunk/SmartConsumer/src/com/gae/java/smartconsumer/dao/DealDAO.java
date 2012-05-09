@@ -199,6 +199,20 @@ public enum DealDAO {
             em.close();
         }
     }
+    /**
+     * Method change status of deal.
+     * @param id id of deal
+     * @param changeToStatus status that change to
+     */
+    public void changeStatus(long id, int changeToStatus) {
+        EntityManager em = EMFService.get().createEntityManager();
+        try {
+            Deal deal = em.find(Deal.class, id);
+            deal.setStatus(changeToStatus);
+        } finally {
+            em.close();
+        }
+    }
     
     /** 
      * Check if a deal exist.

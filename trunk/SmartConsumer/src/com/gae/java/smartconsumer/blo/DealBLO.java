@@ -96,6 +96,19 @@ public enum DealBLO {
         }
     }
     /**
+     * Method change status of deal.
+     * @param id id of deal
+     * @param changeToStatus status that change to
+     * @throws Exception Exception throw when id is invalid
+     */
+    public void changeStatus(long id, int changeToStatus) throws Exception {
+        if (isIdExist(id)) {
+            DealDAO.INSTANCE.changeStatus(id, changeToStatus);
+        } else {
+            throw new Exception("Id does not exist!");
+        }
+    }
+    /**
     * Get value of listAllDeals.
     * @return the listAllDeals
     */
