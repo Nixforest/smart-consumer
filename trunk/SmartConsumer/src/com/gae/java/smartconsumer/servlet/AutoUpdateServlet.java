@@ -21,6 +21,7 @@ package com.gae.java.smartconsumer.servlet;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.Iterator;
+import java.util.logging.Logger;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -37,22 +38,26 @@ import com.gae.java.smartconsumer.util.Status;
  *
  */
 public class AutoUpdateServlet extends HttpServlet {
+    private static final Logger log = Logger.getLogger(AutoUpdateServlet.class.getName());
     public void doGet(HttpServletRequest req, HttpServletResponse resp)
         throws IOException, ServletException {
-        //System.out.println("Auto update method");
+        log.info("Start AutoUpdateServlet");
         try {
             // update status of deal
             for (Deal deal : DealBLO.INSTANCE.getListAllDeals()) {
                 //System.out.println(deal.getEndTime().before(Calendar.getInstance().getTime()));
                 if (deal.getEndTime().before(Calendar.getInstance().getTime())) {
                     if (deal.getStatus() == Status.SELLING.ordinal()) {
-                        DealBLO.INSTANCE.changeStatus(deal.getId(), Status.OUTOFTIME.ordinal());                        
+                        DealBLO.INSTANCE.changeStatus(deal.getId(), Status.OUTOFTIME.ordinal());
+                        log.info("Status of deal (id = " + deal.getId() + ") has updated");
                     }
                 }
             }
+            throw new Exception("Hello hello");
         } catch (Exception ex) {
-            // TODO Auto-generated catch block
-            ex.printStackTrace();
+            //System.out.println(ex.getMessage());
+            //ex.printStackTrace();
+            log.severe(ex.getMessage());
         }
         resp.sendRedirect("/smartconsumer");
     }
