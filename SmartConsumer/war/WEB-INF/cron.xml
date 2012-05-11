@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <cronentries>
     <cron>
-        <url>/autocollector</url>
+        <url>/taskqueue</url>
         <description>Automatic run collector</description>
-        <schedule>every 6 hours</schedule>
+        <schedule>every 10 minutes</schedule>
     </cron>
     <cron>
         <url>/autoupdate</url>

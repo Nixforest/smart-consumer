@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<queue-entries>
+    <queue>
+        <name>default</name>    // task name will be called in servlet
+        <rate>100/s</rate>      // number of times invoke task in a second
+    </queue>
+</queue-entries>

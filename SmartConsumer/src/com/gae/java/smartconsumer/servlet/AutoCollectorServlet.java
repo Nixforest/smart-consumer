@@ -19,6 +19,7 @@
 package com.gae.java.smartconsumer.servlet;
 
 import java.io.IOException;
+import java.util.logging.Logger;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -33,23 +34,27 @@ import com.gae.java.smartconsumer.util.GetDealFunction;
  *
  */
 public class AutoCollectorServlet extends HttpServlet {
+    private static final Logger log = Logger.getLogger(AutoCollectorServlet.class.getName());
     public void doGet(HttpServletRequest req, HttpServletResponse resp)
         throws IOException, ServletException {
+        log.info("Start AutoCollectorServlet");
         try {
             // 123do
+            log.info("Start collect from http://123do.vn/");
             GetDealFunction.getFrom123doVn("http://123do.vn/", 0);
             GetDealFunction.getFrom123doVn("http://123do.vn/dealhot.php", 1);
-            
+
+            log.info("Start collect from http://www.hotdeal.vn/");
             GetDealFunction.getFromHotDealVn("http://www.hotdeal.vn/ho-chi-minh/");
             GetDealFunction.getFromHotDealVn("http://www.hotdeal.vn/ho-chi-minh/?page=2");
             GetDealFunction.getFromHotDealVn("http://www.hotdeal.vn/ha-noi/");
             GetDealFunction.getFromHotDealVn("http://www.hotdeal.vn/ha-noi/?page=2");
             GetDealFunction.getFromHotDealVn("http://www.hotdeal.vn/ha-noi/?page=3");
+            
+            log.info("Start collect from http://muachung.vn/");
             GetDealFunction.getFromMuaChungVn();
         } catch (Exception ex) {
-            //ex.printStackTrace();
-            String error = "<code>" + ex.getMessage() + "</code>";
-            req.setAttribute("error", error);
+            log.severe(ex.getMessage());
         }
         resp.sendRedirect("/smartconsumer");
     }
