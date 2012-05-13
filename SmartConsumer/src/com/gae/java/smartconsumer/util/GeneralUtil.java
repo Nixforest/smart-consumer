@@ -21,8 +21,10 @@ package com.gae.java.smartconsumer.util;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -202,5 +204,55 @@ public class GeneralUtil {
         } catch (Exception ex) {
             throw ex;
         }
+    }
+    
+    private static String[] VietnameseSigns = new String[] { 
+        "aAeEoOuUiIdDyY",
+        "áàạảãâấầậẩẫăắằặẳẵ",
+        "ÁÀẠẢÃÂẤẦẬẨẪĂẮẰẶẲẴ",
+        "éèẹẻẽêếềệểễ",
+        "ÉÈẸẺẼÊẾỀỆỂỄ",
+        "óòọỏõôốồộổỗơớờợởỡ",
+        "ÓÒỌỎÕÔỐỒỘỔỖƠỚỜỢỞỠ",
+        "úùụủũưứừựửữ",
+        "ÚÙỤỦŨƯỨỪỰỬỮ",
+        "íìịỉĩ",
+        "ÍÌỊỈĨ",
+        "đ",
+        "Đ",
+        "ýỳỵỷỹ",
+        "ÝỲỴỶỸ"
+    };
+    public static String RemoveSign4VietNameseString(String text)
+    {
+        for (int i = 1; i < VietnameseSigns.length; i++)
+        {
+            for (int j = 0; j < VietnameseSigns[i].length(); j++)
+            {
+                text = text.replace(VietnameseSigns[i].charAt(j), VietnameseSigns[0].charAt(i - 1));
+            }
+        }
+        return text;
+    }
+
+    public static List<String> NormalizationString(String str)
+    {
+        while (str.indexOf("  ") != -1)
+        {
+            str = str.replace("  ", " ");
+        }
+        List<String> resutl = new ArrayList<String>();
+
+        int index = 0;
+        for (char item : str.toCharArray())
+        {
+            if (" ".equals(item))
+            {
+                resutl.add(str.substring(index, str.indexOf(item) - index));
+                index = str.indexOf(item);
+            }
+        }
+        resutl.add(str.substring(index, str.length() - index));
+        return resutl;
     }
 }

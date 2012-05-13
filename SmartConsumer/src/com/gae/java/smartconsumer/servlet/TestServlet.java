@@ -29,6 +29,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.gae.java.smartconsumer.dao.DealDAO;
+import com.gae.java.smartconsumer.util.GetDealFunction;
 import com.google.appengine.api.urlfetch.HTTPMethod;
 import com.google.appengine.api.urlfetch.HTTPRequest;
 import com.google.appengine.api.urlfetch.URLFetchService;
@@ -45,7 +46,7 @@ public class TestServlet extends HttpServlet {
         RequestDispatcher view = req.getRequestDispatcher("testpage.jsp");
         //String error = "Không lỗi!";
         
-        long startTime = System.currentTimeMillis();
+        /*long startTime = System.currentTimeMillis();
         URLFetchService fetcher = URLFetchServiceFactory.getURLFetchService();
         fetcher.fetchAsync(makeGuestbookPostRequest("Async", "At" + startTime));
         long totalProcessingTime = System.currentTimeMillis() - startTime;
@@ -53,7 +54,7 @@ public class TestServlet extends HttpServlet {
         String error = "<h1>Asynchronous fetch demo</h1><br/>" + "<p>Total processing time: " + totalProcessingTime + "ms</p>";
         //resp.getWriter().println("<h1>Asynchronous fetch demo</h1>");
         //resp.getWriter().println("<p>Total processing time: " + totalProcessingTime + "ms</p>");
-        req.setAttribute("error", error);
+        req.setAttribute("error", error);*/
         view.forward(req, resp);
     }
     public static HTTPRequest makeGuestbookPostRequest(String name, String content) {
@@ -73,9 +74,9 @@ public class TestServlet extends HttpServlet {
     public void doPost(HttpServletRequest req, HttpServletResponse resp)
         throws IOException, ServletException {
         RequestDispatcher view = req.getRequestDispatcher("testpage.jsp");
-            
+        String link = req.getParameter("link");
         try {
-            throw new Exception("Lỗi rồi!");            
+            req.setAttribute("error", GetDealFunction.getAddressFromHotDealVn(link));            
         } catch (Exception ex) {
             String error = ex.getMessage();
             req.setAttribute("error", error);

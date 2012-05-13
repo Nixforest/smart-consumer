@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <queue-entries>
+    <total-storage-limit>150M</total-storage-limit>
     <queue>
-        <name>default</name>    // task name will be called in servlet
-        <rate>100/s</rate>      // number of times invoke task in a second
+        <name>default</name>
+        <rate>1/h</rate>
     </queue>
 </queue-entries>

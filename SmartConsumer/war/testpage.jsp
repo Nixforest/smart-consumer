@@ -10,6 +10,7 @@ String error = (String)request.getAttribute("error");
 %>
     <form action="/test" method="post" accept-charset="utf-8"> 
       <label><%=error %></label>
+      <input type="url" id="link" name="link"/>
       <input type="Submit" value="Submit"/>
     </form>
 </body>

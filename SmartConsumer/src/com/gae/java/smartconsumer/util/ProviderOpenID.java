@@ -22,8 +22,9 @@ package com.gae.java.smartconsumer.util;
  * @author Nixforest
  *
  */
-public enum Status {
-    SELLING,    // Status of deal "Selling"
-    OUTOFTIME,  // Status of deal "Out of time"
-    DELETED,    // Status of record "Deleted"
+public enum ProviderOpenID {
+    GOOGLE,     // Sign in with Google account
+    YAHOO,      // Sign in with Yahoo account
+    FLICKR,     // Sign in with Flickr account
+    WORDPRESS,  // Sign in with Wordpress account
 }

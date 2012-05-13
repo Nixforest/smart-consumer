@@ -100,17 +100,22 @@ function IsNumberInt(str) {
 </head>
 <body>
     <%
-        UserService userService = UserServiceFactory.getUserService();
-        User user = userService.getCurrentUser();
+    String url = "";
+    String urlLinktext = "";
+    String nickName = "";
     
-        String url = userService.createLoginURL(request.getRequestURI());
-        String urlLinktext = "Login";
+    if (request.getAttribute("url") != null) {
+        url = (String)request.getAttribute("url");
+    }
+    if (request.getAttribute("urlLinktext") != null) {
+        urlLinktext = (String)request.getAttribute("urlLinktext");
+    }
+    if (request.getAttribute("nickName") != null) {
+        nickName = (String)request.getAttribute("nickName");
+    }
         List<Deal> deals = (List<Deal>) (request.getAttribute("listDeals"));
         
-        if (user != null) {
-          url = userService.createLogoutURL(request.getRequestURI());
-          urlLinktext = "Logout";
-        }
+        
         String error = (String)request.getAttribute("error");
     %>
     <div class="errorview">
@@ -131,7 +136,7 @@ function IsNumberInt(str) {
         <div style="float: left;" class="headline">Deals Information</div>
         <div style="float: right;">
           <a href="<%=url%>"><%=urlLinktext%></a>
-          <%=(user == null ? "" : user.getNickname())%></div>
+          <%=(urlLinktext.equals("Login") ? "" : nickName)%></div>
       </div>
     </div>
     <div style="clear: both;"></div>
