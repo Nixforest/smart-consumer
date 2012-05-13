@@ -3,11 +3,11 @@
     <cron>
         <url>/taskqueue</url>
         <description>Automatic run collector</description>
-        <schedule>every 10 minutes</schedule>
+        <schedule>every 6 hours</schedule>
     </cron>
     <cron>
         <url>/autoupdate</url>
         <description>Automatic update deal status</description>
-        <schedule>every 5 minutes</schedule>
+        <schedule>every 1 hours</schedule>
     </cron>
 </cronentries>

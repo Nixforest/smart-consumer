@@ -43,6 +43,9 @@ public class AutoCollectorServlet extends HttpServlet {
             log.info("Start collect from http://123do.vn/");
             GetDealFunction.getFrom123doVn("http://123do.vn/", 0);
             GetDealFunction.getFrom123doVn("http://123do.vn/dealhot.php", 1);
+            
+            log.info("Start collect from http://muachung.vn/");
+            GetDealFunction.getFromMuaChungVn();
 
             log.info("Start collect from http://www.hotdeal.vn/");
             GetDealFunction.getFromHotDealVn("http://www.hotdeal.vn/ho-chi-minh/");
@@ -50,9 +53,6 @@ public class AutoCollectorServlet extends HttpServlet {
             GetDealFunction.getFromHotDealVn("http://www.hotdeal.vn/ha-noi/");
             GetDealFunction.getFromHotDealVn("http://www.hotdeal.vn/ha-noi/?page=2");
             GetDealFunction.getFromHotDealVn("http://www.hotdeal.vn/ha-noi/?page=3");
-            
-            log.info("Start collect from http://muachung.vn/");
-            GetDealFunction.getFromMuaChungVn();
         } catch (Exception ex) {
             log.severe(ex.getMessage());
         }

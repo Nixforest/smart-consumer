@@ -134,8 +134,18 @@ public class GetDealFunction {
                                         }
                                     }
                                 }*/
-                                result += divList.item(i).getTextContent();
-
+                                //result += divList.item(i).getTextContent();
+                                String address = divList.item(i).getTextContent();
+                                if (GeneralUtil.RemoveSign4VietNameseString(address).toLowerCase().contains("van phong giao hang hotdeal")) {
+                                    result += removePhoneNumber(address);
+                                } else {
+                                    Element element = (Element) divList.item(i);
+                                    NodeList divContentList = element.getElementsByTagName("p");
+                                    for (int k = 0; k < divContentList.getLength(); k++) {
+                                        result += divContentList.item(k).getTextContent();
+                                    }
+                                    result = removePhoneNumber(result);
+                                }
                             }
                         }
                     }
@@ -143,6 +153,23 @@ public class GetDealFunction {
             }
         } catch (Exception ex) {
             throw ex;
+        }
+        return result;
+    }
+    
+    private static String removePhoneNumber(String address) {
+        String result = "";
+        int location = GeneralUtil.RemoveSign4VietNameseString(address).toLowerCase().indexOf("dt");
+        if (location == -1) {
+            location = GeneralUtil.RemoveSign4VietNameseString(address).toLowerCase().indexOf("dien thoai");
+        }
+        if (location == -1) {
+            location = GeneralUtil.RemoveSign4VietNameseString(address).toLowerCase().indexOf("Hotline");
+        }
+        if (location != -1) {
+            result += address.substring(0, location);
+        } else {
+            result += address;
         }
         return result;
     }

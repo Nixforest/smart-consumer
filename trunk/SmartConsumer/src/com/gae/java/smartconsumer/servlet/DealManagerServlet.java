@@ -31,6 +31,9 @@ import com.gae.java.smartconsumer.blo.DealBLO;
 import com.gae.java.smartconsumer.model.Deal;
 import com.gae.java.smartconsumer.util.GeneralUtil;
 import com.google.appengine.api.datastore.Text;
+import com.google.appengine.api.users.User;
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 
 /**
  * @author Nixforest
@@ -40,6 +43,24 @@ public class DealManagerServlet extends HttpServlet {
     public void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws IOException, ServletException {
         RequestDispatcher view = req.getRequestDispatcher("deal.jsp");
+        
+        UserService userService = UserServiceFactory.getUserService();
+        User user = userService.getCurrentUser();
+        
+        if (user != null) {
+            if (!user.getNickname().equals("Nixforest21991920")
+                    && !user.getNickname().equals("dkhoa47")) {
+                resp.sendRedirect("/smartconsumer");
+                return;
+            }  
+            req.setAttribute("urlLinktext", "Logout");
+            req.setAttribute("url", userService.createLogoutURL(req.getRequestURI()));
+            req.setAttribute("nickName", user.getNickname());
+                          
+        } else {
+            req.setAttribute("url", "/_ah/login_required?url=dealmanager");
+            req.setAttribute("urlLinktext", "Login");
+        }
         try {
             req.setAttribute("listDeals", DealBLO.INSTANCE.getListAllDeals());
         } catch (Exception ex) {

@@ -37,6 +37,14 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
         <servlet-class>com.gae.java.smartconsumer.servlet.TaskQueueServlet</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>LoginRequired</servlet-name>
+        <servlet-class>com.gae.java.smartconsumer.servlet.LoginRequiredServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>MapViewer</servlet-name>
+        <servlet-class>com.gae.java.smartconsumer.servlet.MapViewerServlet</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>Test</servlet-name>
         <servlet-class>com.gae.java.smartconsumer.servlet.TestServlet</servlet-class>
     </servlet>
@@ -52,6 +60,10 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
     <servlet-mapping>
         <servlet-name>DealCollector</servlet-name>
         <url-pattern>/getdeal</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>RemoveDeal</servlet-name>
+        <url-pattern>/remove</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>RemoveAllDeal</servlet-name>
@@ -77,6 +89,14 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
         <servlet-name>TaskQueue</servlet-name>
         <url-pattern>/taskqueue</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LoginRequired</servlet-name>
+        <url-pattern>/_ah/login_required</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>MapViewer</servlet-name>
+        <url-pattern>/map</url-pattern>
+    </servlet-mapping>
     
     <servlet>
         <servlet-name>action</servlet-name>
@@ -98,6 +118,16 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
     <welcome-file-list>
         <welcome-file>smartconsumer</welcome-file>
     </welcome-file-list>
+    
+    <!-- <security-constraint>
+       <web-resource-collection>
+               <web-resource-name>smartconsumer</web-resource-name>
+               <url-pattern>/smartconsumer</url-pattern>
+       </web-resource-collection>
+       <auth-constraint>
+           <role-name>*</role-name>
+       </auth-constraint>
+    </security-constraint> -->
     
     <jsp-config>
     <taglib>
