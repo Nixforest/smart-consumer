@@ -48,8 +48,8 @@ public class DealManagerServlet extends HttpServlet {
         User user = userService.getCurrentUser();
         
         if (user != null) {
-            if (!user.getNickname().equals("Nixforest21991920")
-                    && !user.getNickname().equals("dkhoa47")) {
+            if (!user.getNickname().toLowerCase().contains("nixforest21991920")
+                    && !user.getNickname().toLowerCase().contains("dkhoa47")) {
                 resp.sendRedirect("/smartconsumer");
                 return;
             }  

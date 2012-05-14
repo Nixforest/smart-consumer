@@ -84,6 +84,8 @@ public class GetDealFunction {
                                 Element element = (Element) divList.item(i);
                                 result += GeneralUtil.getTagValue("p", element, 0);
 
+                                result = addressNormalization(result);
+                                return result;
                             }
                         }
                     }
@@ -137,14 +139,15 @@ public class GetDealFunction {
                                 //result += divList.item(i).getTextContent();
                                 String address = divList.item(i).getTextContent();
                                 if (GeneralUtil.RemoveSign4VietNameseString(address).toLowerCase().contains("van phong giao hang hotdeal")) {
-                                    result += removePhoneNumber(address);
+                                    result += addressNormalization(address);
                                 } else {
                                     Element element = (Element) divList.item(i);
                                     NodeList divContentList = element.getElementsByTagName("p");
                                     for (int k = 0; k < divContentList.getLength(); k++) {
                                         result += divContentList.item(k).getTextContent();
                                     }
-                                    result = removePhoneNumber(result);
+                                    result = addressNormalization(result);
+                                    return result;
                                 }
                             }
                         }
@@ -157,8 +160,9 @@ public class GetDealFunction {
         return result;
     }
     
-    private static String removePhoneNumber(String address) {
+    private static String addressNormalization(String address) {
         String result = "";
+        address = address.replaceFirst("Địa chỉ:", "");
         int location = GeneralUtil.RemoveSign4VietNameseString(address).toLowerCase().indexOf("dt");
         if (location == -1) {
             location = GeneralUtil.RemoveSign4VietNameseString(address).toLowerCase().indexOf("dien thoai");
@@ -1222,3 +1226,4 @@ public class GetDealFunction {
         return content;
     }
 }
+

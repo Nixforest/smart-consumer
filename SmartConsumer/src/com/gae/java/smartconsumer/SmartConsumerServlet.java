@@ -25,8 +25,8 @@ public class SmartConsumerServlet extends HttpServlet {
                 req.setAttribute("urlLinktext", "Logout");
                 req.setAttribute("url", userService.createLogoutURL(req.getRequestURI()));
                 req.setAttribute("nickName", user.getNickname());
-                if (user.getNickname().equals("Nixforest21991920")
-                        || user.getNickname().equals("dkhoa47")) {
+                if (user.getNickname().toLowerCase().contains("nixforest21991920")
+                        || user.getNickname().toLowerCase().contains("dkhoa47")) {
                     req.setAttribute("dealmanager", "/dealmanager");
                 }                
             } else {
