@@ -19,6 +19,8 @@
 package com.gae.java.smartconsumer.servlet;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -27,6 +29,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.gae.java.smartconsumer.blo.DealBLO;
+import com.gae.java.smartconsumer.model.Deal;
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
@@ -53,10 +56,25 @@ public class MapViewerServlet extends HttpServlet {
             req.setAttribute("urlLinktext", "Login");
         }
         try {
-            req.setAttribute("listDeals", DealBLO.INSTANCE.getListAllDeals());
+            List<Deal> listDeals = new ArrayList<Deal>();
+            for (Deal deal : DealBLO.INSTANCE.getListAllDeals()) {                
+                if (!checkIfAddressExist(listDeals, deal.getAddress())) {
+                    listDeals.add(deal);
+                }
+            }
+            req.setAttribute("listDeals", listDeals);
         } catch (Exception ex) {
             req.setAttribute("error", ex.getMessage());
         }        
         view.forward(req, resp);
+    }
+    
+    public boolean checkIfAddressExist(List<Deal> deals, String address) {
+        for (Deal deal : deals) {
+            if (deal.getAddress().contains(address)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

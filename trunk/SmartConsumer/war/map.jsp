@@ -10,175 +10,236 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-<title>Xem bản đồ</title>
-<script src="//maps.google.com/maps?file=api&amp;v=2.x&amp;" type="text/javascript"></script>
-<!-- <script src="http://maps.google.com/maps?file=api&v=2" type="text/javascript"></script> -->
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+  <title>Xem bản đồ</title>
+<link rel="stylesheet"
+        type="text/css"
+        href="css/main.css"/>
+  <style type="text/css">
+      html { height: 100% }
+      body { height: 100%; margin: 0; padding: 0 }
+      #map { height: 100% }
+    </style>
+  <script type="text/javascript"
+        src="http://maps.googleapis.com/maps/api/js?key=AIzaSyAf3qvpvrX05JezFZLUxRlPdSFvdIQYJ3A&sensor=true">
+      </script>
 
 <script type="text/javascript">
-	//         
-    var map = null;
-	var geocoder = null;
+	var geocoder;
+	var map;
 	function initialize() {
-		if (GBrowserIsCompatible()) {
-            var lat = 10.819143;
-            var lng = 106.631927;
-			map = new GMap2(document.getElementById("map"));
-            map.addControl(new GSmallMapControl());
-            map.addControl(new GMapTypeControl());
-			map.setCenter(new GLatLng(lat, lng), 13);
-			geocoder = new GClientGeocoder();
-			setAddressInDatabase();
-		}
+		var lat = 10.819143;
+        var lng = 106.631927;
+		geocoder = new google.maps.Geocoder();
+	    var latlng = new google.maps.LatLng(lat, lng);
+	    var myOptions = {
+	    	    zoom: 12,
+	    	    center: latlng,
+	    	    mapTypeId: google.maps.MapTypeId.ROADMAP
+	    }
+	    map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+	    setAddressFromDatabase();
 	}
-	function showAddress(address) {
-		//document.write(document.getElementById("numberOfDeal"));
-		  geocoder.getLatLng(
-		    address,
-		    function(point) {
-		      if (!point) {
-		        //alert(address + " not found");
-		        //return;
-		      } else {
-		        //map.setCenter(point, 13);
-		        var marker = new GMarker(point);
-                GEvent.addListener(marker, "click", function() {
-                    marker.openInfoWindowTabsHtml(address);
+	function codeAddress() {
+		var address = document.getElementById("address").value;
+		codeAddressWithParam(address);
+	}
+	function codeAddressWithParam(address, title, image) {
+		geocoder.geocode(
+                {'address': address},
+                function(results, status) {
+                    if (status == google.maps.GeocoderStatus.OK) {
+                        //map.setCenter(results[0].geometry.location);
+                        var marker = new google.maps.Marker({
+                            map: map,
+                            draggable: true,
+                            animation: google.maps.Animation.DROP,
+                            position: results[0].geometry.location,
+                            title: address
+                        });
+                        var infowindow = new google.maps.InfoWindow({
+                        	content: address 
+                        });
+                        google.maps.event.addListener(marker, 'mouseover', function() {
+                        	infowindow.open(map, marker);
+                        });google.maps.event.addListener(marker, 'mouseout', function() {
+                            infowindow.close();
+                        });
+                    } else {
+                        //alert("Geocode was not successful for the following reason: " + status);
+                        return;
+                    }
                 });
-		        map.addOverlay(marker);
-
-		        // As this is user-generated content, we display it as
-		        // text rather than HTML to reduce XSS vulnerabilities.
-		        //marker.openInfoWindow(document.createTextNode(address));
-		      }
-		    }
-		  );
 	}
-	function setAddressInDatabase() {		
-		for (var i = document.getElementById("numberOfDeal").innerText - 1; i >= 0 ; i--) {
-			var address = "address" + i;
-			showAddress(document.getElementById(address).innerText);
-		}
+	function codeAddressWithIndex(index) {
+		var address = document.getElementById("address" + index).innerText;
+        var title = document.getElementById("title" + index).innerText;
+        var image = document.getElementById("image" + index).innerText;
+        var price = document.getElementById("price" + index).innerText;
+        var basicPrice = document.getElementById("basicPrice" + index).innerText;
+        var numberBuyer = document.getElementById("numberBuyer" + index).innerText;
+        var remainTime = document.getElementById("remainTime" + index).innerText;
+        
+        geocoder.geocode(
+                {'address': address},
+                function(results, status) {
+                    if (status == google.maps.GeocoderStatus.OK) {
+                        //map.setCenter(results[0].geometry.location);
+                        var marker = new google.maps.Marker({
+                            map: map,
+                            draggable: true,
+                            animation: google.maps.Animation.DROP,
+                            position: results[0].geometry.location,
+                            title: address
+                        });
+                        var infowindow = new google.maps.InfoWindow({
+                            content: "<table>" +
+                                "<tr>" +
+                                    "<td colspan=\"2\">" +
+                                    "<b>" + title + "</b>"
+                                    + "</td>"
+                                + "</tr>" +
+                                "<tr>" +
+                                    "<td>" +
+                                        "<img src=\""+ image + "\" width=\"100\" height=\"100\"></img>"
+                                    + "</td>" +
+                                    "<td>" +
+                                        "<b>Giá: </b>" + price + "<br/>" +
+                                        "<b>Giá gốc: </b>" + basicPrice + "<br/>" +
+                                        "<b>Số lượng đã mua: </b>" + numberBuyer + "<br/>" +
+                                        "<b>Thời gian còn lại: </b>" + remainTime
+                                    + "</td>"
+                            + "</tr>"
+                            + "</table>"
+                        });
+                        google.maps.event.addListener(marker, 'mouseover', function() {
+                            infowindow.open(map, marker);
+                        });google.maps.event.addListener(marker, 'mouseout', function() {
+                            infowindow.close();
+                        });
+                    } else {
+                        //alert("Geocode was not successful for the following reason: " + status);
+                        return;
+                    }
+                });
+    }
+
+	function setAddressFromDatabase() {
+		for (var i = 0; i < document.getElementById("numberOfDeal").innerText ; i++) {
+            codeAddressWithIndex(i);
+        }
 	}
-	/* function load() {
-		if (GBrowserIsCompatible()) {
-			var lat = 10.819143;
-			var lng = 106.631927;
-
-			var map = new GMap2(document.getElementById("map"));
-			map.addControl(new GSmallMapControl());
-			map.addControl(new GMapTypeControl());
-			//map.setCenter(new GLatLng(lat, lng), 15);
-			
-            map.setCenter(new GLatLng(37.4419, -122.1419), 13);
-
-			var infoTabs = [
-					new GInfoWindowTab("Address", "Thành phố Hồ chí minh<br /> Việt Nam"), ];
-
-			// Place a marker in the center of the map and open the info window
-			GDownloadUrl("address.xml", function(data, responseCode) {
-				var xml = GXml.parse(data);
-				var markers = xml.documentElement.getElementsByTagName("marker");
-				for (var i = 0; i < markers.length; i++) {
-					var point = new GLatLng(parseFloat(markers[i].getAttribute("lat")),
-							 parseFloat(markers[i].getAttribute("lng")));
-					map.addOverlay(new GMarker(point));
-				}
-			});
-			var marker = new GMarker(map.getCenter());
-			GEvent.addListener(marker, "click", function() {
-				marker.openInfoWindowTabsHtml(infoTabs);
-			});
-			map.addOverlay(marker);
-			marker.openInfoWindowTabsHtml(infoTabs);
-
-			var point = new GLatLng(lat, lng);
-			panoramaOptions = {
-				latlng : point
-			};
-			pano = new GStreetviewPanorama(document
-					.getElementById("streetview"), panoramaOptions);
-			GEvent.addListener(pano);
-
-		}
+	
+	function showLocation(position) {
+		  var latitude = position.coords.latitude;
+		  var longitude = position.coords.longitude;
+          var latlng = new google.maps.LatLng(latitude, longitude);
+		  var marker = new google.maps.Marker({
+              map: map,
+              draggable: true,
+              animation: google.maps.Animation.DROP,
+              position: latlng,
+              title: "Vị trí của bạn"
+          });
+		  map.setCenter(latlng);
 	}
 
-	function readData() {
-		var request = GXmlHttp.create();
-		request.open("GET", "address.xml", true);
-		request.onreadystatechange = function() {
-		  if (request.readyState == 4) {
-		    alert(request.responseText);
-		  }
-		}
-		request.send(null);
-	} */
+	function errorHandler(err) {
+	  if(err.code == 1) {
+	    alert("Error: Access is denied!");
+	  }else if( err.code == 2) {
+	    alert("Error: Position is unavailable!");
+	  }
+	}
+	function getLocation(){
+
+	   if(navigator.geolocation){
+	      // timeout at 60000 milliseconds (60 seconds)
+	      var options = {timeout:60000};
+	      navigator.geolocation.getCurrentPosition(showLocation, 
+	                                               errorHandler,
+	                                               options);
+	   }else{
+	      alert("Sorry, browser does not support geolocation!");
+	   }
+	}
 </script>
 
 </head>
-<body onload="initialize()" onunload="GUnload()">
+<body onload="initialize()">
   <%
-  List<Deal> deals = (List<Deal>) (request.getAttribute("listDeals"));
+  String url = "";
+  String urlLinktext = "";
+  String nickName = "";
+  
+  if (request.getAttribute("url") != null) {
+      url = (String)request.getAttribute("url");
+  }
+  if (request.getAttribute("urlLinktext") != null) {
+      urlLinktext = (String)request.getAttribute("urlLinktext");
+  }
+  if (request.getAttribute("nickName") != null) {
+      nickName = (String)request.getAttribute("nickName");
+  }
+  List<Deal> deals = (List<Deal>)request.getAttribute("listDeals");
   %>
-    <form action="#" onsubmit="showAddress(this.address.value); return false">
-        <input type="text" size="60" name="address"></input>
-        <input type="submit" value="Go!"/>
-        <div id="map" style="width: 500px; height: 400px"></div>
+    <div style="width: 100%;">
+      <div class="line"></div>
+      <div class="topLine">
+        <div style="float: left;">
+          <img src="images/smartconsumer.png" />
+        </div>
+        <div style="float: left;" class="headline">Xem bản đồ</div>
+        <div style="float: right;">
+          <a href="<%=url%>"><%=urlLinktext%></a>
+          <%=(urlLinktext.equals("Login") ? "" : nickName)%></div>
+      </div>
+    </div>
     <div style="clear: both;"></div>
-    Number of Deals: <label id="numberOfDeal" name="numberOfDeal"><%=deals.size() %></label>
-    [<a href="/getdeal">Cập nhật</a>]
-    [<a href="/removeall">Xóa tất cả</a>]
+ <div id="map_canvas" style="width: 920px; height: 480px;"></div>
+  <div>
+    <form>
+    <input id="address" type="textbox" value="Thành Phố Hồ Chí Minh">
+    <input type="button" value="Vị trí của bạn" onclick="getLocation();">
+    <input type="button" value="Tìm địa điểm" onclick="codeAddress()">
+   </form>
+    
+  </div>
+  <div style="display: none;">
+    <label id="numberOfDeal" name="numberOfDeal"><%=deals.size() %></label>
     <table>
-        <tr>
-            <th>Id</th>
-            <th>Tiêu đề</th>
-            <th>Mô tả</th>
-            <th>Địa chỉ</th>
-            <th>Link</th>
-            <th>Giá</th>
-            <th>Giá gốc</th>
-            <th>Tiết kiệm</th>
-            <th>Người mua</th>
-            <th>Thời gian</th>
-            <th>Cập nhật</th>
-            <th>Status</th>
-            <th>Remove</th>
-        </tr>
-        <%
-            int i = -1; 
-            for (Deal deal : deals) {
-                //deal = GeneralUtil.decodeDeal(deal);
-                i++;
+    <%
+    int i = -1;
+    for (Deal item : deals) {
+        i++;
         %>
         <tr>
-            <td><%=deal.getId() %></td>
-            <td><%=deal.getTitle() %></td>
-            <td><%=deal.getDescription() %></td>
-            <td><label id="address<%=i%>" name="address<%=i%>"><%=deal.getAddress() %></label></td>
-            <td><%=deal.getLink() %></td>
-            <td><%=deal.getPrice() + " " + deal.getUnitPrice() %></td>
-            <td><%=deal.getBasicPrice() + " " + deal.getUnitPrice() %></td>
-            <td><%=deal.getSave() + "%" %></td>
-            <td><%=deal.getNumberBuyer() %></td>
-            <td><%=GeneralUtil.getRemainTime(deal.getEndTime()) %></td>
-            <%-- <td><%=deal.isVoucher() %></td> --%>
-            <td><%=deal.getUpdateDate()%></td>
-            <td><%=Status.values()[deal.getStatus()] %></td>
-            <%
-            String statusRemove = "";
-            statusRemove = (deal.getStatus() != Status.DELETED.ordinal())?("Remove"):("Restore");
-            %>
             <td>
-              <a class="done" href="/remove?id=<%=deal.getId() %>&opt=<%=statusRemove %>"><%=statusRemove %></a>
+                <label id="title<%=i %>" name="title<%=i %>"><%=item.getTitle() %></label>
+            </td>
+            <td>
+                <label id="image<%=i %>" name="image<%=i %>"><%=item.getImageLink() %></label>
+            </td>
+            <td>
+                <label id="price<%=i %>" name="price<%=i %>"><%=GeneralUtil.convertPriceToText(item.getPrice()) %></label>
+            </td>
+            <td>
+                <label id="basicPrice<%=i %>" name="basicPrice<%=i %>"><%=GeneralUtil.convertPriceToText(item.getBasicPrice()) %></label>
+            </td>
+            <td>
+                <label id="numberBuyer<%=i %>" name="numberBuyer<%=i %>"><%=item.getNumberBuyer() %></label>
+            </td>
+            <td>
+                <label id="remainTime<%=i %>" name="remainTime<%=i %>"><%=GeneralUtil.getRemainTime(item.getEndTime()) %></label>
+            </td>
+            <td>
+                <label id="address<%=i %>" name="address<%=i %>"><%=item.getAddress() %></label>
             </td>
         </tr>
         <%
-            }
-        %>
+    }
+    %>
     </table>
-  
-    </form>
-    <hr/>
-  <!-- <input type="submit" value="LoadData" onclick="readData()"/> -->
+  </div>
 </body>
 </html>

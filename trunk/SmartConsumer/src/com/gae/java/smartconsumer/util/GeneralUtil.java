@@ -255,4 +255,21 @@ public class GeneralUtil {
         resutl.add(str.substring(index, str.length() - index));
         return resutl;
     }
+    public static String convertPriceToText(double price) {
+        String strTextPrice = "";
+        int priceBillion = (int) (price / 1000000000.0);
+        int priceMillion = (int) ((price % 1000000000) / 1000000.0);
+        int priceThousand = (int) (((price % 1000000000) % 1000000) / 1000.0);
+        if (priceBillion > 0 && price > 900000000) {
+            strTextPrice = strTextPrice + "<b>" + priceBillion + "</b> tỷ ";
+        }
+        if (priceMillion > 0) {
+            strTextPrice = strTextPrice + "<b>" + priceMillion + "</b> triệu ";
+        }
+        if (priceThousand > 0) {
+            strTextPrice = strTextPrice + "<b>" + priceThousand + "</b> ngàn ";
+        }
+
+        return strTextPrice + "<b>VNĐ</b>";
+    }
 }
