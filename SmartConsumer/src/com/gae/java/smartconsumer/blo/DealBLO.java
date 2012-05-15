@@ -130,4 +130,8 @@ public enum DealBLO {
         }
         return result;
     }
+    
+    public boolean isExist(Deal deal) {
+        return DealDAO.INSTANCE.isExist(deal);
+    }
 }

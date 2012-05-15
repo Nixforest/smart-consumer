@@ -84,7 +84,7 @@ public class GetDealFunction {
                                 Element element = (Element) divList.item(i);
                                 result += GeneralUtil.getTagValue("p", element, 0);
 
-                                result = addressNormalization(result);
+                                result = GeneralUtil.addressNormalization(result);
                                 return result;
                             }
                         }
@@ -139,14 +139,14 @@ public class GetDealFunction {
                                 //result += divList.item(i).getTextContent();
                                 String address = divList.item(i).getTextContent();
                                 if (GeneralUtil.RemoveSign4VietNameseString(address).toLowerCase().contains("van phong giao hang hotdeal")) {
-                                    result += addressNormalization(address);
+                                    result += GeneralUtil.addressNormalization(address);
                                 } else {
                                     Element element = (Element) divList.item(i);
                                     NodeList divContentList = element.getElementsByTagName("p");
                                     for (int k = 0; k < divContentList.getLength(); k++) {
                                         result += divContentList.item(k).getTextContent();
                                     }
-                                    result = addressNormalization(result);
+                                    result = GeneralUtil.addressNormalization(result);
                                     return result;
                                 }
                             }
@@ -156,24 +156,6 @@ public class GetDealFunction {
             }
         } catch (Exception ex) {
             throw ex;
-        }
-        return result;
-    }
-    
-    private static String addressNormalization(String address) {
-        String result = "";
-        address = address.replaceFirst("Địa chỉ:", "");
-        int location = GeneralUtil.RemoveSign4VietNameseString(address).toLowerCase().indexOf("dt");
-        if (location == -1) {
-            location = GeneralUtil.RemoveSign4VietNameseString(address).toLowerCase().indexOf("dien thoai");
-        }
-        if (location == -1) {
-            location = GeneralUtil.RemoveSign4VietNameseString(address).toLowerCase().indexOf("Hotline");
-        }
-        if (location != -1) {
-            result += address.substring(0, location);
-        } else {
-            result += address;
         }
         return result;
     }
@@ -242,10 +224,6 @@ public class GetDealFunction {
                                     if ("href".equals(attx.item(k).getNodeName())) {
                                         link = "http://www.hotdeal.vn" + attx.item(k).getTextContent().trim();
                                         content = content + "Link gốc: " + link + "\n";
-                                        
-                                        // Lấy địa chỉ
-                                        address = getAddressFromHotDealVn(link);
-                                        content = content + "Địa chỉ: " + address + "\n";
                                     }
                                 }
 
@@ -297,10 +275,18 @@ public class GetDealFunction {
 
                                 // Kết thúc một item
                                 content = content + "______________\n";
+
+                                // Lấy địa chỉ
+                                address = "";//getAddressFromHotDealVn(link);
+                                //content = content + "Địa chỉ: " + address + "\n";
                                 Deal deal = new Deal(title, description, address, link, imageLink, price, basicPrice,
                                         unitPrice, save, numberBuyer, endTime, isVoucher);
+                                if (!DealBLO.INSTANCE.isExist(deal)) {
+                                    address = getAddressFromHotDealVn(link);
+                                    deal.setAddress(address);
+                                    DealBLO.INSTANCE.insert(deal);
+                                }
                                 //deal = GeneralUtil.encodeDeal(deal);
-                                DealBLO.INSTANCE.insert(deal);
                             }
                         }
                     }
