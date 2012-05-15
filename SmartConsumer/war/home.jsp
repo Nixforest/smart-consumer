@@ -96,7 +96,7 @@
                               </a>
                               <div style="font-size:11px; font-style:italic;">
                                   <%
-                                      if (deal.isVoucher()) {
+                                      if (deal.getVoucher()) {
                                           %>
                                           <img align="absmiddle" src="images/voucher-icon.png">
                                           (Giao Voucher)

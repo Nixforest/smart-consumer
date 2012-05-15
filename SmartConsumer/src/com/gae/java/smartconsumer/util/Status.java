@@ -26,4 +26,5 @@ public enum Status {
     SELLING,    // Status of deal "Selling"
     OUTOFTIME,  // Status of deal "Out of time"
     DELETED,    // Status of record "Deleted"
+    WAITTOCHECK,//Status of deal
 }

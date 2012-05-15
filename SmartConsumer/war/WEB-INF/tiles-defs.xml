@@ -5,9 +5,26 @@
        "http://struts.apache.org/dtds/tiles-config_1_3.dtd">
 
 <tiles-definitions>
-
-  <definition name="home" path="/layout.jsp">
+  <definition name="admin" path="/layout.jsp">
+      <put name="title" value="SmartConsumer"/>  
       <put name="header" value="/header.jsp"/>  
       <put name="body" value="/body.jsp"/>
+      <put name="footer" value="/footer.jsp"/>
   </definition>
-  </tiles-definitions>
+  <definition name="linsertdeal" extends="admin">
+    <put name="title" value="Insert Deal" />
+    <put name="body" value="/insert_deal.jsp" />
+  </definition>
+  <definition name="lmanagedeal" extends="admin">
+    <put name="title" value="Manage Deal" />
+    <put name="body" value="/manage_deal.jsp" />
+  </definition>
+  <definition name="lviewdeal" extends="admin">
+    <put name="title" value="View Deal" />
+    <put name="body" value="/viewdeal.jsp" />
+  </definition>
+  <definition name="leditdeal" extends="admin">
+    <put name="title" value="Edit Deal" />
+    <put name="body" value="/editdeal.jsp" />
+  </definition>
+</tiles-definitions>

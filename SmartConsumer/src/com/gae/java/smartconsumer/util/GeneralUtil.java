@@ -121,6 +121,7 @@ public class GeneralUtil {
         result = calendar.getTime();
         return result;
     }
+    
     /**
      * 
      * Method get the string remainTime from endtime.
@@ -140,7 +141,7 @@ public class GeneralUtil {
         return result;
     }
     
-
+    
     /**
      * Check if a string can convert to a number
      * @param s string input
@@ -234,7 +235,9 @@ public class GeneralUtil {
         }
         return text;
     }
-
+    public static String ReplaceNotation(String text, String notation1, String notation2){
+        return text.replace(notation1, notation2);
+    }
     public static List<String> NormalizationString(String str)
     {
         while (str.indexOf("  ") != -1)

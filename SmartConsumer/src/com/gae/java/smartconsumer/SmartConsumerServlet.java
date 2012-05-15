@@ -7,7 +7,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.*;
 
 import com.gae.java.smartconsumer.blo.DealBLO;
-import com.gae.java.smartconsumer.util.ProviderOpenID;
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
