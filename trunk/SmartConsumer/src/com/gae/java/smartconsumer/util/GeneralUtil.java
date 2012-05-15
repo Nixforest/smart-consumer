@@ -272,4 +272,50 @@ public class GeneralUtil {
 
         return strTextPrice + "<b>VNĐ</b>";
     }
+
+    /**
+     * Check if a char is a number.
+     * @param c character to check
+     * @return True if c is a number, false otherwise
+     */
+    public static boolean isNumber(char c) {
+        try {
+            Integer.parseInt(String.valueOf(c));
+        } catch (NumberFormatException ex) {
+            return false;
+        }
+        return true;
+    }
+    
+    /**
+     * Normalize a address.
+     * @param result Address before normalization
+     * @return Address after normalization
+     */
+    public static String addressNormalization(String result) {
+        String address = result;
+        address = address.replaceFirst("Địa chỉ:", "");
+        int location = GeneralUtil.RemoveSign4VietNameseString(address).toLowerCase().indexOf("dt");
+        if (location != -1) {
+            address = address.substring(0, location);
+        }
+        location = GeneralUtil.RemoveSign4VietNameseString(address).toLowerCase().indexOf("dien thoai");
+        if (location != -1) {
+            address = address.substring(0, location);
+        }
+        location = GeneralUtil.RemoveSign4VietNameseString(address).toLowerCase().indexOf("Hotline");
+        if (location != -1) {
+            address = address.substring(0, location);
+        }
+        location = GeneralUtil.RemoveSign4VietNameseString(address).toLowerCase().indexOf("fax");
+        if (location != -1) {
+            address = address.substring(0, location);
+        }
+        for (char c : address.toCharArray()) {
+            if (isNumber(c)) {
+                return address.substring(address.indexOf(String.valueOf(c)));
+            }
+        }
+        return address;
+    }
 }
