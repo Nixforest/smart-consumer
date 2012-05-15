@@ -64,6 +64,13 @@ public enum DealDAO {
         
         return deals;
     }
+    //get by id
+    public Deal getOne(Long id){
+        EntityManager em = EMFService.get().createEntityManager();
+        Query q = em.createQuery("select from " + Deal.class.getName() + " where id=" + id);
+        Deal deal = (Deal)q.getSingleResult();
+        return deal;
+    }
     
     /**
      * 
@@ -83,13 +90,14 @@ public enum DealDAO {
      * Insert a deal to datastore.
      * @param deal entity to insert
      */
-    public void insert(Deal deal) {
+    public Long insert(Deal deal) {
         synchronized (this) {
             EntityManager em = EMFService.get().createEntityManager();
             if (!isExist(deal)) {
                 em.persist(deal);
             }
             em.close();
+            return deal.getId();
         }
     }
     

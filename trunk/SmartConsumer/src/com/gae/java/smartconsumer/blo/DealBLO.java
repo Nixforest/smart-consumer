@@ -23,6 +23,7 @@ import java.util.List;
 
 import com.gae.java.smartconsumer.dao.DealDAO;
 import com.gae.java.smartconsumer.model.Deal;
+import com.gae.java.smartconsumer.util.GeneralUtil;
 import com.gae.java.smartconsumer.util.Status;
 
 /**
@@ -61,14 +62,41 @@ public enum DealBLO {
         }
         return result;
     }
+    //get by id
+    public Deal getOne(Long id){
+        return DealDAO.INSTANCE.getOne(id);
+    }
+    //get deal by title
+    public Deal getDealByTitle(String title){
+        for(Deal item : DealDAO.INSTANCE.listDeals()){
+            if(GeneralUtil.ReplaceNotation(GeneralUtil.RemoveSign4VietNameseString(item.getTitle()), " ", "-").equals(title)){
+                return item;
+            }
+        }
+        return null;
+    }
+    /**
+     * 
+     * Method get all deals has been created by user.
+     * @return List of Deals
+     */ 
+    public List<Deal> listDealByCreate(){
+        List<Deal> result = new ArrayList<Deal>();
+        for(Deal item : DealDAO.INSTANCE.listDeals()){
+            if(item.getLink().substring(0, 9).equals("/viewdeal")){
+                result.add(item);
+            }
+        }
+        return result;
+    }
     /**
      * 
      * Insert a deal.
      * @param deal object to insert into database
      * @throws Exception
      */
-    public void insert(Deal deal) throws Exception{
-        DealDAO.INSTANCE.insert(deal);        
+    public Long insert(Deal deal) throws Exception{
+        return DealDAO.INSTANCE.insert(deal);        
     }
     /**
      * Delete a deal.

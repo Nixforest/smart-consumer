@@ -24,10 +24,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Lob;
 
 import com.gae.java.smartconsumer.util.Status;
-import com.google.appengine.api.datastore.Text;
 
 /**
  * @author Nixforest
@@ -56,6 +54,9 @@ public class Deal {
     private java.util.Date updateDate;          // Updated date
     private Integer status;                         // Status of record
     
+    //Constructor
+    public Deal(){}
+    
     // Constructor
     public Deal(String title, String description, String address,
             String link, String imageLink, double price,
@@ -78,7 +79,29 @@ public class Deal {
         this.setUpdateDate(java.util.Calendar.getInstance().getTime());
         this.status = Status.SELLING.ordinal();
     }
-    
+    // Constructor
+    public Deal(String title, String description, String address,
+            String link, String imageLink, double price,
+            double basicPrice, String unitPrice, float save,
+            int numberBuyer, 
+            Date endTime,
+            boolean isVoucher,
+            int status) {
+        this.title = title;
+        this.description = description;
+        this.address = address;
+        this.link = link;
+        this.imageLink = imageLink;
+        this.price = price;
+        this.basicPrice = basicPrice;
+        this.unitPrice = unitPrice;
+        this.save = save;
+        this.numberBuyer = numberBuyer;
+        this.endTime = endTime;
+        this.isVoucher = isVoucher;
+        this.setUpdateDate(java.util.Calendar.getInstance().getTime());
+        this.status = status;
+    }
     /**
      * Get value of Title.
      * @return the Title
@@ -259,7 +282,7 @@ public class Deal {
      * Get value of isVoucher.
      * @return the isVoucher
      */
-    public boolean isVoucher() {
+    public boolean getVoucher() {
         return isVoucher;
     }
 

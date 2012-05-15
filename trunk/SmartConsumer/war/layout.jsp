@@ -10,11 +10,16 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-<title><tiles:insert attribute="header" /></title>
+<link rel="stylesheet" type="text/css" href="css/styles.css" />
+<script type="text/javascript" src="js/js.js"></script>
+<script type="text/javascript" src="js/ajax.js"></script>
+<script type="text/javascript" src="js/validation.js"></script>
+<script type="text/javascript" src="js/jquery-1.7.1.min.js"></script>
+<title><tiles:getAsString name="title" /></title>
 </head>
 <body>
-
-123
-<tiles:insert attribute="body"/>
+    <div id="lheader"><tiles:insert attribute="header"/></div>
+    <div id="lbody"><tiles:insert attribute="body"/></div>
+    <div id="lfooter"><tiles:insert attribute="footer"/></div>
 </body>
 </html>

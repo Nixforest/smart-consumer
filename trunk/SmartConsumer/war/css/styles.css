@@ -1,0 +1,26 @@
+#lheader{
+  float:left;
+  width:80%;
+  background-color: lime;
+  height:50px;
+  margin-left: 10%;
+}
+#lbody{
+  float:left;
+  width:80%;
+  background-color: white;
+  margin-left: 10%;
+}
+#lfooter{
+  float:left;
+  width:80%;
+  background-color: navy;
+  height:30px;
+  margin-left: 10%;
+}
+.insertdeal{
+  background-color: red;
+}
+.viewdeal{
+  background-color: pink;
+}
