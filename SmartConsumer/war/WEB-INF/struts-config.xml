@@ -28,7 +28,7 @@
     <action path="/manage" type="com.gae.java.smartconsumer.action.admin.ManageDeal" scope="request">
       <forward name="success" redirect="true" path="lmanagedeal"/>
     </action>
-    <action path="/viewdeal" type="com.gae.java.smartconsumer.action.admin.ViewDeal" scope="session">
+    <action path="/viewdeal" type="com.gae.java.smartconsumer.action.customer.ViewDeal" scope="session">
       <forward name="success" redirect="true" path="lviewdeal"/>
     </action>
     <action path="/deldeal" type="com.gae.java.smartconsumer.action.admin.DeleteDeal" scope="session">
