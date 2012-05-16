@@ -62,7 +62,7 @@ import com.google.appengine.api.users.UserServiceFactory;
         }
         try {
             List<Deal> listDeals = new ArrayList<Deal>();
-            for (Deal deal : DealBLO.INSTANCE.getListAllDeals()) {                
+            for (Deal deal : DealBLO.INSTANCE.listDealsSellingSortByUpdateDate()) {                
                 if (!checkIfAddressExist(listDeals, deal.getAddress())) {
                     listDeals.add(deal);
                 }
@@ -107,7 +107,7 @@ public class MapViewerServlet extends Action {
                     listDeals.add(deal);
                 }
             }
-            request.setAttribute("listDeals", DealBLO.INSTANCE.listDealsSellingSortByUpdateDate());
+            request.setAttribute("listDeals", listDeals);
         } catch (Exception ex) {
             request.setAttribute("error", ex.getMessage());
         }        
