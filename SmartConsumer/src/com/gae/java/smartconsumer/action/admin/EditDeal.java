@@ -18,7 +18,7 @@ public class EditDeal extends Action {
             HttpServletResponse response) throws Exception {
         HttpSession se = request.getSession();
         Long id = Long.valueOf(request.getParameter("id"));
-        Deal deal = DealBLO.INSTANCE.getOne(id);
+        Deal deal = DealBLO.INSTANCE.getOne(id);System.out.println(deal.getTitle());
         se.setAttribute("deal", deal);
         return mapping.findForward("success");
     }

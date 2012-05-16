@@ -226,7 +226,7 @@ body {
   <div style="clear: both;"></div>
   <table>
     <tr>
-        <td><div id="map_canvas" style="width: 920px; height: 480px;"></div></td>
+        <td><div id="map_canvas" style="width: 750px; height: 480px;"></div></td>
         <td>
             <div id="side_bar" style="float:right;height:480px;overflow: scroll;">
                 <%
@@ -234,7 +234,7 @@ body {
                 for (Deal item : deals) {
                     i++;
                     %>
-                    <a href="javascript:myclick(<%=i %>)"><%=item.getTitle() %></a>
+                    <a class="titlelinkmap" href="javascript:myclick(<%=i %>)"><%=item.getTitle() %></a>
                     <br/>
                     <%
                 }

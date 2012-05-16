@@ -10,4 +10,5 @@
   <bean:write name="deal" property="price"/>
   <bean:write name="deal" property="basicPrice"/>
   <bean:write name="deal" property="address"/>
+  
 </div>

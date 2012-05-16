@@ -30,6 +30,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+
 import com.gae.java.smartconsumer.util.ProviderOpenID;
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;

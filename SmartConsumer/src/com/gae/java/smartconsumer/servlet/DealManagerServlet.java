@@ -50,7 +50,7 @@ public class DealManagerServlet extends HttpServlet {
         if (user != null) {
             if (!user.getNickname().toLowerCase().contains("nixforest21991920")
                     && !user.getNickname().toLowerCase().contains("dkhoa47")) {
-                resp.sendRedirect("/smartconsumer");
+                resp.sendRedirect("/smartconsumer.app");
                 return;
             }  
             req.setAttribute("urlLinktext", "Logout");
@@ -60,6 +60,9 @@ public class DealManagerServlet extends HttpServlet {
         } else {
             req.setAttribute("url", "/_ah/login_required?url=dealmanager");
             req.setAttribute("urlLinktext", "Login");
+
+            resp.sendRedirect("/smartconsumer.app");
+            return;
         }
         try {
             req.setAttribute("listDeals", DealBLO.INSTANCE.getListAllDeals());

@@ -1,26 +1,39 @@
 #lheader{
   float:left;
   width:80%;
-  background-color: lime;
-  height:50px;
+  background-color: #A2D071;
+  background-image:url("/images/header.jpg");
+  height:150px;
   margin-left: 10%;
 }
 #lbody{
   float:left;
   width:80%;
   background-color: white;
-  margin-left: 10%;
+  margin-left:10%;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 #lfooter{
   float:left;
   width:80%;
-  background-color: navy;
-  height:30px;
+  height:200px;
   margin-left: 10%;
+  text-align: center;
+  border-radius:4px;
+  background-image: url("/images/footer.jpg");
+  color: black;
 }
 .insertdeal{
   background-color: red;
 }
 .viewdeal{
   background-color: pink;
+}
+.titlelinkmap{
+  text-decoration: none;
+  color:red;
+}
+.titlelinkmap:hover{
+  text-decoration: underline;
 }
