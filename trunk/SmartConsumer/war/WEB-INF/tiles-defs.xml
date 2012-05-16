@@ -27,4 +27,12 @@
     <put name="title" value="Edit Deal" />
     <put name="body" value="/editdeal.jsp" />
   </definition>
+  <definition name="smartconsumer" extends="admin">
+    <put name="title" value="Trang Chủ" />
+    <put name="body" value="/home.jsp" />
+  </definition>
+  <definition name="map" extends="admin">
+    <put name="title" value="Xem bản đồ" />
+    <put name="body" value="/map.jsp" />
+  </definition>
 </tiles-definitions>

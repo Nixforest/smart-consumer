@@ -68,7 +68,7 @@ $(document).ready(function(){
               </td>            
           </tr>
           <tr>
-            <td colspan="1"><button type="submit" title="Thêm Deal" id="insertbtn" >Thêm Deal</button></td>
+            <td colspan="1"><button type="submit" title="Sửa Deal" id="insertbtn" >Sửa Deal</button></td>
           </tr>
       </table>
   </div>

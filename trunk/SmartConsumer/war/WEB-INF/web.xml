@@ -4,10 +4,7 @@ xmlns="http://java.sun.com/xml/ns/javaee"
 xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
 http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
-	<servlet>
-		<servlet-name>SmartConsumer</servlet-name>
-		<servlet-class>com.gae.java.smartconsumer.SmartConsumerServlet</servlet-class>
-	</servlet>
+	
     <servlet>
         <servlet-name>DealManager</servlet-name>
         <servlet-class>com.gae.java.smartconsumer.servlet.DealManagerServlet</servlet-class>
@@ -41,18 +38,10 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
         <servlet-class>com.gae.java.smartconsumer.servlet.LoginRequiredServlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>MapViewer</servlet-name>
-        <servlet-class>com.gae.java.smartconsumer.servlet.MapViewerServlet</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>Test</servlet-name>
         <servlet-class>com.gae.java.smartconsumer.servlet.TestServlet</servlet-class>
     </servlet>
     
-	<servlet-mapping>
-		<servlet-name>SmartConsumer</servlet-name>
-		<url-pattern>/smartconsumer</url-pattern>
-	</servlet-mapping>
     <servlet-mapping>
         <servlet-name>DealManager</servlet-name>
         <url-pattern>/dealmanager</url-pattern>
@@ -68,10 +57,6 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
     <servlet-mapping>
         <servlet-name>RemoveAllDeal</servlet-name>
         <url-pattern>/removeall</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>SmartConsumer</servlet-name>
-        <url-pattern>/smartconsumer</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>Test</servlet-name>
@@ -93,10 +78,6 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
         <servlet-name>LoginRequired</servlet-name>
         <url-pattern>/_ah/login_required</url-pattern>
     </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>MapViewer</servlet-name>
-        <url-pattern>/map</url-pattern>
-    </servlet-mapping>
     
     <servlet>
         <servlet-name>action</servlet-name>
@@ -116,7 +97,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
     </servlet-mapping>
     
     <welcome-file-list>
-        <welcome-file>smartconsumer</welcome-file>
+        <welcome-file>smartconsumer.app</welcome-file>
     </welcome-file-list>
     
     <!-- <security-constraint>

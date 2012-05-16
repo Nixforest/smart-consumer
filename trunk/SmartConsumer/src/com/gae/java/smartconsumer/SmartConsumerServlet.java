@@ -6,12 +6,17 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.*;
 
+import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+
 import com.gae.java.smartconsumer.blo.DealBLO;
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 
-@SuppressWarnings("serial")
+/*@SuppressWarnings("serial")
 public class SmartConsumerServlet extends HttpServlet {
     public void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws IOException, ServletException {
@@ -39,4 +44,35 @@ public class SmartConsumerServlet extends HttpServlet {
             }            
             view.forward(req, resp);
         }
+}*/
+
+public class SmartConsumerServlet extends Action{
+    @Override
+    public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
+            HttpServletResponse response) throws Exception {
+        //RequestDispatcher view = req.getRequestDispatcher("home.jsp");
+        
+        UserService userService = UserServiceFactory.getUserService();
+        User user = userService.getCurrentUser();
+        
+        if (user != null) {
+            request.setAttribute("urlLinktext", "Logout");
+            request.setAttribute("url", userService.createLogoutURL(request.getRequestURI()));
+            request.setAttribute("nickName", user.getNickname());
+            if (user.getNickname().toLowerCase().contains("nixforest21991920")
+                    || user.getNickname().toLowerCase().contains("dkhoa47")) {
+                request.setAttribute("dealmanager", "/dealmanager");
+            }                
+        } else {
+            request.setAttribute("url", "/_ah/login_required?url=smartconsumer");
+            request.setAttribute("urlLinktext", "Login");
+        }
+        try {
+            request.setAttribute("listDeals", DealBLO.INSTANCE.listDealsSellingSortByUpdateDate());
+        } catch (Exception ex) {
+            request.setAttribute("error", ex.getMessage());
+        }            
+        //view.forward(req, resp);
+        return mapping.findForward("success");
+    }
 }

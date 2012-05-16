@@ -222,6 +222,13 @@ public enum DealDAO {
         }
     }
     
+    public void updateLink() {
+        EntityManager em = EMFService.get().createEntityManager();
+        for (Deal deal : listDeals()) {
+            
+        }
+    }
+    
     /** 
      * Check if a deal exist.
      * @param deal object need to check

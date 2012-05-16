@@ -71,7 +71,7 @@
     </div>
     <br/>
     <a href="<%=dealmanager %>">Quản lý Deal</a>
-    <a href="/map">Xem bản đồ</a>
+    <a href="/map.app">Xem bản đồ</a>
     <div style="visibility: hidden; height: 1px; width: 1px; position: absolute; z-index: 100000; " id="_atssh"><iframe id="_atssh280" title="AddThis utility frame" style="height: 1px; width: 1px; position: absolute; z-index: 100000; border-top-width: 0px; border-right-width: 0px; border-bottom-width: 0px; border-left-width: 0px; border-style: initial; border-color: initial; border-image: initial; left: 0px; top: 0px; " src="//s7.addthis.com/static/r07/sh74.html#iit=1333140061219&amp;cb=0&amp;kw=hotdeal%2Chotdeals%2Chot%20deal%2Cmua%20h%C3%A0ng%20theo%20nh%C3%B3m%2Cmua%20chung%2Cnh%C3%B3m%20mua%2Cc%C3%B9ng%20mua%2Cdeal%2Cdeals%2Cgi%C3%A1%20t%E1%BB%91t%2Cgi%C3%A1%20r%E1%BA%BB%2Cgi%E1%BA%A3m%20gi%C3%A1%2Ckhuy%E1%BA%BFn%20m%E1%BA%A1i%2C%C6%B0u%20%C4%91%C3%A3i%2CGroup%20Buy%2Cdaily%20deals&amp;ab=-&amp;dh=www.hotdeal.vn&amp;dr=&amp;du=http%3A%2F%2Fwww.hotdeal.vn%2Fho-chi-minh%2F&amp;dt=HotDeal.vn%3A%20C%C3%B9ng%20mua%20chung%2C%20mua%20theo%20nh%C3%B3m%2C%20mua%20deal%20gi%C3%A1%20r%E1%BA%BB&amp;md=0&amp;inst=1&amp;jsl=33&amp;lng=vi&amp;ogt=&amp;pc=men&amp;pub=hotdeal&amp;ssl=0&amp;sid=4f761a5c66c0b809&amp;srd=1&amp;srf=0.02&amp;srp=0.2&amp;srl=1&amp;srx=1&amp;ver=250&amp;xck=0&amp;xtr=0&amp;og=&amp;rev=109333&amp;ct=1&amp;xld=1&amp;xd=1"></iframe></div>
     <div id="doc">
       <div id="bdw" class="bdw">
