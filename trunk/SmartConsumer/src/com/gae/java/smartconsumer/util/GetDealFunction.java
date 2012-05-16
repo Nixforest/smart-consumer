@@ -511,30 +511,6 @@ public class GetDealFunction {
         return content;
     }
     
-    public static String getFrom123doVnY(String address) throws Exception {
-        URL url = new URL(address);
-        URLConnection connection = url.openConnection();
-        connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded; charset=ISO-8859-1");
-        connection.setRequestProperty("Content-Encoding", "ISO-8859-1");
-
-        BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
-        String temp = "";
-        StringBuffer stringHtml = new StringBuffer();
-        while((temp = br.readLine()) != null){
-            stringHtml.append(temp);
-        }
-        br.close();
-        //return stringHtml.toString();
-        //return connection.getInputStream().
-        return "Content type = " + connection.getContentType() + " and Content encoding = " + connection.getContentEncoding();
-        /*HTTPRequest request = new HTTPRequest(new URL(address), HTTPMethod.GET);
-        URLFetchService service = URLFetchServiceFactory.getURLFetchService();
-        HTTPResponse response = service.fetch(request);
-        //service.f
-        String str = new String(response.getContent());
-        return new String(str.getBytes("UTF-8"));*/
-    }
-    
     public static String getFrom123doVnX(String address) throws Exception {        
         URL url = new URL("http://123do.vn/");
         URLConnection connection = url.openConnection();
@@ -572,15 +548,22 @@ public class GetDealFunction {
                 "http://muachung.vn/danh-muc/c-999999997/deal-dang-ban/trang-2.html"};
         int count = 0;
         try {
+            URL url;
+            URLConnection connection;
             for (int i = 0; i < linkList.length; i++) {
-                URL url = new URL(linkList[i]);
-                BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
-                String data = "";
-                StringBuilder stringHtml = new StringBuilder();
+                url = new URL(linkList[i]);
+                connection = url.openConnection();
 
-                while ((data = br.readLine()) != null) {
+                String data = "";
+                connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded; charset=ISO-8859-1");
+                connection.setRequestProperty("Content-Encoding", "ISO-8859-1");
+
+                BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
+                StringBuffer stringHtml = new StringBuffer();
+                while((data = br.readLine()) != null){
                     stringHtml.append(data);
                 }
+                br.close();
                 data = stringHtml.toString();
 
                 String regex = "<div\\s+class=\"itemSelling\"(.*?)>"// 1

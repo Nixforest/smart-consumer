@@ -62,11 +62,21 @@ public enum DealBLO {
         }
         return result;
     }
-    //get by id
+
+    /**
+     * Get a deal by Id.
+     * @param id
+     * @return
+     */
     public Deal getOne(Long id){
         return DealDAO.INSTANCE.getOne(id);
     }
-    //get deal by title
+
+    /**
+     * Get a deal by title.
+     * @param title title of deal
+     * @return Deal
+     */
     public Deal getDealByTitle(String title){
         for(Deal item : DealDAO.INSTANCE.listDeals()){
             if(GeneralUtil.ReplaceNotation(GeneralUtil.RemoveSign4VietNameseString(item.getTitle()), " ", "-").equals(title)){

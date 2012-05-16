@@ -53,7 +53,7 @@ body {
 	    }
 	    map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
 	    
-        setAddressFromDatabase();
+        setAddressFromDatabaseX();
 	}
 	function codeAddress() {
 		var address = document.getElementById("address").value;
@@ -157,6 +157,18 @@ body {
             codeAddressWithIndex(i);
         }
 	}
+	function setAddressFromDatabaseX() {
+        var numberOfDeal = document.getElementById("numberOfDeal").innerText;
+        for (var i = 0; i < numberOfDeal; i++) {
+            codeAddressWithIndex(i);
+        }
+    }
+	function setAddressFromDatabaseRevert() {
+        var numberOfDeal = document.getElementById("numberOfDeal").innerText;
+        for (var i = numberOfDeal - 1; i >= 0; i--) {
+            codeAddressWithIndex(i);
+        }
+    }
 	
 	function showLocation(position) {
 		  var latitude = position.coords.latitude;
@@ -250,6 +262,8 @@ body {
         value="Vị trí của bạn" onclick="getLocation();"> <input type="button" value="Tìm địa điểm"
           onclick="codeAddress()">
           <input type="button" value="Load dữ liệu" onclick="setAddressFromDatabase()">
+          
+          <input type="button" value="Load ngược" onclick="setAddressFromDatabaseRevert()">
     </form>
 
   </div>
