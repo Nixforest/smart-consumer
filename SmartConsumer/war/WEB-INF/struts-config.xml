@@ -37,7 +37,8 @@
     <action path="/editdealdone" name="InsertDeal" type="com.gae.java.smartconsumer.action.admin.EditDealDone" scope="session">
       <forward name="success" redirect="true" path="/manage.app"/>
     </action>
-    <action path="/editdeal" type="com.gae.java.smartconsumer.action.admin.EditDeal" forward="leditdeal" scope="session">
+    <action path="/editdeal" type="com.gae.java.smartconsumer.action.admin.EditDeal" scope="session">
+        <forward name="success" redirect="true" path="leditdeal" />
     </action>
     <action path="/smartconsumer" type="com.gae.java.smartconsumer.SmartConsumerServlet" scope="request">
       <forward name="success" redirect="true" path="smartconsumer"/>

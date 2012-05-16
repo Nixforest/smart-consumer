@@ -19,6 +19,7 @@
 </head>
 <body>
     <div id="lheader"><tiles:insert attribute="header"/></div>
+    <div id="menu"><tiles:insert attribute="menu" /></div>
     <div id="lbody"><tiles:insert attribute="body"/></div>
     <div id="lfooter"><tiles:insert attribute="footer"/></div>
 </body>
