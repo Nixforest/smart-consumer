@@ -122,6 +122,17 @@ public class GeneralUtil {
         return result;
     }
     
+    public  static  String subDateTime(Date d1, Date d2) {
+        String result = "";
+        long  difmillisecond = d1.getTime() - d2.getTime();
+        int  hour = (int) (difmillisecond/(3600*1000));
+        difmillisecond = difmillisecond - hour*3600*1000;
+        int  minute = (int) (difmillisecond/(60*1000));
+        difmillisecond = difmillisecond - minute*60*1000;
+        int  second = (int) (difmillisecond/1000);
+        result = String.valueOf(hour) + ":"  + String.valueOf(minute) + ":"  + String.valueOf(second);
+        return  result;
+    }
     /**
      * 
      * Method get the string remainTime from endtime.
