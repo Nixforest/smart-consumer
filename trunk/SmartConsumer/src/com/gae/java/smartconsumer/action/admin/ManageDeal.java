@@ -29,7 +29,7 @@ public class ManageDeal extends Action {
         for(Deal item : list){
             //set id by the way using description
             //item.setDescription(GeneralUtil.ReplaceNotation(GeneralUtil.RemoveSign4VietNameseString(item.getTitle())," ","-"));
-            if(item.getVoucher()==true){
+            if(item.getisVoucher()==true){
                 item.setImageLink("Giao Voucher");
             }else{
                 item.setImageLink("Giao sản phẩm");

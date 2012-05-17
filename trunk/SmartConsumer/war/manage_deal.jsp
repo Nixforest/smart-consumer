@@ -4,6 +4,7 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 
+
 <table>
     <tr>
         <td>STT</td>
@@ -25,7 +26,7 @@
         <td><bean:write name="element" property="price" /></td>
         <td><bean:write name="element" property="basicPrice" /></td>
         <td><bean:write name="element" property="imageLink" /></td>
-        <td><bean:write name="element" property="link" /></td>
+        <td><a href="/changestatus.app?id=<bean:write name="element" property="id" />"><bean:write name="element" property="link" /></a></td>
         <td><a href="/editdeal.app?id=<bean:write name="element" property="id" />">Sửa</a></td>
         <td><a href="/deldeal.app?id=<bean:write name="element" property="id" />"  onclick="if(!confirm('Bạn có chắc chắn muốn xóa không ?'))return false;">Xóa</a></td>
     </tr>

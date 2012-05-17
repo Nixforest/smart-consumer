@@ -282,7 +282,7 @@ public class Deal {
      * Get value of isVoucher.
      * @return the isVoucher
      */
-    public boolean getVoucher() {
+    public boolean getisVoucher() {
         return isVoucher;
     }
 
