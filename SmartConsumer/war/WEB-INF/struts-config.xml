@@ -4,6 +4,7 @@
   <form-beans>
     <form-bean name="dealForm" type="com.gae.java.smartconsumer.form.DealForm"/>
     <form-bean name="InsertDeal" type="org.apache.struts.validator.DynaValidatorForm">
+      <form-property name="id" type="java.lang.Long"/>  
       <form-property name="title" type="java.lang.String"/>
       <form-property name="description" type="java.lang.String"/>
       <form-property name="address" type="java.lang.String"/>
@@ -14,6 +15,7 @@
       <form-property name="unitPrice" type="java.lang.String"/>
       <form-property name="isVoucher" type="java.lang.Boolean"/>
     </form-bean>
+    <form-bean name="statusForm" type="com.gae.java.smartconsumer.form.StatusForm" />
   </form-beans>
   <action-mappings>
     <action path="/admin" type="com.gae.java.smartconsumer.action.admin.HelloAction">
@@ -34,7 +36,7 @@
     <action path="/deldeal" type="com.gae.java.smartconsumer.action.admin.DeleteDeal" scope="session">
       <forward name="success" redirect="true" path="/manage.app"/>
     </action>
-    <action path="/editdealdone" name="InsertDeal" type="com.gae.java.smartconsumer.action.admin.EditDealDone" scope="session">
+    <action path="/editdealdone" input="/editdeal.jsp" name="InsertDeal" type="com.gae.java.smartconsumer.action.admin.EditDealDone" scope="session">
       <forward name="success" redirect="true" path="/manage.app"/>
     </action>
     <action path="/editdeal" type="com.gae.java.smartconsumer.action.admin.EditDeal" scope="session">
@@ -45,6 +47,12 @@
     </action>
     <action path="/map" type="com.gae.java.smartconsumer.servlet.MapViewerServlet" scope="request">
         <forward name="success" redirect="true" path="map" />
+    </action>
+    <action path="/changestatus" type="com.gae.java.smartconsumer.action.admin.ChangeStatus" scope="request">
+        <forward name="success" redirect="true" path="lchangestatus" />
+    </action>
+    <action path="/changestatusdone" name="statusForm" input="/changestatus.jsp" type="com.gae.java.smartconsumer.action.admin.ChangeStatusDone" scope="request">
+        <forward name="success" redirect="true" path="/manage.app" />
     </action>
   </action-mappings>
   <controller processorClass="org.apache.struts.tiles.TilesRequestProcessor"/>

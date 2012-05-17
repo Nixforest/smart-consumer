@@ -19,6 +19,7 @@
 package com.gae.java.smartconsumer.blo;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.gae.java.smartconsumer.dao.DealDAO;
@@ -171,5 +172,9 @@ public enum DealBLO {
     
     public boolean isExist(Deal deal) {
         return DealDAO.INSTANCE.isExist(deal);
+    }
+    public void editDeal(long id, String title, String description, String address, String imageLink, Float price,
+            Float basicPrice, String unitPrice, Boolean isVoucher, Date endTime){
+        DealDAO.INSTANCE.editDeal(id, title, description, address, imageLink, price, basicPrice, unitPrice, isVoucher, endTime);
     }
 }

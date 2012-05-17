@@ -25,6 +25,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import com.gae.java.smartconsumer.model.Deal;
+import com.gae.java.smartconsumer.util.GeneralUtil;
 import com.gae.java.smartconsumer.util.Status;
 import com.google.appengine.api.datastore.Text;
 
@@ -221,7 +222,26 @@ public enum DealDAO {
             em.close();
         }
     }
-    
+    public void editDeal(long id, String title, String description, String address, String imageLink, Float price,
+            Float basicPrice, String unitPrice, Boolean isVoucher, Date endTime){
+        EntityManager em = EMFService.get().createEntityManager();
+        try{
+            Deal deal = em.find(Deal.class, id);
+            deal.setTitle(title);
+            deal.setLink("/viewdeal.app?id=" + GeneralUtil.ReplaceNotation(GeneralUtil.RemoveSign4VietNameseString(title), " ", "-"));
+            deal.setDescription(description);
+            deal.setAddress(address);
+            deal.setImageLink(imageLink);
+            deal.setPrice(price);
+            deal.setBasicPrice(basicPrice);
+            deal.setUnitPrice(unitPrice);
+            deal.setVoucher(isVoucher);
+            deal.setEndTime(endTime);
+            deal.setUpdateDate(java.util.Calendar.getInstance().getTime());
+        }finally{
+            em.close();
+        }
+    }
     public void updateLink() {
         EntityManager em = EMFService.get().createEntityManager();
         for (Deal deal : listDeals()) {

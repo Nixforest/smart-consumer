@@ -16,7 +16,7 @@ $(document).ready(function(){
 });
 </script>
 
-<html:form action="/editdealdone.app" method="POST" onsubmit="return validateEditDeal(this);" >
+<html:form action="/editdealdone.app" method="POST">
 <logic:messagesPresent>
     <ul>
         <font color="red">
@@ -30,42 +30,45 @@ $(document).ready(function(){
       <table>
           <tr>
               <td>Tiêu đề</td>
-              <td><input type="text" name="tbxtitle" value="<bean:write name="deal" property="title"/>" /></td>            
+              <td>
+                    <input type="text" name="title" value="<bean:write name="deal" property="title"/>" />
+                    <input type="hidden" name="id" value="<bean:write name="deal" property="id" />"  />
+              </td>            
           </tr>
           <tr>
               <td>Mô tả</td>
-              <td><textarea name="tbxdescription" rows="5" cols="25"><bean:write name="deal" property="description" /></textarea></td>            
+              <td><textarea name="description" rows="5" cols="25"><bean:write name="deal" property="description" /></textarea></td>            
           </tr>
           <tr>
               <td>Địa chỉ</td>
-              <td><input type="text" name="tbxaddress" value="<bean:write name="deal" property="address"/>" /></td>            
+              <td><input type="text" name="address" value="<bean:write name="deal" property="address"/>" /></td>            
           </tr>
           <tr>
               <td>Hình ảnh</td>
-              <td><input type="text" name="tbxlinkImage" value="<bean:write name="deal" property="imageLink"/>" /></td>            
+              <td><input type="text" name="imageLink" value="<bean:write name="deal" property="imageLink"/>" /></td>            
           </tr>
           <tr>
               <td>Giá bán</td>
-              <td><input type="text" name="tbxprice" value="<bean:write name="deal" property="price" />" /></td>            
+              <td><input type="text" name="price" value="<bean:write name="deal" property="price" />" /></td>            
           </tr>
           <tr>
               <td>Giá gốc</td>
-              <td><input type="text" name="tbxbasicprice" value="<bean:write name="deal" property="basicPrice" />" /></td>            
+              <td><input type="text" name="basicPrice" value="<bean:write name="deal" property="basicPrice" />" /></td>            
           </tr>
           <tr>
               <td>Đơn vị</td>
-              <td><input type="text" name="tbxunitprice" value="<bean:write name="deal" property="unitPrice" />" /></td>            
+              <td><input type="text" name="unitPrice" value="<bean:write name="deal" property="unitPrice" />" /></td>            
           </tr>
           <tr>
               <td>Thời gian khuyến mãi</td>
-              <td><input type="text" name="tbxtime" value="<bean:write name="time" />"></td>            
+              <td><input type="text" name="endTime" value="<bean:write name="time" />"></td>            
           </tr>
           <tr>
               <td>Phương thức</td>
               <td>
-                  <bean:define id="checkvoucher" name="deal" property="Voucher" />
-                  <input type="radio" name="isVoucher" value="true" checked='<c:if test="%{#checkvoucher=='true'}">checked</c:if>' />Giao Voucher
-                  <input type="radio" name="isVoucher" value="false" checked='<c:if test="%{#checkvoucher=='false'}">checked</c:if>' />Giao sản phẩm
+                  <bean:define id="checkvoucher" name="deal" property="isVoucher" />
+                  <input type="radio" name="isVoucher" value="true" <% if(checkvoucher.toString()=="true"){out.print("checked");} %> />Giao Voucher
+                  <input type="radio" name="isVoucher" value="false" <% if(checkvoucher.toString()=="false"){out.print("checked");} %> />Giao sản phẩm
               </td>            
           </tr>
           <tr>

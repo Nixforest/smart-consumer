@@ -36,4 +36,8 @@
     <put name="title" value="Xem bản đồ" />
     <put name="body" value="/map.jsp" />
   </definition>
+  <definition name="lchangestatus" extends="admin">
+    <put name="title" value="Thay đổi trạng thái" />
+    <put name="body" value="/changestatus.jsp" />
+  </definition>
 </tiles-definitions>
