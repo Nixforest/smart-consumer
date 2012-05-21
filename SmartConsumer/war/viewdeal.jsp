@@ -33,17 +33,17 @@
                         
                     </div>
                     <div class="t_news_details">
-                        <h2><bean:write name="deal" property="title"/></h2>
+                        <div class="t_news_details_title"><bean:write name="deal" property="title"/></div>
                         <cite>
                             <bean:write name="deal" property="updateDate"/> 
                         </cite>
                         <div class="description">
                             <p>
-                                <bean:write name="deal" property="address"/>
                                 <form type="POST" action="viewdeal.jsp">
                                   <select name="item" style="display: none;">
                                     <option><bean:write name="deal" property="id"/>
                                   </select>
+                                  <br />
                                   <label>Số lượng mua: </label>
 
                                   <INPUT TYPE=submit name="submit" value="add">
@@ -52,16 +52,18 @@
                                 
        
                             </p>
-                            <p>CHỈ <bean:write name="price"/></p>
-                            <p>Trị giá <bean:write name="deal" property="basicPrice"/></p>
-                            <p>Tiết kiệm: <bean:write name="deal" property="save"/>%</p>
-                            <p>Thời gian còn lại: <bean:write name="remainTime"/></p>
-                            <p>Số lượng đã mua: <bean:write name="deal" property="numberBuyer"/></p>
+                            <div class="t_news_details_all"><div class="t_news_details_price"><bean:write name="price"/>
+                            Trị giá <bean:write name="deal" property="basicPrice"/></div>
+                            <div class="t_news_details_save">Tiết kiệm: <bean:write name="deal" property="save"/>%</div>
+                            <div class="t_news_details_save">Số lượng đã mua: <bean:write name="deal" property="numberBuyer"/></div>
+                            
+                            </div>
+                            <div class="t_news_details_image"><img width="100%" height="100%" src="<bean:write name="deal" property="imageLink"/>"/></div>
+                            <div class="t_news_details_timeremain">Thời gian còn lại: <bean:write name="remainTime"/></div>
+                            <div class="t_news_details_address"><bean:write name="deal" property="address"/></div>
+                            
                         </div>
-                        <div class="description">
-                            <p><img src="<bean:write name="deal" property="imageLink"/>"/></p>
-                        </div>
-                        <div class="content">
+                        <div class="t_news_details_content">
                             <p><bean:write name="deal" property="description"/></p>
                         </div>
                     </div>
@@ -85,7 +87,7 @@
                                 cart.processRequest(request);
                             %>
                             
-                            <form type="POST" action="order.jsp">
+                            <form type="POST" action="order.app">
                               <FONT size=5 COLOR="#CC0000">
                                 <ol>
                                   <%

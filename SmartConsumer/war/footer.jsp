@@ -3,8 +3,8 @@
 <b><br />Đại Học Quốc Gia TP Hồ Chí Minh <br />
 Trường Đại Học Công Nghệ Thông Tin <br />
 Khoa Công Nghệ Phần Mềm <br />
-Đồ Án Môn Chuyên Đề J2EE <br />
-Giảng Viên HD : Ths.Huỳnh Ngọc Tín <br /></b>
+Đồ Án Môn E-Commerce <br />
+Giảng Viên HD : Ts.Ngô Thanh Hùng <br /></b>
 Thành viên nhóm :  <br />
 1. 08520046 - Trần Quốc Công <br />
 2. 08520181 - Cù Duy Khoa <br />
