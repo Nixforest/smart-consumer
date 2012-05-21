@@ -3,8 +3,36 @@
 <%@taglib uri="/WEB-INF/c.tld" prefix="c"%>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
-
-
+<%
+    String url = "";
+    String urlLinktext = "";
+    String nickName = "";
+    
+    if (request.getAttribute("url") != null) {
+        url = (String)request.getAttribute("url");
+    }
+    if (request.getAttribute("urlLinktext") != null) {
+        urlLinktext = (String)request.getAttribute("urlLinktext");
+    }
+    if (request.getAttribute("nickName") != null) {
+        nickName = (String)request.getAttribute("nickName");
+    }
+    %>
+<div style="width: 100%;">
+      <div class="line"></div>
+      <div class="topLine">
+        <div style="float: left;">
+          <img src="images/smartconsumer.png" />
+        </div>
+        <div style="float: left;" class="headline">Quản lý Deal tự tạo</div>
+        <div style="float: right;">
+          <a href="<%=url%>"><%=urlLinktext%></a>
+          <%=(urlLinktext.equals("Login") ? "" : nickName)%></div>
+      </div>
+    </div>
+    
+    <div style="clear: both;"></div>
+    <a href="/insert.app">Tạo mới Deal</a>
 <table>
     <tr>
         <td>STT</td>

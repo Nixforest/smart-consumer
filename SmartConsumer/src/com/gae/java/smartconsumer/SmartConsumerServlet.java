@@ -69,6 +69,7 @@ public class SmartConsumerServlet extends Action{
         }
         try {
             request.setAttribute("listDeals", DealBLO.INSTANCE.listDealsSellingSortByUpdateDate());
+            request.setAttribute("listDealsCreated", DealBLO.INSTANCE.listDealSellingByCreate());
         } catch (Exception ex) {
             request.setAttribute("error", ex.getMessage());
         }            

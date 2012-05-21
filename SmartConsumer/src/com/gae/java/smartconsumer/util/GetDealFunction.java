@@ -138,7 +138,7 @@ public class GetDealFunction {
                                 }*/
                                 //result += divList.item(i).getTextContent();
                                 String address = divList.item(i).getTextContent();
-                                if (GeneralUtil.RemoveSign4VietNameseString(address).toLowerCase().contains("van phong giao hang hotdeal")) {
+                                if (GeneralUtil.removeSign4VietNameseString(address).toLowerCase().contains("van phong giao hang hotdeal")) {
                                     result += GeneralUtil.addressNormalization(address);
                                 } else {
                                     Element element = (Element) divList.item(i);
@@ -542,7 +542,9 @@ public class GetDealFunction {
         float save = 0;
         int numberBuyer = 0;
         String remainTime = "";
-        java.util.Date endTime = Calendar.getInstance().getTime();
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.HOUR, 100);
+        java.util.Date endTime = cal.getTime();
         boolean isVoucher = true;
         String linkList[] = {"http://muachung.vn/danh-muc/c-999999997/deal-dang-ban/trang-1.html",
                 "http://muachung.vn/danh-muc/c-999999997/deal-dang-ban/trang-2.html"};

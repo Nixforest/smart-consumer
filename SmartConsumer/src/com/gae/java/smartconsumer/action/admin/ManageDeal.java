@@ -17,11 +17,35 @@ import com.gae.java.smartconsumer.form.DealForm;
 import com.gae.java.smartconsumer.model.Deal;
 import com.gae.java.smartconsumer.util.GeneralUtil;
 import com.gae.java.smartconsumer.util.Status;
+import com.google.appengine.api.users.User;
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 
 public class ManageDeal extends Action {
     @Override
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
             HttpServletResponse response) throws Exception {
+        
+        UserService userService = UserServiceFactory.getUserService();
+        User user = userService.getCurrentUser();
+        
+        if (user != null) {
+            if (!user.getNickname().toLowerCase().contains("nixforest21991920")
+                    && !user.getNickname().toLowerCase().contains("dkhoa47")) {
+                response.sendRedirect("/smartconsumer.app");
+                return mapping.findForward("failed");
+            }  
+            request.setAttribute("urlLinktext", "Logout");
+            request.setAttribute("url", userService.createLogoutURL(request.getRequestURI()));
+            request.setAttribute("nickName", user.getNickname());
+                          
+        } else {
+            request.setAttribute("url", "/_ah/login_required?url=dealmanager");
+            request.setAttribute("urlLinktext", "Login");
+
+            response.sendRedirect("/smartconsumer.app");
+            return mapping.findForward("failed");
+        }
         HttpSession se = request.getSession();
         List<Deal> list = new ArrayList<Deal>();
         List<Deal> listDeal = new ArrayList<Deal>();

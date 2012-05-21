@@ -20,10 +20,11 @@ package com.gae.java.smartconsumer.util;
 
 /**
  * @author Nixforest
+ *
  */
-public enum Status {
-    WAITTOCHECK,    // Status of deal when just insert
-    SELLING,        // Status of deal "Selling"
-    OUTOFTIME,      // Status of deal "Out of time"
-    DELETED,        // Status of record "Deleted"
+public enum Payment {
+    MASTERCARD,
+    VISACARD,
+    AMERICANEXPRESS,
+    JBC,
 }

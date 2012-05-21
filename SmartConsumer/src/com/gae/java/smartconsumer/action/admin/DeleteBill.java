@@ -8,16 +8,15 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import com.gae.java.smartconsumer.blo.DealBLO;
-import com.gae.java.smartconsumer.form.StatusForm;
+import com.gae.java.smartconsumer.dao.CustomerDAO;
 
-public class ChangeStatusDone extends Action {
-    @Override
+public class DeleteBill extends Action {
+
+	@Override
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
             HttpServletResponse response) throws Exception {
-        StatusForm status = (StatusForm)form;
-        //System.out.println(status.getId());
-        DealBLO.INSTANCE.changeStatus(status.getId(), status.getStatus());
+                 
+        CustomerDAO.INSTANCE.delete(Long.valueOf(request.getParameter("customerid")));
         return mapping.findForward("success");
     }
 }
