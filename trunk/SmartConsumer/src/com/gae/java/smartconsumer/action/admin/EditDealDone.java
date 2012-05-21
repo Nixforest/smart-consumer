@@ -14,6 +14,7 @@ import org.apache.struts.validator.DynaValidatorForm;
 
 import com.gae.java.smartconsumer.blo.DealBLO;
 import com.gae.java.smartconsumer.form.DealForm;
+import com.gae.java.smartconsumer.model.Deal;
 import com.gae.java.smartconsumer.util.GeneralUtil;
 
 public class EditDealDone extends Action {
@@ -23,6 +24,8 @@ public class EditDealDone extends Action {
         HttpSession se = request.getSession();
         DynaValidatorForm dealForm = (DynaValidatorForm)form;
         Long id = (Long)dealForm.get("id");
+
+        Deal deal = DealBLO.INSTANCE.getDealById(id);
         String title = dealForm.getString("title");
         String description = dealForm.getString("description");
         String address = dealForm.getString("address");
@@ -32,7 +35,17 @@ public class EditDealDone extends Action {
         String unitPrice = dealForm.getString("unitPrice");
         Boolean isVoucher = (Boolean)dealForm.get("isVoucher");
         Date endTime = GeneralUtil.getEndTime(dealForm.getString("endTime"));
-        DealBLO.INSTANCE.editDeal(id, title, description, address, imageLink, price, basicPrice, unitPrice, isVoucher, endTime);
+        
+        deal.setTitle(title);
+        deal.setDescription(description);
+        deal.setAddress(address);
+        deal.setImageLink(imageLink);
+        deal.setPrice(price);
+        deal.setBasicPrice(basicPrice);
+        deal.setUnitPrice(unitPrice);
+        deal.setEndTime(endTime);
+        
+        DealBLO.INSTANCE.update(deal);
         return mapping.findForward("success");
     }
 }

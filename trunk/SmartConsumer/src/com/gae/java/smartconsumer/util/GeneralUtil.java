@@ -218,7 +218,7 @@ public class GeneralUtil {
         }
     }
     
-    private static String[] VietnameseSigns = new String[] { 
+    private static String[] vietnameseSigns = new String[] { 
         "aAeEoOuUiIdDyY",
         "áàạảãâấầậẩẫăắằặẳẵ",
         "ÁÀẠẢÃÂẤẦẬẨẪĂẮẰẶẲẴ",
@@ -235,21 +235,21 @@ public class GeneralUtil {
         "ýỳỵỷỹ",
         "ÝỲỴỶỸ"
     };
-    public static String RemoveSign4VietNameseString(String text)
+    public static String removeSign4VietNameseString(String text)
     {
-        for (int i = 1; i < VietnameseSigns.length; i++)
+        for (int i = 1; i < vietnameseSigns.length; i++)
         {
-            for (int j = 0; j < VietnameseSigns[i].length(); j++)
+            for (int j = 0; j < vietnameseSigns[i].length(); j++)
             {
-                text = text.replace(VietnameseSigns[i].charAt(j), VietnameseSigns[0].charAt(i - 1));
+                text = text.replace(vietnameseSigns[i].charAt(j), vietnameseSigns[0].charAt(i - 1));
             }
         }
         return text;
     }
-    public static String ReplaceNotation(String text, String notation1, String notation2){
+    public static String replaceNotation(String text, String notation1, String notation2){
         return text.replace(notation1, notation2);
     }
-    public static List<String> NormalizationString(String str)
+    public static List<String> normalizationString(String str)
     {
         while (str.indexOf("  ") != -1)
         {
@@ -275,16 +275,16 @@ public class GeneralUtil {
         int priceMillion = (int) ((price % 1000000000) / 1000000.0);
         int priceThousand = (int) (((price % 1000000000) % 1000000) / 1000.0);
         if (priceBillion > 0 && price > 900000000) {
-            strTextPrice = strTextPrice + "<b>" + priceBillion + "</b> tỷ ";
+            strTextPrice = strTextPrice + priceBillion + " tỷ ";
         }
         if (priceMillion > 0) {
-            strTextPrice = strTextPrice + "<b>" + priceMillion + "</b> triệu ";
+            strTextPrice = strTextPrice + priceMillion + " triệu ";
         }
         if (priceThousand > 0) {
-            strTextPrice = strTextPrice + "<b>" + priceThousand + "</b> ngàn ";
+            strTextPrice = strTextPrice + priceThousand + " ngàn ";
         }
 
-        return strTextPrice + "<b>VNĐ</b>";
+        return strTextPrice;
     }
 
     /**
@@ -309,19 +309,19 @@ public class GeneralUtil {
     public static String addressNormalization(String result) {
         String address = result;
         address = address.replaceFirst("Địa chỉ:", "");
-        int location = GeneralUtil.RemoveSign4VietNameseString(address).toLowerCase().indexOf("dt");
+        int location = GeneralUtil.removeSign4VietNameseString(address).toLowerCase().indexOf("dt");
         if (location != -1) {
             address = address.substring(0, location);
         }
-        location = GeneralUtil.RemoveSign4VietNameseString(address).toLowerCase().indexOf("dien thoai");
+        location = GeneralUtil.removeSign4VietNameseString(address).toLowerCase().indexOf("dien thoai");
         if (location != -1) {
             address = address.substring(0, location);
         }
-        location = GeneralUtil.RemoveSign4VietNameseString(address).toLowerCase().indexOf("Hotline");
+        location = GeneralUtil.removeSign4VietNameseString(address).toLowerCase().indexOf("Hotline");
         if (location != -1) {
             address = address.substring(0, location);
         }
-        location = GeneralUtil.RemoveSign4VietNameseString(address).toLowerCase().indexOf("fax");
+        location = GeneralUtil.removeSign4VietNameseString(address).toLowerCase().indexOf("fax");
         if (location != -1) {
             address = address.substring(0, location);
         }

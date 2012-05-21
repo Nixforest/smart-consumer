@@ -20,7 +20,7 @@ public class ChangeStatus extends Action {
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
             HttpServletResponse response) throws Exception {
         Long id = Long.valueOf(request.getParameter("id"));
-        Deal deal = DealBLO.INSTANCE.getOne(id);
+        Deal deal = DealBLO.INSTANCE.getDealById(id);
         request.setAttribute("deal", deal);
         return mapping.findForward("success");
     }

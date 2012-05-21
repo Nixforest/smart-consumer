@@ -4,7 +4,7 @@
   <form-beans>
     <form-bean name="dealForm" type="com.gae.java.smartconsumer.form.DealForm"/>
     <form-bean name="InsertDeal" type="org.apache.struts.validator.DynaValidatorForm">
-      <form-property name="id" type="java.lang.Long"/>  
+      <form-property name="id" type="java.lang.Long"/>
       <form-property name="title" type="java.lang.String"/>
       <form-property name="description" type="java.lang.String"/>
       <form-property name="address" type="java.lang.String"/>
@@ -15,7 +15,7 @@
       <form-property name="unitPrice" type="java.lang.String"/>
       <form-property name="isVoucher" type="java.lang.Boolean"/>
     </form-bean>
-    <form-bean name="statusForm" type="com.gae.java.smartconsumer.form.StatusForm" />
+    <form-bean name="statusForm" type="com.gae.java.smartconsumer.form.StatusForm"/>
   </form-beans>
   <action-mappings>
     <action path="/admin" type="com.gae.java.smartconsumer.action.admin.HelloAction">
@@ -36,44 +36,63 @@
     <action path="/deldeal" type="com.gae.java.smartconsumer.action.admin.DeleteDeal" scope="session">
       <forward name="success" redirect="true" path="/manage.app"/>
     </action>
-    <action path="/editdealdone" input="/editdeal.jsp" name="InsertDeal" type="com.gae.java.smartconsumer.action.admin.EditDealDone" scope="session">
+    <action path="/editdealdone" name="InsertDeal" type="com.gae.java.smartconsumer.action.admin.EditDealDone" scope="session" input="/editdeal.jsp">
       <forward name="success" redirect="true" path="/manage.app"/>
     </action>
     <action path="/editdeal" type="com.gae.java.smartconsumer.action.admin.EditDeal" scope="session">
-        <forward name="success" redirect="true" path="leditdeal" />
+      <forward name="success" redirect="true" path="leditdeal"/>
     </action>
     <action path="/smartconsumer" type="com.gae.java.smartconsumer.SmartConsumerServlet" scope="request">
       <forward name="success" redirect="true" path="smartconsumer"/>
     </action>
     <action path="/map" type="com.gae.java.smartconsumer.servlet.MapViewerServlet" scope="request">
-        <forward name="success" redirect="true" path="map" />
+      <forward name="success" redirect="true" path="map"/>
     </action>
     <action path="/changestatus" type="com.gae.java.smartconsumer.action.admin.ChangeStatus" scope="request">
-        <forward name="success" redirect="true" path="lchangestatus" />
+      <forward name="success" redirect="true" path="lchangestatus"/>
     </action>
-    <action path="/changestatusdone" name="statusForm" input="/changestatus.jsp" type="com.gae.java.smartconsumer.action.admin.ChangeStatusDone" scope="request">
-        <forward name="success" redirect="true" path="/manage.app" />
+    <action path="/changestatusdone" name="statusForm" type="com.gae.java.smartconsumer.action.admin.ChangeStatusDone" scope="request" input="/changestatus.jsp">
+      <forward name="success" redirect="true" path="/manage.app"/>
+    </action>
+    <action path="/mycart" type="com.gae.java.smartconsumer.action.customer.ViewCart" scope="session">
+      <forward name="success" redirect="true" path="lmycart"/>
+      <forward name="buycomplete" redirect="true" path="/buycomplete.app"/>
+    </action>
+    <action path="/delitem" type="com.gae.java.smartconsumer.action.customer.DeleteItem" scope="session">
+      <forward name="success" redirect="true" path="/mycart.app"/>
+    </action>
+    <action path="/additem" type="com.gae.java.smartconsumer.action.customer.AddItem" scope="session">
+      <forward name="success" redirect="true" path="lviewdeal"/>
+    </action>
+    <action path="/managebill" type="com.gae.java.smartconsumer.action.admin.ManageBill" scope="request">
+      <forward name="success" redirect="true" path="lmanagebill"/>
+    </action>
+    <action path="/deletebill" type="com.gae.java.smartconsumer.action.admin.DeleteBill" scope="request">
+      <forward name="success" redirect="true" path="/managebill.app"/>
+    </action>
+    <action path="/viewbill" type="com.gae.java.smartconsumer.action.admin.ViewBill" scope="request">
+      <forward name="success" redirect="true" path="lviewbill"/>
     </action>
   </action-mappings>
   <controller processorClass="org.apache.struts.tiles.TilesRequestProcessor"/>
   <message-resources parameter="ApplicationResources"/>
   <!--
   ========================= Tiles plugin ===============================  This plugin initialize Tiles definition factory. This later can takes 
-                      		some parameters explained here after. The plugin first read parameters from 
-                      		web.xml, thenoverload them with parameters defined here. All parameters are 
-                      		optional. The plugin should be declared in each struts-config file. - definitions-config: 
-                      		(optional) Specify configuration file names. There can be several comma separated 
-                      		file names (default: ?? ) - moduleAware: (optional - struts1.1) Specify if 
-                      		the Tiles definition factory is module aware. If true (default), there will 
-                      		be one factory for each Struts module. If false, there will be one common 
-                      		factory for all module. In this later case, it is still needed to declare 
-                      		one plugin per module. The factory will be initialized with parameters found 
-                      		in the first initialized plugin (generally the one associated with the default 
-                      		module). true : One factory per module. (default) false : one single shared 
-                      		factory for all modules - definitions-parser-validate: (optional) Specify 
-                      		if xml parser should validate the Tiles configuration file. true : validate. 
-                      		DTD should be specified in file header (default) false : no validation Paths 
-                      		found in Tiles definitions are relative to the main context.
+                        		some parameters explained here after. The plugin first read parameters from 
+                        		web.xml, thenoverload them with parameters defined here. All parameters are 
+                        		optional. The plugin should be declared in each struts-config file. - definitions-config: 
+                        		(optional) Specify configuration file names. There can be several comma separated 
+                        		file names (default: ?? ) - moduleAware: (optional - struts1.1) Specify if 
+                        		the Tiles definition factory is module aware. If true (default), there will 
+                        		be one factory for each Struts module. If false, there will be one common 
+                        		factory for all module. In this later case, it is still needed to declare 
+                        		one plugin per module. The factory will be initialized with parameters found 
+                        		in the first initialized plugin (generally the one associated with the default 
+                        		module). true : One factory per module. (default) false : one single shared 
+                        		factory for all modules - definitions-parser-validate: (optional) Specify 
+                        		if xml parser should validate the Tiles configuration file. true : validate. 
+                        		DTD should be specified in file header (default) false : no validation Paths 
+                        		found in Tiles definitions are relative to the main context.
   -->
   <plug-in className="org.apache.struts.tiles.TilesPlugin">
     <set-property property="definitions-config" value="/WEB-INF/tiles-defs.xml"/>

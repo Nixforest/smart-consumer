@@ -21,7 +21,7 @@ public class EditDeal extends Action {
             HttpServletResponse response) throws Exception {
         HttpSession se = request.getSession();
         Long id = Long.valueOf(request.getParameter("id"));
-        Deal deal = DealBLO.INSTANCE.getOne(id);
+        Deal deal = DealBLO.INSTANCE.getDealById(id);
         se.setAttribute("time", "time");
         String time = GeneralUtil.subDateTime(deal.getEndTime(), deal.getUpdateDate());
         se.setAttribute("deal", deal);

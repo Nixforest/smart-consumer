@@ -57,7 +57,7 @@ body {
 	}
 	function codeAddress() {
 		var address = document.getElementById("address").value;
-		codeAddressWithParam(address);
+		codeAddressWithParam(address, "Vị trí của bạn");
 	}
 	function codeAddressWithParam(address, title, image) {
 		geocoder.geocode(

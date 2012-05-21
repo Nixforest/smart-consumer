@@ -15,7 +15,34 @@ $(document).ready(function(){
 	});
 });
 </script>
-
+<%
+    String url = "";
+    String urlLinktext = "";
+    String nickName = "";
+    
+    if (request.getAttribute("url") != null) {
+        url = (String)request.getAttribute("url");
+    }
+    if (request.getAttribute("urlLinktext") != null) {
+        urlLinktext = (String)request.getAttribute("urlLinktext");
+    }
+    if (request.getAttribute("nickName") != null) {
+        nickName = (String)request.getAttribute("nickName");
+    }
+    %>
+    <div style="width: 100%;">
+      <div class="line"></div>
+      <div class="topLine">
+        <div style="float: left;">
+          <img src="images/smartconsumer.png" />
+        </div>
+        <div style="float: left;" class="headline">Tạo mới Deal</div>
+        <div style="float: right;">
+          <a href="<%=url%>"><%=urlLinktext%></a>
+          <%=(urlLinktext.equals("Login") ? "" : nickName)%></div>
+      </div>
+    </div>
+    <div style="clear: both;"></div>
 <html:form action="/insertdeal.app" method="POST" onsubmit="return validateInsertDeal(this);" >
 <logic:messagesPresent>
     <ul>

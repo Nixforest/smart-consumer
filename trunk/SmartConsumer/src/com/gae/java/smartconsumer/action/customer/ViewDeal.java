@@ -11,6 +11,7 @@ import org.apache.struts.action.ActionMapping;
 
 import com.gae.java.smartconsumer.blo.DealBLO;
 import com.gae.java.smartconsumer.model.Deal;
+import com.gae.java.smartconsumer.util.GeneralUtil;
 
 public class ViewDeal extends Action {
     @Override
@@ -19,8 +20,10 @@ public class ViewDeal extends Action {
         HttpSession se = request.getSession();
         String param = request.getParameter("id");
         Deal deal = DealBLO.INSTANCE.getDealByTitle(param);
-        System.out.println(deal.getTitle());
+        //System.out.println(deal.getTitle());
         se.setAttribute("deal", deal);
+        se.setAttribute("price", GeneralUtil.convertPriceToText(deal.getPrice()));
+        se.setAttribute("remainTime", GeneralUtil.getRemainTime(deal.getEndTime()));
         return mapping.findForward("success");
     }
 }

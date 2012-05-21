@@ -1,3 +1,4 @@
+<%@page import="com.gae.java.smartconsumer.util.Status"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="/WEB-INF/c.tld" prefix="c"%>
@@ -10,13 +11,16 @@
       <tr>
         <td>Trạng thái</td>
         <td>
-            <input type="hidden" name="id" value="<bean:write name="deal" property="id" />" />
+            <input type="hidden" name="id" value="<bean:write name="deal" property="id" />"  />
           <select name="status">
               <bean:define id="checkstatus" name="deal" property="status" />
-              <option value="0" <% if(checkstatus.toString() == "0"){out.print("selected='selected'");} %>>Đang bán</option>
-              <option value="1" <% if(checkstatus.toString() == "1"){out.print("selected='selected'");} %>>Hết hạn</option>
-              <option value="2" <% if(checkstatus.toString() == "2"){out.print("selected='selected'");} %>>Đã xóa</option>
-              <option value="3" <% if(checkstatus.toString() == "3"){out.print("selected='selected'");} %>>Chưa duyệt</option>
+              <%
+              for (int i = 0; i < Status.values().length; i++) {
+                  %>
+                  <option value="<%=i %>" <%if(checkstatus.equals(i)) out.print("selected='selected'"); %>><%=Status.values()[i]%></option>
+                  <%
+              }
+              %>
           </select>
       </td>
       <tr>

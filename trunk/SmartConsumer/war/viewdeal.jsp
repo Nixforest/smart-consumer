@@ -3,12 +3,125 @@
 <%@ taglib uri="/WEB-INF/c.tld" prefix="c"%>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
+<%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
 
-<div class="viewdeal">
-  <bean:write name="deal" property="title"/>
-  <bean:write name="deal" property="description"/>
-  <bean:write name="deal" property="price"/>
-  <bean:write name="deal" property="basicPrice"/>
-  <bean:write name="deal" property="address"/>
+
+<%@ page import="com.gae.java.smartconsumer.util.*" %>
+<%@ page import="java.util.List" %>
+
+<html>
+<head>
+   <link href="css/default.css" rel="Stylesheet" type="text/css" />
+   <link href="css/all.min.css" media="screen" rel="stylesheet" type="text/css">
+   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+   <title><bean:write name="deal" property="title"/></title>
+</head>
+<body data-rendering="true">
+    <div id="wrapper">
+        <div id="container" class="container_12">
+            <div class="widget_container grid_12 t_space_bottom" id="container_1">
+                <div class="widget" id="container_1_1">
+                </div>
+            </div>
+            <div class="widget_container grid_12 t_space_bottom" id="container_2"></div>
+            <div class="widget_container grid_12 t_space_bottom" id="container_3">
+                <div class="widdget_container grid_9 alpha" id="container_4">
+                    <div class="widget" id="container_4_1">
+                        
+                    </div>
+                    <div class="widget" id="container_4_2">
+                        
+                    </div>
+                    <div class="t_news_details">
+                        <h2><bean:write name="deal" property="title"/></h2>
+                        <cite>
+                            <bean:write name="deal" property="updateDate"/> 
+                        </cite>
+                        <div class="description">
+                            <p>
+                                <bean:write name="deal" property="address"/>
+                                <form type="POST" action="viewdeal.jsp">
+                                  <select name="item" style="display: none;">
+                                    <option><bean:write name="deal" property="id"/>
+                                  </select>
+                                  <label>Số lượng mua: </label>
+
+                                  <INPUT TYPE=submit name="submit" value="add">
+                                  <INPUT TYPE=submit name="submit" value="remove">
+                                </form>
+                                
+       
+                            </p>
+                            <p>CHỈ <bean:write name="price"/></p>
+                            <p>Trị giá <bean:write name="deal" property="basicPrice"/></p>
+                            <p>Tiết kiệm: <bean:write name="deal" property="save"/>%</p>
+                            <p>Thời gian còn lại: <bean:write name="remainTime"/></p>
+                            <p>Số lượng đã mua: <bean:write name="deal" property="numberBuyer"/></p>
+                        </div>
+                        <div class="description">
+                            <p><img src="<bean:write name="deal" property="imageLink"/>"/></p>
+                        </div>
+                        <div class="content">
+                            <p><bean:write name="deal" property="description"/></p>
+                        </div>
+                    </div>
+                    <div class="widget" id="container_4_3"></div>
+                    <div class="widget" id="container_4_4"></div>
+                    <div class="widget" id="container_4_5">
+                        
+                    </div>
+                    <div class="widget" id="container_4_6">
+                        
+                    </div>
+                </div>
+                <div class="widdget_container grid_3 omega" id="container_5">
+                    <div class="widget" id="container_5_1">
+                        <div class="t_news_newer">
+                            <h2>Giỏ hàng</h2>
+                            <jsp:useBean id="cart" scope="session" class="com.gae.java.smartconsumer.action.DummyCart" />
+
+                            <jsp:setProperty name="cart" property="*" />
+                            <%
+                                cart.processRequest(request);
+                            %>
+                            
+                            <form type="POST" action="order.jsp">
+                              <FONT size=5 COLOR="#CC0000">
+                                <ol>
+                                  <%
+                                      String[] items = cart.getItems();
+                                      for (int i = 0; i < items.length; i++) {
+                                          //out.print(items[i]);
+                                  %>
+                                  <li>
+                                    <%
+                                        out.print(com.gae.java.smartconsumer.util.HTMLFilter.filter(items[i]));
+                                    
+                                   }
+                               %>
+                                  
+                                </ol>
+                              
+                              </FONT>
+                              <INPUT TYPE=submit name="submit" value="order">
+                            </form>
+                        </div>
+                    </div>
+                <div class="widget" id="container_5_2"></div>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        
+    </div>  </div>
+    <script>
+        $("div").filter(".control, .panel, .clear").remove();
+        $("h3").remove();
+        $("div").css({"border":"none"});
+    </script>
+    
+</body>
+
+
+<html>
   
-</div>

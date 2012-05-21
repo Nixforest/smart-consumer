@@ -37,8 +37,7 @@ public enum DealDAO {
     INSTANCE;
     
     /**
-     * Get all deal from table Deal
-     * [Give the description for method].
+     * Get all deal from datastore
      * @return List of Deals
      */
     public List<Deal> listDeals() {
@@ -52,9 +51,8 @@ public enum DealDAO {
     }
     
     /**
-     * 
-     * Method get all deals.
-     * @return List of deals sort by updatedate
+     * Method get all deals soft by updateDate property.
+     * @return List of deals sort by updateDate property.
      */
     public List<Deal> listDealsSortByUpdateDate() {
         EntityManager em = EMFService.get().createEntityManager();
@@ -65,18 +63,10 @@ public enum DealDAO {
         
         return deals;
     }
-    //get by id
-    public Deal getOne(Long id){
-        EntityManager em = EMFService.get().createEntityManager();
-        Query q = em.createQuery("select from " + Deal.class.getName() + " where id=" + id);
-        Deal deal = (Deal)q.getSingleResult();
-        return deal;
-    }
     
     /**
-     * 
-     * Method get all deals.
-     * @return List of deals sort by EndTime
+     * Method get all deals soft by EndTime property.
+     * @return List of deals sort by EndTime property.
      */
     public List<Deal> listDealsSortByEndTime() {
         EntityManager em = EMFService.get().createEntityManager();
@@ -87,23 +77,35 @@ public enum DealDAO {
         
         return deals;
     }
+
+    /**
+     * Get Deal by Id
+     * @param id Id of Deal
+     * @return Deal object has Id match
+     */
+    public Deal getDealById(Long id){
+        EntityManager em = EMFService.get().createEntityManager();
+        Query q = em.createQuery("select from " + Deal.class.getName() + " where id=" + id);
+        Deal deal = (Deal)q.getSingleResult();
+        return deal;
+    }
+    
     /**
      * Insert a deal to datastore.
      * @param deal entity to insert
      */
-    public Long insert(Deal deal) {
+    public void insert(Deal deal) {
         synchronized (this) {
             EntityManager em = EMFService.get().createEntityManager();
             if (!isExist(deal)) {
                 em.persist(deal);
             }
             em.close();
-            return deal.getId();
         }
     }
     
     /**
-     * Insert a deal to table Deal
+     * Insert a deal to datastore
      * [Give the description for method].
      * @param title
      * @param description
@@ -146,7 +148,6 @@ public enum DealDAO {
     }
     
     /**
-     * 
      * Remove all record in deal table.
      */
     public void removeAll() {
@@ -164,8 +165,7 @@ public enum DealDAO {
     }
     
     /**
-     * 
-     * Remove a record by ID.
+     * Remove a record by Id.
      * @param id id of record
      */
     public void delete(long id) {
@@ -174,40 +174,10 @@ public enum DealDAO {
             Deal deal = em.find(Deal.class, id);
             em.remove(deal);
         } finally {
-            // TODO: handle exception
-            em.close();
-        }
-    }    
-    /**
-     * 
-     * Method represent a delete method by change Status of deal to DELETE.
-     * @param id object's id
-     */
-    public void deleteByChangeStatus(long id) {
-        EntityManager em = EMFService.get().createEntityManager();
-        try {
-            Deal deal = em.find(Deal.class, id);
-            deal.setStatus(Status.DELETED.ordinal());
-            //em.persist(deal);
-        } finally {
             em.close();
         }
     }
-    /**
-     * 
-     * Method represent a restore method by change Status of deal to SELLING.
-     * @param id object's id
-     */
-    public void restoreChangeStatus(long id) {
-        EntityManager em = EMFService.get().createEntityManager();
-        try {
-            Deal deal = em.find(Deal.class, id);
-            deal.setStatus(Status.SELLING.ordinal());
-            //em.persist(deal);
-        } finally {
-            em.close();
-        }
-    }
+    
     /**
      * Method change status of deal.
      * @param id id of deal
@@ -222,37 +192,40 @@ public enum DealDAO {
             em.close();
         }
     }
-    public void editDeal(long id, String title, String description, String address, String imageLink, Float price,
-            Float basicPrice, String unitPrice, Boolean isVoucher, Date endTime){
+    
+    /**
+     * Edit deal
+     * @param deal
+     */
+    public void update(Deal deal) {
         EntityManager em = EMFService.get().createEntityManager();
-        try{
-            Deal deal = em.find(Deal.class, id);
-            deal.setTitle(title);
-            deal.setLink("/viewdeal.app?id=" + GeneralUtil.ReplaceNotation(GeneralUtil.RemoveSign4VietNameseString(title), " ", "-"));
-            deal.setDescription(description);
-            deal.setAddress(address);
-            deal.setImageLink(imageLink);
-            deal.setPrice(price);
-            deal.setBasicPrice(basicPrice);
-            deal.setUnitPrice(unitPrice);
-            deal.setVoucher(isVoucher);
-            deal.setEndTime(endTime);
-            deal.setUpdateDate(java.util.Calendar.getInstance().getTime());
-        }finally{
+        try {
+            Deal innerDeal = em.find(Deal.class, deal.getId());
+            innerDeal.setTitle(deal.getTitle());
+            //innerDeal.setLink("/viewdeal.app?id=" + GeneralUtil.ReplaceNotation(GeneralUtil.RemoveSign4VietNameseString(title), " ", "-"));
+            innerDeal.setDescription(deal.getDescription());
+            innerDeal.setAddress(deal.getAddress());
+            innerDeal.setLink(deal.getLink());
+            innerDeal.setImageLink(deal.getImageLink());
+            innerDeal.setPrice(deal.getPrice());
+            innerDeal.setBasicPrice(deal.getBasicPrice());
+            innerDeal.setUnitPrice(deal.getUnitPrice());
+            innerDeal.setSave(deal.getSave());
+            innerDeal.setNumberBuyer(deal.getNumberBuyer());
+            innerDeal.setEndTime(deal.getEndTime());
+            innerDeal.setVoucher(deal.getisVoucher());
+            innerDeal.setUpdateDate(deal.getUpdateDate());
+            innerDeal.setStatus(deal.getStatus());
+        } finally {         // Close connection
             em.close();
-        }
-    }
-    public void updateLink() {
-        EntityManager em = EMFService.get().createEntityManager();
-        for (Deal deal : listDeals()) {
-            
         }
     }
     
     /** 
      * Check if a deal exist.
      * @param deal object need to check
-     * @return True if deal has a link exist in db and deal has status not DELETED, false otherwise.
+     * @return True if deal has a link exist in data store and deal
+     * has status not DELETED, false otherwise.
      */
     public boolean isExist(Deal deal) {
         for (Deal item : this.listDeals()) {

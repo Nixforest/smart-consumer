@@ -142,7 +142,7 @@ function IsNumberInt(str) {
     <div style="clear: both;"></div>
     Number of Deals: <%=deals.size() %>
     [<a href="/getdeal">Cập nhật</a>]
-    [<a href="/removeall">Xóa tất cả</a>]
+    [<a href="/manage.app">Quản lý Deal tự tạo</a>]
     <table>
         <tr>
             <th>Id</th>
@@ -192,7 +192,7 @@ function IsNumberInt(str) {
   
     <hr/>
     
-    <div class="main">
+    <div class="main" style="display: ;">
         <div class="headline">New deal</div>
         <form action="/dealmanager" method="post" accept-charset="utf-8">
             <table>

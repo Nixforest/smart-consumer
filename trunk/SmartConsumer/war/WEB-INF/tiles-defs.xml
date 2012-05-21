@@ -40,4 +40,21 @@
     <put name="title" value="Thay đổi trạng thái" />
     <put name="body" value="/changestatus.jsp" />
   </definition>
+
+  <definition name="lmycart" extends="admin">
+    <put name="title" value="Giỏ hàng" />
+    <put name="body" value="/viewcart.jsp" />
+  </definition>
+  <definition name="lmanagebill" extends="admin">
+    <put name="title" value="Quản lý đơn đặt hàng" />
+    <put name="body" value="managebill.jsp" />
+  </definition>
+  <definition name="buycomplete" extends="admin">
+    <put name="title" value="Hoàn thành" />
+    <put name="body" value="buycomplete.jsp" />
+  </definition>
+  <definition name="lviewbill" extends="admin">
+    <put name="title" value="Quản lý đơn đặt hàng" />
+    <put name="body" value="viewbill.jsp" />
+  </definition>
 </tiles-definitions>
