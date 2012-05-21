@@ -1086,3 +1086,136 @@ a.orangeButtonRegis{display:block;padding:0 0 0 10px;width:226px;height:46px;bac
 .contentBoxSearch{background-color: #fff}
 
 .realTitle{height:30px;overflow: hidden}
+
+/* order */
+.lorder th{
+  background: #88B455;
+  line-height: 30px;
+  padding:0px 30px;
+  color: white;
+  font-weight: bold;
+  font-size: 20px;
+}
+.lorder .lorderproduct{
+  width:250px;
+  float:left;
+}
+.lorder .lorderproduct{
+  width:200px;
+  float:left;
+}
+.lorder .lordertitle{
+  font-weight: bold;
+  font-size: 15px;
+}
+.lorder .lordersum{
+  color: #900;
+  font-weight: bold;
+}
+.lorder .lorderall{
+  color: #900;
+  font-weight: bold;
+  font-size: 20px;
+}
+.lorder td{
+  text-align: center;
+}
+.lorder input{
+  border: 1px solid #89B4D6;
+}
+/* view deal */
+.t_news_details .t_news_details_title{
+  font-size: 27px;
+  font-weight: bold;
+}
+.t_news_details cite{
+  background: #89B4D6;
+  height:30px;
+  float:left;
+  text-align: center;
+  line-height: 30px;
+}
+.description input{
+  background: #F78D1D;
+  color: #C22227;
+  line-height: 30px;
+  width:100px;
+  border:1px solid #D27D00;
+  border-radius:3px;
+}
+.description input:hover{
+  border:2px solid red;
+}
+#container_5 input{
+  background: #F78D1D;
+  color: #C22227;
+  line-height: 30px;
+  width:100px;
+  border:1px solid #D27D00;
+  border-radius:3px;
+}
+#container_5 input:hover{
+      border:2px solid red;
+}
+.t_news_details_price{
+  background: red;
+  color:white;
+  font-size: 20px;
+  font-weight: bold;
+  width:200px;
+  height:50px;
+  line-height: 50px;
+  float:left;
+}
+.t_news_details_all{
+  float:left;
+  width:200px;
+}
+.t_news_details_image{
+  float:left;
+  width:440px;
+  height:285px;
+  margin-left:5px;
+  boder:1px solid black;
+}
+.t_news_details_save{
+   background: #339A99;
+  color:black;
+  font-size: 20px;
+  font-weight: bold;
+  width:200px;
+  height:50px;
+  line-height: 50px;
+  float:left;
+  border:1px solid black;
+  margin-top:1px;
+}
+.t_news_details_timeremain{
+   background: #339A99;
+  color:black;
+  font-size: 20px;
+  font-weight: bold;
+  width:300px;
+  height:50px;
+  line-height: 50px;
+  float:left;
+  border:1px solid black;
+  margin-top:1px;
+}
+.t_news_details_content{
+  color:black;
+  float:left;
+  width:100%;
+}
+.t_news_details_address{
+   background: #339A99;
+  color:black;
+  font-size: 20px;
+  font-weight: bold;
+  width:100%;
+  height:50px;
+  line-height: 50px;
+  float:left;
+  border:1px solid black;
+  margin-top:1px;
+}

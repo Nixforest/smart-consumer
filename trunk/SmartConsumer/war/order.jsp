@@ -30,14 +30,15 @@
         }
     }
     %>
+    <div class="lorder">
     <form>
       <table>
           <tr>
               <th>STT</th>
               <th>Mã sản phẩm</th>
-              <th>Tên sản phẩm</th>
+              <th class="lorderproduct">Tên sản phẩm</th>
               <th>Số lượng</th>
-              <th colspan="2">Tổng</th>
+              <th colspan="2" class="lordersum">Tổng</th>
           </tr>
           <%
           int i = 0;
@@ -49,10 +50,10 @@
               <tr>
                 <td><%=i %></td>
                 <td><%=key %></td>
-                <td><%=DealBLO.INSTANCE.getDealById(Long.parseLong(key)).getTitle() %></td>
-                <td><%=processItems.get(key) %></td>
-                <td align="right"><%=processItems.get(key) %> x <%=DealBLO.INSTANCE.getDealById(Long.parseLong(key)).getPrice() %> =</td>
-                <td align="right">
+                <td class="lordertitle"><%=DealBLO.INSTANCE.getDealById(Long.parseLong(key)).getTitle() %></td>
+                <td class="lordertitle"><%=processItems.get(key) %></td>
+                <td align="right" class="lordertitle"><%=processItems.get(key) %> x <%=DealBLO.INSTANCE.getDealById(Long.parseLong(key)).getPrice() %> =</td>
+                <td align="right" class="lordersum">
                       <%=processItems.get(key)*DealBLO.INSTANCE.getDealById(Long.parseLong(key)).getPrice() %>
                 </td>
               </tr>
@@ -60,9 +61,9 @@
           }
           %>
           <tr>
-              <td colspan="4">Tổng giá tiền</td>
-              <td align="right"><%=total %> =</td>
-              <td><%=GeneralUtil.convertPriceToText(total) %></td>
+              <td colspan="4" class="lordertitle">Tổng giá tiền</td>
+              <td align="right" class="lorderall"><%=total %> =</td>
+              <td class="lordersum"><%=GeneralUtil.convertPriceToText(total) %></td>
           </tr>
       </table>
       <h2>Thông tin khách hàng:</h2>
@@ -119,6 +120,7 @@
       </table>
       <input type="submit" id="submit" value="Mua"/>
     </form>
+    </div>
 </div>
 </body>
 </html>
