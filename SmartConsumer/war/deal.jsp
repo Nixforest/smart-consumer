@@ -142,7 +142,7 @@ function IsNumberInt(str) {
     <div style="clear: both;"></div>
     Number of Deals: <%=deals.size() %>
     [<a href="/getdeal">Cập nhật</a>]
-    [<a href="/manage.app">Quản lý Deal tự tạo</a>]
+    [<a href="/manage.app">Quản lý Deal tự tạo</a>] [<%=DealDAO.INSTANCE.getMaxId() %>]
     <table>
         <tr>
             <th>Id</th>
@@ -262,9 +262,6 @@ function IsNumberInt(str) {
                 <tr>
                     <td><label for="isVoucher">Phương thức</label></td>
                     <td><input type="checkbox" name="isVoucher" id="isVoucher" size="65"/>Giao voucher</td>
-                </tr>
-                <tr>
-                  <td colspan="2" align="right"><input type="submit" value="Tạo mới" /></td>
                 </tr>
             </table>
         </form>

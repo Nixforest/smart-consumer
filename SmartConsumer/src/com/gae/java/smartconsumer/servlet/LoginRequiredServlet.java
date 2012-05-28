@@ -1,20 +1,9 @@
 /**
- * Licensed to Open-Ones Group under one or more contributor license
- * agreements. See the NOTICE file distributed with this work
- * for additional information regarding copyright ownership.
- * Open-Ones Group licenses this file to you under the Apache License,
- * Version 2.0 (the "License"); you may not use this file
- * except in compliance with the License. You may obtain a
- * copy of the License at:
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations
- * under the License.
+ * LoginRequiredServlet.java
+ * 
+ * 28/5/2012
+ * 
+ * Smart Consumer project
  */
 package com.gae.java.smartconsumer.servlet;
 
@@ -23,17 +12,11 @@ import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
 
 import com.gae.java.smartconsumer.util.ProviderOpenID;
 import com.google.appengine.api.users.User;
@@ -41,11 +24,14 @@ import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 
 /**
- * Servlet control authentication.
+ * Controller login
  * 
+ * @version 1.0 28/5/2012
  * @author Nixforest
  */
 public class LoginRequiredServlet extends HttpServlet {
+    /**  . */
+    private static final long serialVersionUID = 1L;
     private static final Logger log = Logger.getLogger(LoginRequiredServlet.class.getName());
     private static final Map<ProviderOpenID, String> authDomainMap = new HashMap<ProviderOpenID, String>();
     static {
@@ -63,10 +49,6 @@ public class LoginRequiredServlet extends HttpServlet {
         throws IOException {        
         UserService userService = UserServiceFactory.getUserService();
         User user = userService.getCurrentUser();
-        Set attributesRequest = new HashSet();
-        attributesRequest.add("openid.mode=checkid_immediate");
-        attributesRequest.add("openid.ns=http://specs.openid.net/auth/2.0");
-        attributesRequest.add("openid.return_to=/smartconsumer");
         
         resp.setContentType("text/html");
         PrintWriter out = resp.getWriter();
@@ -85,7 +67,7 @@ public class LoginRequiredServlet extends HttpServlet {
                   //          "gmail.com",  new HashSet<String>());
                 String loginUrl = userService.createLoginURL(
                         req.getRequestURI(), authDomainMap.get(providerName),
-                        providerUrl, new HashSet());
+                        providerUrl, new HashSet<String>());
                 log.info(loginUrl);
                 out.println("[<a href=\"" + loginUrl + "\">" + providerName + "</a>] ");
             }

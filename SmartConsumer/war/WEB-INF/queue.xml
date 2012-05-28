@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <queue-entries>
-    <total-storage-limit>150M</total-storage-limit>
     <queue>
         <name>default</name>
-        <rate>1/h</rate>
+        <rate>1/d</rate>
     </queue>
 </queue-entries>

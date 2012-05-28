@@ -1,3 +1,4 @@
+<%@page import="com.gae.java.smartconsumer.blo.DealBLO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
   pageEncoding="UTF-8"%>
 <%@ taglib uri="/WEB-INF/c.tld" prefix="c"%>
@@ -39,7 +40,7 @@
                         </cite>
                         <div class="description">
                             <p>
-                                <form type="POST" action="viewdeal.jsp">
+                                <form type="POST" action="viewdeal.app">
                                   <select name="item" style="display: none;">
                                     <option><bean:write name="deal" property="id"/>
                                   </select>
@@ -81,10 +82,9 @@
                         <div class="t_news_newer">
                             <h2>Giỏ hàng</h2>
                             <jsp:useBean id="cart" scope="session" class="com.gae.java.smartconsumer.action.DummyCart" />
-
                             <jsp:setProperty name="cart" property="*" />
                             <%
-                                cart.processRequest(request);
+                            cart.processRequest(request);
                             %>
                             
                             <form type="POST" action="order.app">
@@ -97,7 +97,8 @@
                                   %>
                                   <li>
                                     <%
-                                        out.print(com.gae.java.smartconsumer.util.HTMLFilter.filter(items[i]));
+                                        //out.print(com.gae.java.smartconsumer.util.HTMLFilter.filter(items[i]));
+                                    out.print(DealBLO.INSTANCE.getDealById(Long.parseLong(items[i])).getTitle());
                                     
                                    }
                                %>

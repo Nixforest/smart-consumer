@@ -13,10 +13,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import com.gae.java.smartconsumer.blo.DealBLO;
-import com.gae.java.smartconsumer.form.DealForm;
 import com.gae.java.smartconsumer.model.Deal;
-import com.gae.java.smartconsumer.util.GeneralUtil;
-import com.gae.java.smartconsumer.util.SendMail;
 import com.gae.java.smartconsumer.util.Status;
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;

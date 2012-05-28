@@ -1,20 +1,9 @@
 /**
- * Licensed to Open-Ones Group under one or more contributor license
- * agreements. See the NOTICE file distributed with this work
- * for additional information regarding copyright ownership.
- * Open-Ones Group licenses this file to you under the Apache License,
- * Version 2.0 (the "License"); you may not use this file
- * except in compliance with the License. You may obtain a
- * copy of the License at:
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations
- * under the License.
+ * General Util.java
+ * 
+ * 28/5/2012
+ * 
+ * Smart Consumer project
  */
 package com.gae.java.smartconsumer.util;
 
@@ -25,6 +14,15 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Properties;
+
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -33,9 +31,10 @@ import org.w3c.dom.NodeList;
 import com.gae.java.smartconsumer.model.Deal;
 
 /**
- * @author Nixforest
- *
  * A class provide some method for utility
+ * 
+ * @version 1.0 28/5/2012
+ * @author Nixforest
  */
 public class GeneralUtil {
     /**
@@ -48,6 +47,7 @@ public class GeneralUtil {
         SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
         return sdf.format(cal.getTime());
     }
+    
     /**
      * Method get a sub string from a string.
      * @param str String to get substring
@@ -65,12 +65,12 @@ public class GeneralUtil {
         }
         return result;
     }
+    
     /**
-     * 
-     * [Give the description for method].
-     * @param price
-     * @return
-     * @throws Exception 
+     * Get price value (double) from string.
+     * @param price string price
+     * @return value of price string in double
+     * @throws Exception Exception threw when parse t double
      */
     public static double getPriceFromString(String price) throws Exception {
         double result = 0;
@@ -85,23 +85,23 @@ public class GeneralUtil {
         }
         return result;
     }
+    
     /**
-     * 
-     * [Give the description for method].
-     * @param sTag
-     * @param eElement
-     * @param location
-     * @return
+     * Get the value in tag (read XML).
+     * @param sTag tag name
+     * @param eElement Element to read
+     * @param location location of tag in element
+     * @return string of value in tag
      */
     public static String getTagValue(String sTag, Element eElement, int location) {
         NodeList nlList = eElement.getElementsByTagName(sTag).item(0).getChildNodes();
         Node nValue = (Node)nlList.item(location);
         return nValue.getNodeValue();
     }
+    
     /**
-     * 
      * Method get the EndTime of Deal from string remainTime.
-     * @param remainTime String represent remaintime get from deal (hh:mm:ss)
+     * @param remainTime String represent remain time get from deal (hh:mm:ss)
      * @return a Date object represent EndTime of Deal
      */
     public static java.util.Date getEndTime(String remainTime) {
@@ -122,7 +122,13 @@ public class GeneralUtil {
         return result;
     }
     
-    public  static  String subDateTime(Date d1, Date d2) {
+    /**
+     * Method get string is value sub operation of two date.
+     * @param d1 Date one
+     * @param d2 Date two
+     * @return String of result
+     */
+    public static String subDateTime(Date d1, Date d2) {
         String result = "";
         long  difmillisecond = d1.getTime() - d2.getTime();
         int  hour = (int) (difmillisecond/(3600*1000));
@@ -133,10 +139,10 @@ public class GeneralUtil {
         result = String.valueOf(hour) + ":"  + String.valueOf(minute) + ":"  + String.valueOf(second);
         return  result;
     }
+    
     /**
-     * 
-     * Method get the string remainTime from endtime.
-     * @param endTime endtime of deal
+     * Method get the string remain Time from end time.
+     * @param endTime end time of deal
      * @return String represent remainTime (hh:mm:ss)
      */
     public static String getRemainTime(Date endTime) {
@@ -151,8 +157,7 @@ public class GeneralUtil {
         result = String.valueOf(hour) + ":" + String.valueOf(minute) + ":" + String.valueOf(second);
         return result;
     }
-    
-    
+   
     /**
      * Check if a string can convert to a number
      * @param s string input
@@ -166,12 +171,25 @@ public class GeneralUtil {
         result = result.replace(",", "");
         return result;
     }
+    
+    /**
+     * Cut a string if its length too 500.
+     * @param str String to cut
+     * @return String after cut
+     */
     public static String cutOff(String str) {
         if (str.length() >= 500) {
             str = str.substring(0, 499);
         }
         return str;
     }
+    
+    /**
+     * Encode a deal.
+     * @param deal deal to encode
+     * @return Deal after encode
+     * @throws Exception exception when encode maybe happen
+     */
     public static Deal encodeDeal(Deal deal) throws Exception {
         try {
             String title = URLEncoder.encode(deal.getTitle(), "UTF-8");            
@@ -190,22 +208,13 @@ public class GeneralUtil {
             throw ex;
         }
     }
-    /*public static Deal encodeDeal(Deal deal) throws Exception {
-        try {
-            String title = URLEncoder.encode(deal.getTitle(), "UTF-8");
-            if (title.length() >= 500) {
-                title.substring(0, 499);
-            }
-            deal.setTitle(title);
-            deal.setDescription(URLEncoder.encode(deal.getDescription(), "UTF-8"));
-            deal.setAddress(URLEncoder.encode(deal.getAddress(), "UTF-8"));
-            deal.setUnitPrice(URLEncoder.encode(deal.getUnitPrice(), "UTF-8"));
-            return deal;
-        } catch (Exception ex) {
-            throw ex;
-        }
-    }*/
     
+    /**
+     * Decode a deal.
+     * @param deal deal to decode
+     * @return Deal after decode
+     * @throws Exception exception when decode maybe happen
+     */
     public static Deal decodeDeal(Deal deal) throws Exception {
         try {
             deal.setTitle(URLDecoder.decode(deal.getTitle(), "UTF-8"));
@@ -218,6 +227,7 @@ public class GeneralUtil {
         }
     }
     
+    /** String array to remove sign in Vietnamese*/
     private static String[] vietnameseSigns = new String[] { 
         "aAeEoOuUiIdDyY",
         "áàạảãâấầậẩẫăắằặẳẵ",
@@ -235,6 +245,12 @@ public class GeneralUtil {
         "ýỳỵỷỹ",
         "ÝỲỴỶỸ"
     };
+    
+    /**
+     * Method remove sign in Vietnamese string.
+     * @param text String to remove sign
+     * @return String after remove sign
+     */
     public static String removeSign4VietNameseString(String text)
     {
         for (int i = 1; i < vietnameseSigns.length; i++)
@@ -246,9 +262,23 @@ public class GeneralUtil {
         }
         return text;
     }
+    
+    /**
+     * Replace notation.
+     * @param text String to replace notation
+     * @param notation1 notation 1
+     * @param notation2 notation 2
+     * @return String after replace notation
+     */
     public static String replaceNotation(String text, String notation1, String notation2){
         return text.replace(notation1, notation2);
     }
+    
+    /**
+     * Normalization String method.
+     * @param str String to normalize
+     * @return String after normalize
+     */
     public static List<String> normalizationString(String str)
     {
         while (str.indexOf("  ") != -1)
@@ -269,6 +299,12 @@ public class GeneralUtil {
         resutl.add(str.substring(index, str.length() - index));
         return resutl;
     }
+    
+    /**
+     * Convert price to text with format Vietnamese.
+     * @param price Price to convert
+     * @return String result
+     */
     public static String convertPriceToText(double price) {
         String strTextPrice = "";
         int priceBillion = (int) (price / 1000000000.0);
@@ -331,5 +367,30 @@ public class GeneralUtil {
             }
         }
         return address;
+    }
+    
+    /**
+     * Send mail method.
+     * @param from From
+     * @param to To
+     * @param subject Subject
+     * @param body Content email
+     */
+    public static void sendMessage(String from, String to, String subject, String body){
+        Properties props = new Properties();
+        Session session = Session.getDefaultInstance(props, null);
+        
+        try{
+            Message msg = new MimeMessage(session);
+            msg.setFrom(new InternetAddress(from));
+            msg.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
+            msg.setSubject(subject);
+            msg.setText(body);
+            Transport.send(msg);
+        }catch(AddressException e){
+            System.out.println(e.getMessage());
+        }catch(MessagingException ex){
+            System.out.println(ex.getMessage());
+        }
     }
 }

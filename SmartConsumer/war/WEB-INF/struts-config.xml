@@ -32,6 +32,7 @@
     </action>
     <action path="/viewdeal" type="com.gae.java.smartconsumer.action.customer.ViewDeal" scope="session">
       <forward name="success" redirect="true" path="lviewdeal"/>
+      <forward name="success1" redirect="true" path="lviewdeal" />
     </action>
     <action path="/deldeal" type="com.gae.java.smartconsumer.action.admin.DeleteDeal" scope="session">
       <forward name="success" redirect="true" path="/manage.app"/>
@@ -73,7 +74,7 @@
     <action path="/viewbill" type="com.gae.java.smartconsumer.action.admin.ViewBill" scope="request">
       <forward name="success" redirect="true" path="lviewbill"/>
     </action>
-    <action path="/order" type="com.gae.java.smartconsumer.action.customer.Order">
+    <action path="/order" type="com.gae.java.smartconsumer.action.customer.Order"  scope="session">
         <forward name="success" redirect="true" path="order" />
     </action>
   </action-mappings>
