@@ -19,7 +19,6 @@
 package com.gae.java.smartconsumer.blo;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import com.gae.java.smartconsumer.dao.DealDAO;
@@ -33,11 +32,6 @@ import com.gae.java.smartconsumer.util.Status;
  */
 public enum DealBLO {
     INSTANCE;
-    
-    /**
-     * List all of Deal in data store
-     */
-    private List<Deal> listAllDeals = DealDAO.INSTANCE.listDeals();
     
     /**
     * List all of Deal in data store
@@ -135,7 +129,7 @@ public enum DealBLO {
      * @param deal object to insert into database
      * @throws Exception A exception threw when Deal's properties is invalid
      */
-    public void insert(Deal deal) throws Exception {
+    public Long insert(Deal deal) throws Exception {
         if (deal.getTitle().isEmpty()) {
             throw new Exception("Title can not empty");
         }
@@ -164,7 +158,9 @@ public enum DealBLO {
                 || (deal.getStatus() > Status.OUTOFTIME.ordinal())) {
             throw new Exception("Status is invalid");
         }
-        DealDAO.INSTANCE.insert(deal);        
+        deal.setId(DealDAO.INSTANCE.getMaxId() + 1);
+        DealDAO.INSTANCE.insert(deal);
+        return deal.getId();
     }
     
     /**
@@ -211,7 +207,7 @@ public enum DealBLO {
      */
     public boolean isIdExist(long id) {
         boolean result = false;
-        for (Deal item : this.listAllDeals) {
+        for (Deal item : DealDAO.INSTANCE.listDeals()) {
             if (item.getId().equals(id)) {
                 return true;
             }
@@ -260,7 +256,7 @@ public enum DealBLO {
                         GeneralUtil.removeSign4VietNameseString(
                                 deal.getTitle()), " ", "-"));
         deal.setSave((float) ((deal.getBasicPrice() - deal.getPrice()) / deal.getBasicPrice() * 100));
-        deal.setStatus(Status.WAITTOCHECK.ordinal());
+        //deal.setStatus(Status.WAITTOCHECK.ordinal());
         deal.setUpdateDate(java.util.Calendar.getInstance().getTime());
         
         DealDAO.INSTANCE.update(deal);

@@ -1,20 +1,9 @@
 /**
- * Licensed to Open-Ones Group under one or more contributor license
- * agreements. See the NOTICE file distributed with this work
- * for additional information regarding copyright ownership.
- * Open-Ones Group licenses this file to you under the Apache License,
- * Version 2.0 (the "License"); you may not use this file
- * except in compliance with the License. You may obtain a
- * copy of the License at:
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations
- * under the License.
+ * DealDAO.java
+ * 
+ * 28/5/2012
+ * 
+ * Smart Consumer project
  */
 package com.gae.java.smartconsumer.dao;
 
@@ -25,19 +14,19 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import com.gae.java.smartconsumer.model.Deal;
-import com.gae.java.smartconsumer.util.GeneralUtil;
 import com.gae.java.smartconsumer.util.Status;
-import com.google.appengine.api.datastore.Text;
 
 /**
+ * Data access class for Deal object
+ * 
+ * @version 1.0 28/5/2012
  * @author Nixforest
- *
  */
 public enum DealDAO {
     INSTANCE;
     
     /**
-     * Get all deal from datastore
+     * Get all deal from data store
      * @return List of Deals
      */
     public List<Deal> listDeals() {
@@ -51,7 +40,7 @@ public enum DealDAO {
     }
     
     /**
-     * Method get all deals soft by updateDate property.
+     * Method get all deals sort by updateDate property.
      * @return List of deals sort by updateDate property.
      */
     public List<Deal> listDealsSortByUpdateDate() {
@@ -65,7 +54,7 @@ public enum DealDAO {
     }
     
     /**
-     * Method get all deals soft by EndTime property.
+     * Method get all deals sort by EndTime property.
      * @return List of deals sort by EndTime property.
      */
     public List<Deal> listDealsSortByEndTime() {
@@ -75,6 +64,18 @@ public enum DealDAO {
         @SuppressWarnings("unchecked")
         List<Deal> deals = q.getResultList();
         
+        return deals;
+    }
+    
+    /**
+     * Method get all deals sort by Id property.
+     * @return List of deals sort by Id property.
+     */
+    public List<Deal> listDealsSortById() {
+        EntityManager em = EMFService.get().createEntityManager();
+        Query q = em.createQuery("select m from Deal m order by m.id desc");
+        @SuppressWarnings("unchecked")
+        List<Deal> deals = q.getResultList();
         return deals;
     }
 
@@ -91,7 +92,7 @@ public enum DealDAO {
     }
     
     /**
-     * Insert a deal to datastore.
+     * Insert a deal to data store.
      * @param deal entity to insert
      */
     public void insert(Deal deal) {
@@ -105,7 +106,7 @@ public enum DealDAO {
     }
     
     /**
-     * Insert a deal to datastore
+     * Insert a deal to data store
      * [Give the description for method].
      * @param title
      * @param description
@@ -140,7 +141,7 @@ public enum DealDAO {
                     numberBuyer,
                     endTime,
                     isVoucher);
-            if (!isExist(deal)) {   //
+            if (!isExist(deal)) {
                 em.persist(deal);
             }
             em.close();
@@ -160,8 +161,7 @@ public enum DealDAO {
             }    
         } finally {
             em.close();
-        }
-        
+        }        
     }
     
     /**
@@ -194,15 +194,14 @@ public enum DealDAO {
     }
     
     /**
-     * Edit deal
-     * @param deal
+     * Update deal
+     * @param deal deal wish to update
      */
     public void update(Deal deal) {
         EntityManager em = EMFService.get().createEntityManager();
         try {
             Deal innerDeal = em.find(Deal.class, deal.getId());
             innerDeal.setTitle(deal.getTitle());
-            //innerDeal.setLink("/viewdeal.app?id=" + GeneralUtil.ReplaceNotation(GeneralUtil.RemoveSign4VietNameseString(title), " ", "-"));
             innerDeal.setDescription(deal.getDescription());
             innerDeal.setAddress(deal.getAddress());
             innerDeal.setLink(deal.getLink());
@@ -216,7 +215,8 @@ public enum DealDAO {
             innerDeal.setVoucher(deal.getisVoucher());
             innerDeal.setUpdateDate(deal.getUpdateDate());
             innerDeal.setStatus(deal.getStatus());
-        } finally {         // Close connection
+        } finally {
+            // Close connection
             em.close();
         }
     }
@@ -235,5 +235,17 @@ public enum DealDAO {
             }
         }
         return false;        
+    }
+    
+    /**
+     * Get max Id in Deal data.
+     * @return Max Id if it is exist, null otherwise
+     */
+    public Long getMaxId() {
+        if (listDealsSortById().size() == 0) {
+            return (long)0;
+        } else {
+            return listDealsSortById().get(0).getId();
+        }
     }
 }

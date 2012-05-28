@@ -61,4 +61,8 @@
     <put name="title" value="Order" />
     <put name="body" value="order.jsp" />
   </definition>
+  <definition name="lviewdealcart" extends="admin">
+    <put name="title" value="View Deal" />
+    <put name="body" value="viewdeal.jsp" />
+  </definition>
 </tiles-definitions>

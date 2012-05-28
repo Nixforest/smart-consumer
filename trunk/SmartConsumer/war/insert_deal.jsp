@@ -57,35 +57,35 @@ $(document).ready(function(){
       <table>
           <tr>
               <td>Tiêu đề</td>
-              <td><html:text property="title" /></td>            
+              <td><html:text property="title" size="65" /></td>            
           </tr>
           <tr>
               <td>Mô tả</td>
-              <td><html:text property="description" /></td>            
+              <td><html:textarea property="description" cols="50" rows="10"/></td>            
           </tr>
           <tr>
               <td>Địa chỉ</td>
-              <td><html:textarea property="address" /></td>            
+              <td><html:text property="address" size="65" /></td>            
           </tr>
           <tr>
               <td>Hình ảnh</td>
-              <td><html:text property="imageLink" /></td>            
+              <td><html:text property="imageLink" size="65" /></td>            
           </tr>
           <tr>
               <td>Giá bán</td>
-              <td><html:text property="price" value="0.0" /></td>            
+              <td><html:text property="price" value="0.0" size="65" /></td>            
           </tr>
           <tr>
               <td>Giá gốc</td>
-              <td><html:text property="basicPrice" value="0.0" /></td>            
+              <td><html:text property="basicPrice" value="0.0" size="65" /></td>            
           </tr>
           <tr>
               <td>Đơn vị</td>
-              <td><html:text property="unitPrice" /></td>            
+              <td><html:text property="unitPrice" size="65" /></td>            
           </tr>
           <tr>
               <td>Thời gian khuyến mãi</td>
-              <td><html:text property="endTime" value="00:00:00" /></td>            
+              <td><html:text property="endTime" value="00:00:00" size="65" /></td>            
           </tr>
           <tr>
               <td>Phương thức</td>

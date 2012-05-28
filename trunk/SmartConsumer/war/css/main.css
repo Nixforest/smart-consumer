@@ -60,4 +60,26 @@ table tr {
 form td {
     font-size: smaller;
 }
+.errorview {
+  background-color: BAD3ED;
+  width: 100%;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  -moz-box-shadow: 5px 5px 5px black;
+  -webkit-box-shadow: 5px 5px 5px black;
+  box-shadow: 5px 5px 5px black;
+  color: red; 
+  text-align: center;
+  font-weight: bold;
+  
+}
+
+.errorMes {
+  font-weight: bold;
+  color: red;
+}
+
+.errorInput {
+  border-color:red;
+}
             

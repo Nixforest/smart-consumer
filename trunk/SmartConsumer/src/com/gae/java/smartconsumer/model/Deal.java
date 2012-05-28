@@ -1,63 +1,93 @@
 /**
- * Licensed to Open-Ones Group under one or more contributor license
- * agreements. See the NOTICE file distributed with this work
- * for additional information regarding copyright ownership.
- * Open-Ones Group licenses this file to you under the Apache License,
- * Version 2.0 (the "License"); you may not use this file
- * except in compliance with the License. You may obtain a
- * copy of the License at:
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations
- * under the License.
+ * Deal.java
+ * 
+ * 27/5/2012
+ * 
+ * Smart Consumer project
  */
 package com.gae.java.smartconsumer.model;
 
 import java.util.Date;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import com.gae.java.smartconsumer.util.Status;
 
 /**
+ * Class describe "Deal" object, contain data about Deal
+ * 
+ * @version 1.0 27/5/2012
  * @author Nixforest
- *
  */
 @Entity(name="Deal")
 public class Deal {
+    /** Id - Primary key */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY, generator="DealID")
     private Long id;
     
-    // Properties
-    private String title;                       // Title of deal
+    /** Title of deal */
+    private String title;
     
-    private String description;                 // Description of deal
-    private String address;                     // Address of deal
-    private String link;                        // Url of deal
-    private String imageLink;                   // Url of deal's image
-    private double price;                       // Price of deal
-    private double basicPrice;                  // Basic price of deal
-    private String unitPrice;                   // Unit price of deal
-    private float save;                         // Save of deal
-    private int numberBuyer;                    // Number of buyer for deal
-    private java.util.Date endTime;             // End time of deal
-    private boolean isVoucher;                  // Method of delivery
-    private java.util.Date updateDate;          // Updated date
-    private Integer status;                         // Status of record
+    /** Description of deal */
+    private String description;
     
-    //Constructor
+    /** Address of deal */
+    private String address;
+    
+    /** Url of deal */
+    private String link;
+    
+    /** Url of deal's image */
+    private String imageLink;
+    
+    /** Price of deal */
+    private double price;
+    
+    /** Basic price of deal */
+    private double basicPrice;
+    
+    /** Unit price of deal */
+    private String unitPrice;
+    
+    /** Save of deal */
+    private float save;
+    
+    /** Number of buyer for deal */
+    private int numberBuyer;
+
+    /** End time of deal */
+    private java.util.Date endTime;
+
+    /** Method of delivery */
+    private boolean isVoucher;
+
+    /** Updated date */
+    private java.util.Date updateDate;
+
+    /** Status of record */
+    private Integer status;
+    
+    /**
+     * Empty constructor
+     */
     public Deal(){}
     
-    // Constructor
+    /**
+     * Constructor of Deal class
+     * @param title Title
+     * @param description Description
+     * @param address Address
+     * @param link Url
+     * @param imageLink Image's url
+     * @param price Price
+     * @param basicPrice Basic price
+     * @param unitPrice Unit price
+     * @param save Save
+     * @param numberBuyer Number of buyer
+     * @param endTime End time
+     * @param isVoucher Is voucher
+     */
     public Deal(String title, String description, String address,
             String link, String imageLink, double price,
             double basicPrice, String unitPrice, float save,
@@ -79,7 +109,23 @@ public class Deal {
         this.setUpdateDate(java.util.Calendar.getInstance().getTime());
         this.status = Status.SELLING.ordinal();
     }
-    // Constructor
+    
+    /**
+     * Constructor of Deal class
+     * @param title Title
+     * @param description Description
+     * @param address Address
+     * @param link Url
+     * @param imageLink Image's url
+     * @param price Price
+     * @param basicPrice Basic price
+     * @param unitPrice Unit price
+     * @param save Save
+     * @param numberBuyer Number of buyer
+     * @param endTime End time
+     * @param isVoucher Is voucher
+     * @param status Status of Deal
+     */
     public Deal(String title, String description, String address,
             String link, String imageLink, double price,
             double basicPrice, String unitPrice, float save,
@@ -102,6 +148,7 @@ public class Deal {
         this.setUpdateDate(java.util.Calendar.getInstance().getTime());
         this.status = status;
     }
+    
     /**
      * Get value of Title.
      * @return the Title
@@ -332,5 +379,13 @@ public class Deal {
     */
     public Long getId() {
         return id;
-    }    
+    }
+    
+    /**
+     * Set the value for id.
+     * @param id the id to set
+     */
+    public void setId(Long id) {
+        this.id = id;
+    }
 }

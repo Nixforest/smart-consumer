@@ -4,11 +4,90 @@
 <%@page import="java.util.HashMap"%>
 <%@page import="java.util.Map"%>
 <%@page import="java.util.ArrayList"%>
+<%@page import="com.google.appengine.api.users.UserServiceFactory"%>
+<%@page import="com.google.appengine.api.users.User"%>
+<%@page import="com.google.appengine.api.users.UserService"%>
 <%@page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8" %>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 <title>Đặt hàng</title>
+<link rel="stylesheet" type="text/css" href="js/jquery-ui-1.8.20.custom/css/ui-lightness/jquery-ui-1.8.20.custom.css" />
+<link rel="stylesheet" type="text/css" href="css/main.css" />
+<script type="text/javascript" src="js/jquery-ui-1.8.20.custom/js/jquery-1.7.2.min.js"></script> 
+<script type="text/javascript" src="js/jquery-ui-1.8.20.custom/js/jquery-ui-1.8.20.custom.min.js"></script>  
+<script type="text/javascript" src="js/jquery-ui-1.8.20.custom/js/jquery-ui-timepicker-addon.js"></script>
+<script>
+  $(function() {
+      $("#dpickExpirationTime").datepicker();
+  });
+  
+  function checkCustomerName() {   
+    var field = document.getElementById("customerName");
+    if (field.value == "") {
+        document.getElementById("errorMes1").removeAttribute("style");
+        field.setAttribute("class", "errorInput");
+    } else {
+        document.getElementById("errorMes1").setAttribute("style",
+                "display:none");
+        field.removeAttribute("class");
+    }
+  }
+  function checkCustomerEmail(email) {   
+      var field = document.getElementById("customerEmail");
+      if (field.value == "") {
+          document.getElementById("errorMes2").removeAttribute("style");
+          field.setAttribute("class", "errorInput");
+      } else {
+    	  document.getElementById("errorMes2").setAttribute("style",
+          "display:none");
+          field.removeAttribute("class");
+    	  var emailReg = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+          if (emailReg.test(field.value)) {
+        	  document.getElementById("errorMes3").setAttribute("style",
+              "display:none");
+              field.removeAttribute("class");
+          } else {
+        	  document.getElementById("errorMes3").removeAttribute("style");
+              field.setAttribute("class", "errorInput");
+          }
+          
+      }
+  }
+  function checkCardNumber() {
+      var field = document.getElementById("cardNumber");
+      if (field.value == "") {
+          document.getElementById("errorMes4").removeAttribute("style");
+          field.setAttribute("class", "errorInput");
+      } else {
+          document.getElementById("errorMes4").setAttribute("style",
+                  "display:none");
+          field.removeAttribute("class");
+      }
+  }
+  function checkHolderName() {
+      var field = document.getElementById("holderName");
+      if (field.value == "") {
+          document.getElementById("errorMes5").removeAttribute("style");
+          field.setAttribute("class", "errorInput");
+      } else {
+          document.getElementById("errorMes5").setAttribute("style",
+                  "display:none");
+          field.removeAttribute("class");
+      }
+  }
+  function checkExpirationTime() {
+      var field = document.getElementById("dpickExpirationTime");
+      if (field.value == "") {
+          document.getElementById("errorMes6").removeAttribute("style");
+          field.setAttribute("class", "errorInput");
+      } else {
+          document.getElementById("errorMes6").setAttribute("style",
+                  "display:none");
+          field.removeAttribute("class");
+      }
+  }
+</script>
 </head>
 <body>
 <div class="main">
@@ -16,6 +95,9 @@
     <jsp:useBean id="cart" scope="session" class="com.gae.java.smartconsumer.action.DummyCart" />
     <jsp:setProperty name="cart" property="*" />
     <%
+    UserService userService = UserServiceFactory.getUserService();
+    User user = userService.getCurrentUser();
+    
     cart.processRequest(request);
     String[] items = cart.getItems();
     Map<String, Integer> processItems = new HashMap<String, Integer>();
@@ -31,7 +113,7 @@
     }
     %>
     <div class="lorder">
-    <form>
+    <form action="order.app?type=submit" method="POST" onsubmit="return validateOrder(this);">
       <table>
           <tr>
               <th>STT</th>
@@ -69,13 +151,19 @@
       <h2>Thông tin khách hàng:</h2>
       <table>
         <tr>
-            <td>Họ tên:</td>
+            <td>Họ tên:<span class="errorMes" id="errorMes1" style="display:none">(*)</span></td>
             <td>
-                <input type="text" id="customerName" name="customerName"/>
+                <input type="text" id="customerName" name="customerName"
+                    value="<%=(user != null ? user.getNickname() : "") %>"
+                    onblur="checkCustomerName()"/>
+                
             </td>
-            <td>Email:</td>
+            <td>Email:<span class="errorMes" id="errorMes2" style="display:none">(*)</span></td>
             <td>
-                <input type="text" id="customerEmail" name="customerEmail"/>
+                <input type="text" id="customerEmail" name="customerEmail"
+                    value="<%=(user != null ? user.getEmail() : "") %>"
+                    onblur="checkCustomerEmail()"/>
+                    <span class="errorMes" id="errorMes3" style="display:none">Email chưa hợp lệ</span>
             </td>
         </tr>
         <tr>
@@ -91,7 +179,7 @@
         <tr>
             <td>Hình thức thanh toán:</td>
             <td>
-                <select name="payment">
+                <select name="payment" id="payment">
                     <%
                     for (int j = 0; j < Payment.values().length; j++) {
                         %>
@@ -101,20 +189,22 @@
                     %>
                 </select>
             </td>
-            <td>Mã số thẻ:</td>
+            <td>Mã số thẻ:<span class="errorMes" id="errorMes4" style="display:none">(*)</span></td>
             <td>
-                <input type="text" id="cardNumber" name="cardNumber"/>
+                <input type="text" id="cardNumber" name="cardNumber"
+                    onblur="checkCardNumber()"/>
             </td>
         </tr>
         <tr>
-            <td>Tên chủ thẻ:</td>
+            <td>Tên chủ thẻ:<span class="errorMes" id="errorMes5" style="display:none">(*)</span></td>
             <td>
-                <input type="text" id="holderName" name="holderName"/>
+                <input type="text" id="holderName" name="holderName"
+                    onblur="checkHolderName()"/>
             </td>
-            <td>Hạn sử dụng:</td>
+            <td>Hạn sử dụng:<span class="errorMes" id="errorMes6" style="display:none">(*)</span></td>
             <td>
-                <input type="text" id="expirationDateMonth" name="expirationDateMonth"/>:
-                <input type="text" id="expirationDateYear" name="expirationDateYear"/>
+                <input type="text" id="dpickExpirationTime" name="dpickExpirationTime"
+                    onblur="checkExpirationTime()"/>
             </td>
         </tr>
       </table>
