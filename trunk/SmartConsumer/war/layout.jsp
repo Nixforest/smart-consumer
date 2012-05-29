@@ -12,10 +12,14 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 <link rel="stylesheet" type="text/css" href="css/styles.css" />
 <link rel="stylesheet" type="text/css" href="css/main.css" />
+<link rel="stylesheet" type="text/css" href="js/jquery-ui-1.8.20.custom/css/ui-lightness/jquery-ui-1.8.20.custom.css" />
 <script type="text/javascript" src="js/js.js"></script>
 <script type="text/javascript" src="js/ajax.js"></script>
 <script type="text/javascript" src="js/validation.js"></script>
 <script type="text/javascript" src="js/jquery-1.7.1.min.js"></script>
+<script type="text/javascript" src="js/jquery-ui-1.8.20.custom/js/jquery-1.7.2.min.js"></script> 
+<script type="text/javascript" src="js/jquery-ui-1.8.20.custom/js/jquery-ui-1.8.20.custom.min.js"></script>  
+<script type="text/javascript" src="js/jquery-ui-1.8.20.custom/js/jquery-ui-timepicker-addon.js"></script>
 <title><tiles:getAsString name="title" /></title>
 </head>
 <body>

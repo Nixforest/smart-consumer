@@ -15,9 +15,14 @@ public class ChangeStatusDone extends Action {
     @Override
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
             HttpServletResponse response) throws Exception {
-        StatusForm status = (StatusForm)form;
-        //System.out.println(status.getId());
-        DealBLO.INSTANCE.changeStatus(status.getId(), status.getStatus());
+        if (request.getParameter("url") == null) {
+            StatusForm status = (StatusForm)form;
+            //System.out.println(status.getId());
+            DealBLO.INSTANCE.changeStatus(status.getId(), status.getStatus());
+        } else {
+            String url = request.getParameter("url");
+        }
+
         return mapping.findForward("success");
     }
 }

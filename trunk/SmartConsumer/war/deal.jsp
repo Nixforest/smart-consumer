@@ -96,6 +96,15 @@ function IsNumberInt(str) {
     }
     return str;
 }
+
+function setLinkUpdate(id) {
+	var name = document.getElementById("updateLink" + id);
+    document.getElementById("updateLink" + id).setAttribute("style",
+                "display:");
+    alert($("#status"+id).val());
+    document.getElementById("updateLink" + id).setAttribute("href",
+    "/changestatusdone.app?id=" + id + "&status=");
+}
 </script>
 </head>
 <body>
@@ -176,6 +185,18 @@ function IsNumberInt(str) {
             <td><%=GeneralUtil.getRemainTime(deal.getEndTime()) %></td>
             <%-- <td><%=deal.isVoucher() %></td> --%>
             <td><%=deal.getUpdateDate()%></td>
+            <td>
+                <select id="status<%=deal.getId() %>" name="status<%=deal.getId() %>" onchange="setLinkUpdate(<%=deal.getId() %>)" >
+                    <%
+                    for (int i = 0; i < Status.values().length; i ++) {
+                        %>
+                        <option value="<%=i %>" <%if (deal.getStatus() == i) out.print("selected='seleted'");%>><%=Status.values()[i] %></option> 
+                        <%
+                    }
+                    %>
+                </select>
+                <a class="done" id="updateLink<%=deal.getId() %>" name="updateLink<%=deal.getId() %>" href="" style="display: none;">Update</a>
+            </td>
             <td><%=Status.values()[deal.getStatus()] %></td>
             <%
             String statusRemove = "";
@@ -224,8 +245,6 @@ function IsNumberInt(str) {
                     <td><label for="price">Giá</label></td>
                     <td>
                         <input name="price" id="price" type="text" autocomplete="off"
-                                onfocusout="ConvertPriceText(this.value)" 
-                                onblur="ConvertPriceText(this.value)"
                                 onkeyup="this.value=FormatNumber(this.value);" />
                     </td>
                 </tr>
@@ -233,8 +252,6 @@ function IsNumberInt(str) {
                     <td><label for="basicPrice">Giá gốc</label></td>
                     <td>
                         <input name="basicPrice" id="basicPrice" type="text" autocomplete="off"
-                                onfocusout="ConvertPriceText(this.value)" 
-                                onblur="ConvertPriceText(this.value)"
                                 onkeyup="this.value=FormatNumber(this.value);" />
                     </td>
                 </tr>

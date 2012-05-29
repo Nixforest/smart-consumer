@@ -14,6 +14,9 @@ $(document).ready(function(){
         }
     });
 });
+$(function() {
+    $("#endTime").datetimepicker();
+});
 function checkTitle() {
     var name = document.getElementById("title");
     if (name.value == "") {
@@ -24,7 +27,97 @@ function checkTitle() {
                 "display:none");
         name.removeAttribute("class");
     }
+}
+function checkAddress() {
+    var name = document.getElementById("address");
+    if (name.value == "") {
+        document.getElementById("errorMes2").removeAttribute("style");
+        name.setAttribute("class", "errorInput");
+    } else {
+        document.getElementById("errorMes2").setAttribute("style",
+                "display:none");
+        name.removeAttribute("class");
+    }
 
+}
+function validateField() {
+    var docs = document.getElementById("imgLoad");
+    var link = document.getElementById("imageLink").value;
+    docs.setAttribute("src", link);
+    
+}
+function FormatNumber(str) {
+
+    var strTemp = GetNumber(str);
+    if (strTemp.length <= 3)
+        return strTemp;
+    strResult = "";
+    for (var i = 0; i < strTemp.length; i++)
+        strTemp = strTemp.replace(",", "");
+    var m = strTemp.lastIndexOf(".");
+    if (m == -1) {
+        for (var i = strTemp.length; i >= 0; i--) {
+            if (strResult.length > 0 && (strTemp.length - i - 1) % 3 == 0)
+                strResult = "," + strResult;
+            strResult = strTemp.substring(i, i + 1) + strResult;
+        }
+    }
+    else {
+        //phần nguyên
+        var strphannguyen = strTemp.substring(0, strTemp.lastIndexOf("."));
+        var strphanthapphan = strTemp.substring(strTemp.lastIndexOf("."), strTemp.length);
+        //phần thập phân
+        var tam = 0;
+        for (var i = strphannguyen.length; i >= 0; i--) {
+
+            if (strResult.length > 0 && tam == 4) {
+                strResult = "," + strResult;
+                tam = 1;
+            }
+
+
+            strResult = strphannguyen.substring(i, i + 1) + strResult;
+            tam = tam + 1;
+        }
+        strResult = strResult + strphanthapphan;
+    }
+
+    return strResult;
+}
+function GetNumber(str) {
+    var count = 0;
+    for (var i = 0; i < str.length; i++) {
+        var temp = str.substring(i, i + 1);
+        if (!(temp == "," || temp == "." || (temp >= 0 && temp <= 9))) {
+            alert("Vui lòng nhập số (0-9)!");
+            return str.substring(0, i);
+        }
+        if (temp == " ")
+            return str.substring(0, i);
+        if (temp == ".") {
+            if (count > 0)
+                return str.substring(0, i);
+            count++;
+        }
+    }
+    return str;
+}
+
+function IsNumberInt(str) {
+    for (var i = 0; i < str.length; i++) {
+        var temp = str.substring(i, i + 1);
+        if (!(temp == "." || (temp >= 0 && temp <= 9))) {
+            alert("Vui lòng nhập số (0-9)!");
+            return str.substring(0, i);
+        }
+        if (temp == ",") {
+            alert("Bạn sử dụng dấu . nếu muốn nhập số lẻ!");
+            return str.substring(0, i);
+        }
+        //                  if(temp == " " || temp == ",")
+        //                      return str.substring(0, i);
+    }
+    return str;
 }
 </script>
 
@@ -54,27 +147,45 @@ function checkTitle() {
           </tr>
           <tr>
               <td>Địa chỉ</td>
-              <td><input type="text" size="65" name="address" value="<bean:write name="deal" property="address"/>" /></td>            
+              <td>
+                <input type="text" size="65" id="address" name="address" value="<bean:write name="deal" property="address"/>"  onblur="checkAddress()"/>
+                <span class="errorMes" id="errorMes2" style="display:none">Vui lòng nhập Địa chỉ</span>
+              </td>
           </tr>
           <tr>
               <td>Hình ảnh</td>
-              <td><input type="text" size="65" name="imageLink" value="<bean:write name="deal" property="imageLink"/>" /></td>            
+              <td>
+                <input type="url" size="65" id="imageLink" name="imageLink" value="<bean:write name="deal" property="imageLink"/>" />
+                <input type="button" name="btnUpload" id="btnUpload" value="Upload" onclick="validateField()" />
+                <img id="imgLoad" src='<bean:write name="deal" property="imageLink"/>'>
+              </td>
           </tr>
           <tr>
               <td>Giá bán</td>
-              <td><input type="text" size="65" name="price" value="<bean:write name="deal" property="price" />" /></td>            
+              <td>
+                <input type="text" size="65" id="price" name="price" value="<bean:write name="deal" property="price" />"
+                        autocomplete="off"
+                        onkeyup="this.value=FormatNumber(this.value);" />
+              </td>            
           </tr>
           <tr>
               <td>Giá gốc</td>
-              <td><input type="text" size="65" name="basicPrice" value="<bean:write name="deal" property="basicPrice" />" /></td>            
+              <td>
+                <input type="text" size="65" name="basicPrice" value="<bean:write name="deal" property="basicPrice" />"
+                        autocomplete="off"
+                        onkeyup="this.value=FormatNumber(this.value);" />
+              </td>            
           </tr>
           <tr>
               <td>Đơn vị</td>
               <td><input type="text" size="65" name="unitPrice" value="<bean:write name="deal" property="unitPrice" />" /></td>            
           </tr>
           <tr>
-              <td>Thời gian khuyến mãi</td>
-              <td><input type="text" size="65" name="endTime" value="<bean:write name="time" />"></td>            
+              <td>Thời gian kết thúc</td>
+              <td>
+                <input type="text" size="65" id="endTime" name="endTime" value="<bean:write name="time" />"
+                    onblur="checkEndTime()"/>
+              </td>            
           </tr>
           <tr>
               <td>Phương thức</td>

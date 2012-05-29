@@ -57,7 +57,10 @@ $(document).ready(function(){
       <table>
           <tr>
               <td>Tiêu đề</td>
-              <td><html:text property="title" size="65" /></td>            
+              <td>
+                <html:text property="title" size="65" onblur="checkTitle()" />
+                <span class="errorMes" id="errorMes1" style="display:none">Vui lòng nhập Tiêu đề</span>
+              </td>            
           </tr>
           <tr>
               <td>Mô tả</td>
@@ -85,7 +88,10 @@ $(document).ready(function(){
           </tr>
           <tr>
               <td>Thời gian khuyến mãi</td>
-              <td><html:text property="endTime" value="00:00:00" size="65" /></td>            
+              <td>
+                <input type="text" size="65" id="endTime" name="endTime" value="<bean:write name="time" />"
+                    onblur="checkEndTime()"/>
+              </td>            
           </tr>
           <tr>
               <td>Phương thức</td>
