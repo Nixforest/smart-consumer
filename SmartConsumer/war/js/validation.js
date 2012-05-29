@@ -394,3 +394,25 @@ function checkNumber1(number) {
     return false;
 }
 
+function checkTitle() {
+    var name = document.getElementById("title");
+    if (name.value == "") {
+        document.getElementById("errorMes1").removeAttribute("style");
+        name.setAttribute("class", "errorInput");
+    } else {
+        document.getElementById("errorMes1").setAttribute("style",
+                "display:none");
+        name.removeAttribute("class");
+    }
+}
+function checkEndTime() {
+    var field = document.getElementById("dpickExpirationTime");
+    if (field.value == "") {
+        document.getElementById("errorMes6").removeAttribute("style");
+        field.setAttribute("class", "errorInput");
+    } else {
+        document.getElementById("errorMes6").setAttribute("style",
+                "display:none");
+        field.removeAttribute("class");
+    }
+}

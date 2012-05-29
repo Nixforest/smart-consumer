@@ -1,8 +1,6 @@
 /**
  * DealDAO.java
- * 
  * 28/5/2012
- * 
  * Smart Consumer project
  */
 package com.gae.java.smartconsumer.dao;
@@ -17,16 +15,15 @@ import com.gae.java.smartconsumer.model.Deal;
 import com.gae.java.smartconsumer.util.Status;
 
 /**
- * Data access class for Deal object
- * 
+ * Data access class for Deal object.
  * @version 1.0 28/5/2012
  * @author Nixforest
  */
 public enum DealDAO {
+    /** Instance of class. */
     INSTANCE;
-    
     /**
-     * Get all deal from data store
+     * Get all deal from data store.
      * @return List of Deals
      */
     public List<Deal> listDeals() {
@@ -35,10 +32,9 @@ public enum DealDAO {
         Query q = em.createQuery("select m from Deal m");
         @SuppressWarnings("unchecked")
         List<Deal> deals = q.getResultList();
-        
         return deals;
     }
-    
+
     /**
      * Method get all deals sort by updateDate property.
      * @return List of deals sort by updateDate property.
@@ -49,10 +45,9 @@ public enum DealDAO {
         Query q = em.createQuery("select m from Deal m order by m.updateDate desc");
         @SuppressWarnings("unchecked")
         List<Deal> deals = q.getResultList();
-        
         return deals;
     }
-    
+
     /**
      * Method get all deals sort by EndTime property.
      * @return List of deals sort by EndTime property.
@@ -63,10 +58,9 @@ public enum DealDAO {
         Query q = em.createQuery("select m from Deal m order by m.endTime desc");
         @SuppressWarnings("unchecked")
         List<Deal> deals = q.getResultList();
-        
         return deals;
     }
-    
+
     /**
      * Method get all deals sort by Id property.
      * @return List of deals sort by Id property.
@@ -80,17 +74,17 @@ public enum DealDAO {
     }
 
     /**
-     * Get Deal by Id
+     * Get Deal by Id.
      * @param id Id of Deal
      * @return Deal object has Id match
      */
-    public Deal getDealById(Long id){
+    public Deal getDealById(Long id) {
         EntityManager em = EMFService.get().createEntityManager();
         Query q = em.createQuery("select from " + Deal.class.getName() + " where id=" + id);
-        Deal deal = (Deal)q.getSingleResult();
+        Deal deal = (Deal) q.getSingleResult();
         return deal;
     }
-    
+
     /**
      * Insert a deal to data store.
      * @param deal entity to insert
@@ -104,50 +98,37 @@ public enum DealDAO {
             em.close();
         }
     }
-    
+
     /**
-     * Insert a deal to data store
-     * [Give the description for method].
-     * @param title
-     * @param description
-     * @param address
-     * @param link
-     * @param imageLink
-     * @param price
-     * @param basicPrice
-     * @param unitPrice
-     * @param save
-     * @param numberBuyer
-     * @param remainTime
-     * @param isVoucher
-     * @throws Exception
-     */    
-    public void insert(String title,
-            String description,
-                        String address,
-                        String link,
-                        String imageLink,
-                        double price,
-                        double basicPrice,
-                        String unitPrice,
-                        float save,
-                        int numberBuyer,
-                        Date endTime,
-                        boolean isVoucher) throws Exception {
+     * Insert a deal to data store [Give the description for method].
+     * @param title Title
+     * @param description Description
+     * @param address Address
+     * @param link Link
+     * @param imageLink Image link
+     * @param price Price
+     * @param basicPrice Basic price
+     * @param unitPrice Unit price
+     * @param save Save
+     * @param numberBuyer Number of buyer
+     * @param endTime End Time
+     * @param isVoucher Is voucher
+     * @throws Exception Exception maybe happen
+     */
+    public void insert(String title, String description, String address, String link, String imageLink, double price,
+            double basicPrice, String unitPrice, float save, int numberBuyer, Date endTime, boolean isVoucher)
+            throws Exception {
         synchronized (this) {
             EntityManager em = EMFService.get().createEntityManager();
-            Deal deal = new Deal(title, description, address, link,
-                    imageLink, price, basicPrice, unitPrice, save, 
-                    numberBuyer,
-                    endTime,
-                    isVoucher);
+            Deal deal = new Deal(title, description, address, link, imageLink, price, basicPrice, unitPrice, save,
+                    numberBuyer, endTime, isVoucher);
             if (!isExist(deal)) {
                 em.persist(deal);
             }
             em.close();
         }
     }
-    
+
     /**
      * Remove all record in deal table.
      */
@@ -158,12 +139,12 @@ public enum DealDAO {
             for (Deal deal : listDeals()) {
                 Deal dealx = em.find(Deal.class, deal.getId());
                 em.remove(dealx);
-            }    
+            }
         } finally {
             em.close();
-        }        
+        }
     }
-    
+
     /**
      * Remove a record by Id.
      * @param id id of record
@@ -177,7 +158,7 @@ public enum DealDAO {
             em.close();
         }
     }
-    
+
     /**
      * Method change status of deal.
      * @param id id of deal
@@ -192,9 +173,9 @@ public enum DealDAO {
             em.close();
         }
     }
-    
+
     /**
-     * Update deal
+     * Update deal.
      * @param deal deal wish to update
      */
     public void update(Deal deal) {
@@ -220,30 +201,28 @@ public enum DealDAO {
             em.close();
         }
     }
-    
-    /** 
+
+    /**
      * Check if a deal exist.
      * @param deal object need to check
-     * @return True if deal has a link exist in data store and deal
-     * has status not DELETED, false otherwise.
+     * @return True if deal has a link exist in data store and deal has status not DELETED, false otherwise.
      */
     public boolean isExist(Deal deal) {
         for (Deal item : this.listDeals()) {
-            if (deal.getLink().equals(item.getLink())
-                    && (deal.getStatus() != Status.DELETED.ordinal())) {
+            if (deal.getLink().equals(item.getLink()) && (deal.getStatus() != Status.DELETED.ordinal())) {
                 return true;
             }
         }
-        return false;        
+        return false;
     }
-    
+
     /**
      * Get max Id in Deal data.
-     * @return Max Id if it is exist, null otherwise
+     * @return Max Id if it is exist, 0 otherwise
      */
     public Long getMaxId() {
         if (listDealsSortById().size() == 0) {
-            return (long)0;
+            return (long) 0;
         } else {
             return listDealsSortById().get(0).getId();
         }

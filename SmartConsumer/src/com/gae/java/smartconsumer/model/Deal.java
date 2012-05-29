@@ -1,8 +1,6 @@
 /**
  * Deal.java
- * 
  * 27/5/2012
- * 
  * Smart Consumer project
  */
 package com.gae.java.smartconsumer.model;
@@ -15,66 +13,51 @@ import javax.persistence.Id;
 import com.gae.java.smartconsumer.util.Status;
 
 /**
- * Class describe "Deal" object, contain data about Deal
- * 
+ * Class describe "Deal" object, contain data about Deal.
  * @version 1.0 27/5/2012
  * @author Nixforest
  */
-@Entity(name="Deal")
+@Entity(name = "Deal")
 public class Deal {
-    /** Id - Primary key */
+    /** Id - Primary key. */
     @Id
     private Long id;
-    
-    /** Title of deal */
+    /** Title of deal. */
     private String title;
-    
-    /** Description of deal */
+    /** Description of deal. */
     private String description;
-    
-    /** Address of deal */
+    /** Address of deal. */
     private String address;
-    
-    /** Url of deal */
+    /** Url of deal. */
     private String link;
-    
-    /** Url of deal's image */
+    /** Url of deal's image. */
     private String imageLink;
-    
-    /** Price of deal */
+    /** Price of deal. */
     private double price;
-    
-    /** Basic price of deal */
+    /** Basic price of deal. */
     private double basicPrice;
-    
-    /** Unit price of deal */
+    /** Unit price of deal. */
     private String unitPrice;
-    
-    /** Save of deal */
+    /** Save of deal. */
     private float save;
-    
-    /** Number of buyer for deal */
+    /** Number of buyer for deal. */
     private int numberBuyer;
-
-    /** End time of deal */
+    /** End time of deal. */
     private java.util.Date endTime;
-
-    /** Method of delivery */
+    /** Method of delivery. */
     private boolean isVoucher;
-
-    /** Updated date */
+    /** Updated date. */
     private java.util.Date updateDate;
-
-    /** Status of record */
+    /** Status of record. */
     private Integer status;
-    
     /**
-     * Empty constructor
+     * Empty constructor.
      */
-    public Deal(){}
-    
+    public Deal() {
+    }
+
     /**
-     * Constructor of Deal class
+     * Constructor of Deal class.
      * @param title Title
      * @param description Description
      * @param address Address
@@ -88,12 +71,8 @@ public class Deal {
      * @param endTime End time
      * @param isVoucher Is voucher
      */
-    public Deal(String title, String description, String address,
-            String link, String imageLink, double price,
-            double basicPrice, String unitPrice, float save,
-            int numberBuyer, 
-            Date endTime,
-            boolean isVoucher) {
+    public Deal(String title, String description, String address, String link, String imageLink, double price,
+            double basicPrice, String unitPrice, float save, int numberBuyer, Date endTime, boolean isVoucher) {
         this.title = title;
         this.description = description;
         this.address = address;
@@ -109,9 +88,9 @@ public class Deal {
         this.setUpdateDate(java.util.Calendar.getInstance().getTime());
         this.status = Status.SELLING.ordinal();
     }
-    
+
     /**
-     * Constructor of Deal class
+     * Constructor of Deal class.
      * @param title Title
      * @param description Description
      * @param address Address
@@ -126,12 +105,8 @@ public class Deal {
      * @param isVoucher Is voucher
      * @param status Status of Deal
      */
-    public Deal(String title, String description, String address,
-            String link, String imageLink, double price,
-            double basicPrice, String unitPrice, float save,
-            int numberBuyer, 
-            Date endTime,
-            boolean isVoucher,
+    public Deal(String title, String description, String address, String link, String imageLink, double price,
+            double basicPrice, String unitPrice, float save, int numberBuyer, Date endTime, boolean isVoucher,
             int status) {
         this.title = title;
         this.description = description;
@@ -148,7 +123,7 @@ public class Deal {
         this.setUpdateDate(java.util.Calendar.getInstance().getTime());
         this.status = status;
     }
-    
+
     /**
      * Get value of Title.
      * @return the Title
@@ -310,9 +285,9 @@ public class Deal {
     }
 
     /**
-    * Get value of endTime.
-    * @return the endTime
-    */
+     * Get value of endTime.
+     * @return the endTime
+     */
     public java.util.Date getEndTime() {
         return endTime;
     }
@@ -342,9 +317,9 @@ public class Deal {
     }
 
     /**
-    * Get value of updateDate.
-    * @return the updateDate
-    */
+     * Get value of updateDate.
+     * @return the updateDate
+     */
     public java.util.Date getUpdateDate() {
         return updateDate;
     }
@@ -358,9 +333,9 @@ public class Deal {
     }
 
     /**
-    * Get value of status.
-    * @return the status
-    */
+     * Get value of status.
+     * @return the status
+     */
     public int getStatus() {
         return status;
     }
@@ -374,13 +349,13 @@ public class Deal {
     }
 
     /**
-    * Get value of id.
-    * @return the id
-    */
+     * Get value of id.
+     * @return the id
+     */
     public Long getId() {
         return id;
     }
-    
+
     /**
      * Set the value for id.
      * @param id the id to set
