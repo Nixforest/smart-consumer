@@ -16,6 +16,7 @@ import com.gae.java.smartconsumer.util.Status;
  * Class describe "Deal" object, contain data about Deal.
  * @version 1.0 27/5/2012
  * @author Nixforest
+ * @update DuyKhoa
  */
 @Entity(name = "Deal")
 public class Deal {
