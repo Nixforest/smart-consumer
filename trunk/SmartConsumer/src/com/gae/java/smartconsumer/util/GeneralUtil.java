@@ -1,8 +1,6 @@
 /**
  * General Util.java
- * 
  * 28/5/2012
- * 
  * Smart Consumer project
  */
 package com.gae.java.smartconsumer.util;
@@ -24,6 +22,7 @@ import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -31,12 +30,16 @@ import org.w3c.dom.NodeList;
 import com.gae.java.smartconsumer.model.Deal;
 
 /**
- * A class provide some method for utility
- * 
+ * A class provide some method for utility.
  * @version 1.0 28/5/2012
  * @author Nixforest
  */
-public class GeneralUtil {
+public final class GeneralUtil {
+    /**
+     * Constructor.
+     */
+    protected GeneralUtil() {
+    }
     /**
      * Method get present time.
      * @param dateFormat String represent date format
@@ -47,7 +50,7 @@ public class GeneralUtil {
         SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
         return sdf.format(cal.getTime());
     }
-    
+
     /**
      * Method get a sub string from a string.
      * @param str String to get substring
@@ -65,7 +68,7 @@ public class GeneralUtil {
         }
         return result;
     }
-    
+
     /**
      * Get price value (double) from string.
      * @param price string price
@@ -78,14 +81,14 @@ public class GeneralUtil {
             price = price.substring(0, price.lastIndexOf("0") + 1);
             price = price.replace(",", "");
             price = price.replace(".", "").trim();
-            //price = price.replace(" VNĐ", "");
+            // price = price.replace(" VNĐ", "");
             result = Double.parseDouble(price.trim());
         } catch (Exception e) {
             throw e;
         }
         return result;
     }
-    
+
     /**
      * Get the value in tag (read XML).
      * @param sTag tag name
@@ -94,11 +97,14 @@ public class GeneralUtil {
      * @return string of value in tag
      */
     public static String getTagValue(String sTag, Element eElement, int location) {
-        NodeList nlList = eElement.getElementsByTagName(sTag).item(0).getChildNodes();
-        Node nValue = (Node)nlList.item(location);
-        return nValue.getNodeValue();
+        if (eElement.getElementsByTagName(sTag).getLength() != 0) {
+            NodeList nlList = eElement.getElementsByTagName(sTag).item(0).getChildNodes();
+            Node nValue = (Node) nlList.item(location);
+            return nValue.getNodeValue();
+        }
+        return "";
     }
-    
+
     /**
      * Method get the EndTime of Deal from string remainTime.
      * @param remainTime String represent remain time get from deal (hh:mm:ss)
@@ -110,9 +116,9 @@ public class GeneralUtil {
         int minute = 0;
         int second = 0;
         hour = Integer.parseInt(remainTime.substring(0, remainTime.indexOf(":")));
-        remainTime = remainTime.substring(remainTime.indexOf(":")+1, remainTime.length());
+        remainTime = remainTime.substring(remainTime.indexOf(":") + 1, remainTime.length());
         minute = Integer.parseInt(remainTime.substring(0, remainTime.indexOf(":")));
-        remainTime = remainTime.substring(remainTime.indexOf(":")+1, remainTime.length());
+        remainTime = remainTime.substring(remainTime.indexOf(":") + 1, remainTime.length());
         second = Integer.parseInt(remainTime);
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.HOUR, hour);
@@ -121,7 +127,7 @@ public class GeneralUtil {
         result = calendar.getTime();
         return result;
     }
-    
+
     /**
      * Method get string is value sub operation of two date.
      * @param d1 Date one
@@ -130,16 +136,16 @@ public class GeneralUtil {
      */
     public static String subDateTime(Date d1, Date d2) {
         String result = "";
-        long  difmillisecond = d1.getTime() - d2.getTime();
-        int  hour = (int) (difmillisecond/(3600*1000));
-        difmillisecond = difmillisecond - hour*3600*1000;
-        int  minute = (int) (difmillisecond/(60*1000));
-        difmillisecond = difmillisecond - minute*60*1000;
-        int  second = (int) (difmillisecond/1000);
-        result = String.valueOf(hour) + ":"  + String.valueOf(minute) + ":"  + String.valueOf(second);
-        return  result;
+        long difmillisecond = d1.getTime() - d2.getTime();
+        int hour = (int) (difmillisecond / (3600 * 1000));
+        difmillisecond = difmillisecond - hour * 3600 * 1000;
+        int minute = (int) (difmillisecond / (60 * 1000));
+        difmillisecond = difmillisecond - minute * 60 * 1000;
+        int second = (int) (difmillisecond / 1000);
+        result = String.valueOf(hour) + ":" + String.valueOf(minute) + ":" + String.valueOf(second);
+        return result;
     }
-    
+
     /**
      * Method get the string remain Time from end time.
      * @param endTime end time of deal
@@ -149,17 +155,17 @@ public class GeneralUtil {
         String result = "";
         Calendar calendar = Calendar.getInstance();
         long difmillisecond = endTime.getTime() - calendar.getTime().getTime();
-        int hour = (int) (difmillisecond/(3600*1000));
-        difmillisecond = difmillisecond - hour*3600*1000;
-        int minute = (int) (difmillisecond/(60*1000));
-        difmillisecond = difmillisecond - minute*60*1000;
-        int second = (int) (difmillisecond/1000);
+        int hour = (int) (difmillisecond / (3600 * 1000));
+        difmillisecond = difmillisecond - hour * 3600 * 1000;
+        int minute = (int) (difmillisecond / (60 * 1000));
+        difmillisecond = difmillisecond - minute * 60 * 1000;
+        int second = (int) (difmillisecond / 1000);
         result = String.valueOf(hour) + ":" + String.valueOf(minute) + ":" + String.valueOf(second);
         return result;
     }
-   
+
     /**
-     * Check if a string can convert to a number
+     * Check if a string can convert to a number.
      * @param s string input
      * @return return string s if it's not null
      */
@@ -171,7 +177,7 @@ public class GeneralUtil {
         result = result.replace(",", "");
         return result;
     }
-    
+
     /**
      * Cut a string if its length too 500.
      * @param str String to cut
@@ -183,7 +189,7 @@ public class GeneralUtil {
         }
         return str;
     }
-    
+
     /**
      * Encode a deal.
      * @param deal deal to encode
@@ -192,14 +198,11 @@ public class GeneralUtil {
      */
     public static Deal encodeDeal(Deal deal) throws Exception {
         try {
-            String title = URLEncoder.encode(deal.getTitle(), "UTF-8");            
+            String title = URLEncoder.encode(deal.getTitle(), "UTF-8");
             deal.setTitle(cutOff(title));
-            
+
             String description = URLEncoder.encode(deal.getDescription(), "UTF-8");
             deal.setDescription(cutOff(description));
-            
-            String address = URLEncoder.encode(deal.getAddress(), "UTF-8");
-            deal.setAddress(cutOff(address));
 
             String unit = URLEncoder.encode(deal.getUnitPrice(), "UTF-8");
             deal.setUnitPrice(cutOff(unit));
@@ -208,7 +211,7 @@ public class GeneralUtil {
             throw ex;
         }
     }
-    
+
     /**
      * Decode a deal.
      * @param deal deal to decode
@@ -219,50 +222,32 @@ public class GeneralUtil {
         try {
             deal.setTitle(URLDecoder.decode(deal.getTitle(), "UTF-8"));
             deal.setDescription(URLDecoder.decode(deal.getDescription(), "UTF-8"));
-            deal.setAddress(URLDecoder.decode(deal.getAddress(), "UTF-8"));
             deal.setUnitPrice(URLDecoder.decode(deal.getUnitPrice(), "UTF-8"));
             return deal;
         } catch (Exception ex) {
             throw ex;
         }
     }
-    
-    /** String array to remove sign in Vietnamese*/
-    private static String[] vietnameseSigns = new String[] { 
-        "aAeEoOuUiIdDyY",
-        "áàạảãâấầậẩẫăắằặẳẵ",
-        "ÁÀẠẢÃÂẤẦẬẨẪĂẮẰẶẲẴ",
-        "éèẹẻẽêếềệểễ",
-        "ÉÈẸẺẼÊẾỀỆỂỄ",
-        "óòọỏõôốồộổỗơớờợởỡ",
-        "ÓÒỌỎÕÔỐỒỘỔỖƠỚỜỢỞỠ",
-        "úùụủũưứừựửữ",
-        "ÚÙỤỦŨƯỨỪỰỬỮ",
-        "íìịỉĩ",
-        "ÍÌỊỈĨ",
-        "đ",
-        "Đ",
-        "ýỳỵỷỹ",
-        "ÝỲỴỶỸ"
-    };
-    
+
+    /** String array to remove sign in Vietnamese. */
+    private static String[] vietnameseSigns = new String[]{"aAeEoOuUiIdDyY", "áàạảãâấầậẩẫăắằặẳẵ", "ÁÀẠẢÃÂẤẦẬẨẪĂẮẰẶẲẴ",
+            "éèẹẻẽêếềệểễ", "ÉÈẸẺẼÊẾỀỆỂỄ", "óòọỏõôốồộổỗơớờợởỡ", "ÓÒỌỎÕÔỐỒỘỔỖƠỚỜỢỞỠ", "úùụủũưứừựửữ", "ÚÙỤỦŨƯỨỪỰỬỮ",
+            "íìịỉĩ", "ÍÌỊỈĨ", "đ", "Đ", "ýỳỵỷỹ", "ÝỲỴỶỸ"};
+
     /**
      * Method remove sign in Vietnamese string.
      * @param text String to remove sign
      * @return String after remove sign
      */
-    public static String removeSign4VietNameseString(String text)
-    {
-        for (int i = 1; i < vietnameseSigns.length; i++)
-        {
-            for (int j = 0; j < vietnameseSigns[i].length(); j++)
-            {
+    public static String removeSign4VietNameseString(String text) {
+        for (int i = 1; i < vietnameseSigns.length; i++) {
+            for (int j = 0; j < vietnameseSigns[i].length(); j++) {
                 text = text.replace(vietnameseSigns[i].charAt(j), vietnameseSigns[0].charAt(i - 1));
             }
         }
         return text;
     }
-    
+
     /**
      * Replace notation.
      * @param text String to replace notation
@@ -270,28 +255,24 @@ public class GeneralUtil {
      * @param notation2 notation 2
      * @return String after replace notation
      */
-    public static String replaceNotation(String text, String notation1, String notation2){
+    public static String replaceNotation(String text, String notation1, String notation2) {
         return text.replace(notation1, notation2);
     }
-    
+
     /**
      * Normalization String method.
      * @param str String to normalize
      * @return String after normalize
      */
-    public static List<String> normalizationString(String str)
-    {
-        while (str.indexOf("  ") != -1)
-        {
+    public static List<String> normalizationString(String str) {
+        while (str.indexOf("  ") != -1) {
             str = str.replace("  ", " ");
         }
         List<String> resutl = new ArrayList<String>();
 
         int index = 0;
-        for (char item : str.toCharArray())
-        {
-            if (" ".equals(item))
-            {
+        for (char item : str.toCharArray()) {
+            if (" ".equals(item)) {
                 resutl.add(str.substring(index, str.indexOf(item) - index));
                 index = str.indexOf(item);
             }
@@ -299,7 +280,7 @@ public class GeneralUtil {
         resutl.add(str.substring(index, str.length() - index));
         return resutl;
     }
-    
+
     /**
      * Convert price to text with format Vietnamese.
      * @param price Price to convert
@@ -336,20 +317,21 @@ public class GeneralUtil {
         }
         return true;
     }
-    
+
     /**
      * Normalize a address.
      * @param result Address before normalization
      * @return Address after normalization
      */
     public static String addressNormalization(String result) {
-        String address = result;
+        String address = result.trim();
         address = address.replaceFirst("Địa chỉ:", "");
+        address = address.replaceAll("\u00a0", "");
         int location = GeneralUtil.removeSign4VietNameseString(address).toLowerCase().indexOf("dt");
         if (location != -1) {
             address = address.substring(0, location);
         }
-        location = GeneralUtil.removeSign4VietNameseString(address).toLowerCase().indexOf("dien thoai");
+        /*location = GeneralUtil.removeSign4VietNameseString(address).toLowerCase().indexOf("dien thoai");
         if (location != -1) {
             address = address.substring(0, location);
         }
@@ -365,10 +347,45 @@ public class GeneralUtil {
             if (isNumber(c)) {
                 return address.substring(address.indexOf(String.valueOf(c)));
             }
+        }*/
+        for (char c : address.toCharArray()) {
+            if (isNumber(c)) {
+                return address.substring(address.indexOf(String.valueOf(c)));
+            }
         }
         return address;
     }
-    
+    /**
+     * Convert a address string to latitude and longitude.
+     * @param address Address string
+     * @return String represent latitude and longitude.
+     * Example: 10.8230989,106.6296638
+     * @throws Exception Exception maybe happen when Status response is not OK
+     */
+    public static String convertAddressToLatitudeLongitude(String address) throws Exception {
+        String result = "";
+        // Using google map web service API
+        String geocoderUri = String.format("http://maps.googleapis.com/maps/api/geocode/xml?address="
+                + address.replace(" ", "+") + "&sensor=false");
+        // Convert to XML response return
+        String html = new UtilHtmlToXML().HtmlToXML(geocoderUri);
+        UtilReadXML reader = new UtilReadXML();
+        Document document = reader.ReadContentXML(html);
+        // Read status of response
+        String status = document.getElementsByTagName("status").item(0).getTextContent();
+        if (!status.equals("OK")) {
+            if (status.equals("ZERO_RESULTS")) {
+                return result;
+            }
+            //throw new Exception(status);
+        } else {
+            String latitudeString = document.getElementsByTagName("lat").item(0).getTextContent();
+            String longitudeString = document.getElementsByTagName("lng").item(0).getTextContent();
+            result = latitudeString + "," + longitudeString;
+        }
+        return result;
+    }
+
     /**
      * Send mail method.
      * @param from From
@@ -376,21 +393,40 @@ public class GeneralUtil {
      * @param subject Subject
      * @param body Content email
      */
-    public static void sendMessage(String from, String to, String subject, String body){
+    public static void sendMessage(String from, String to, String subject, String body) {
         Properties props = new Properties();
         Session session = Session.getDefaultInstance(props, null);
-        
-        try{
+
+        try {
             Message msg = new MimeMessage(session);
             msg.setFrom(new InternetAddress(from));
             msg.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
             msg.setSubject(subject);
             msg.setText(body);
             Transport.send(msg);
-        }catch(AddressException e){
+        } catch (AddressException e) {
             System.out.println(e.getMessage());
-        }catch(MessagingException ex){
+        } catch (MessagingException ex) {
             System.out.println(ex.getMessage());
+        }
+    }
+    /**
+     * Get List div tag in url.
+     * @param url url to get
+     * @return NodeList contain div tags
+     * @throws Exception maybe happen
+     */
+    public static NodeList getListDivTag(String url) throws Exception {
+        try {
+            UtilHtmlToXML util = new UtilHtmlToXML();
+            // Get content HTML and convert to XML
+            String html = util.HtmlToXML(url);
+
+            UtilReadXML reader = new UtilReadXML();
+            Document document = reader.ReadContentXML(html);
+            return document.getElementsByTagName("div");
+        } catch (Exception ex) {
+            throw ex;
         }
     }
 }

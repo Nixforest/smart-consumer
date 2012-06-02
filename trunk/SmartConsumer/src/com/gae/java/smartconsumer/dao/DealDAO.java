@@ -5,7 +5,6 @@
  */
 package com.gae.java.smartconsumer.dao;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -92,39 +91,7 @@ public enum DealDAO {
     public void insert(Deal deal) {
         synchronized (this) {
             EntityManager em = EMFService.get().createEntityManager();
-            if (!isExist(deal)) {
-                em.persist(deal);
-            }
-            em.close();
-        }
-    }
-
-    /**
-     * Insert a deal to data store [Give the description for method].
-     * @param title Title
-     * @param description Description
-     * @param address Address
-     * @param link Link
-     * @param imageLink Image link
-     * @param price Price
-     * @param basicPrice Basic price
-     * @param unitPrice Unit price
-     * @param save Save
-     * @param numberBuyer Number of buyer
-     * @param endTime End Time
-     * @param isVoucher Is voucher
-     * @throws Exception Exception maybe happen
-     */
-    public void insert(String title, String description, String address, String link, String imageLink, double price,
-            double basicPrice, String unitPrice, float save, int numberBuyer, Date endTime, boolean isVoucher)
-            throws Exception {
-        synchronized (this) {
-            EntityManager em = EMFService.get().createEntityManager();
-            Deal deal = new Deal(title, description, address, link, imageLink, price, basicPrice, unitPrice, save,
-                    numberBuyer, endTime, isVoucher);
-            if (!isExist(deal)) {
-                em.persist(deal);
-            }
+            em.persist(deal);
             em.close();
         }
     }
@@ -184,7 +151,6 @@ public enum DealDAO {
             Deal innerDeal = em.find(Deal.class, deal.getId());
             innerDeal.setTitle(deal.getTitle());
             innerDeal.setDescription(deal.getDescription());
-            innerDeal.setAddress(deal.getAddress());
             innerDeal.setLink(deal.getLink());
             innerDeal.setImageLink(deal.getImageLink());
             innerDeal.setPrice(deal.getPrice());

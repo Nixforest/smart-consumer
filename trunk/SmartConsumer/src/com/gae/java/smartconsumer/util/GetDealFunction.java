@@ -1,8 +1,6 @@
 /**
  * GetDealFunction.java
- * 
  * 27/5/2012
- * 
  * Smart Consumer project
  */
 package com.gae.java.smartconsumer.util;
@@ -22,37 +20,38 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.NodeList;
 
+import com.gae.java.smartconsumer.blo.AddressBLO;
+import com.gae.java.smartconsumer.blo.AddressDetailBLO;
 import com.gae.java.smartconsumer.blo.DealBLO;
+import com.gae.java.smartconsumer.model.Address;
+import com.gae.java.smartconsumer.model.AddressDetail;
 import com.gae.java.smartconsumer.model.Deal;
 
 /**
- * Deal collector class
- * 
+ * Deal collector class.
  * @version 1.0 28/5/2012
  * @author Nixforest
  */
 public class GetDealFunction {
-    
-    private static String VOUCHER = "(Giao Voucher)";
-
+    /** Voucher string. */
+    private static final String VOUCHER = "(Giao Voucher)";
+    /**
+     * Constructor.
+     */
+    protected GetDealFunction() {
+    }
     /**
      * Get address from http://123do.vn.
      * @param url link a deal from http://123do.vn
+     * @param website Website
      * @return a string represent address get from url
      * @throws Exception Exception threw
      */
-    public static String getAddressFrom123doVn(String url) throws Exception {
-        String result = "";
+    public static Long getAddress(String url, int website) throws Exception {
+        Long result = (long) 0;
         try {
-            UtilHtmlToXML util = new UtilHtmlToXML();
-            // Get all content html and convert to xml
-            String html = util.HtmlToXML(url);
-
-            UtilReadXML reader = new UtilReadXML();
-            Document document = reader.ReadContentXML(html);
-
             // Scan list div tag
-            NodeList divList = document.getElementsByTagName("div");
+            NodeList divList = GeneralUtil.getListDivTag(url);
             for (int i = 0; i < divList.getLength(); i++) {
                 // Check if div tag content not null
                 if (divList.item(i).hasAttributes()) {
@@ -65,9 +64,14 @@ public class GetDealFunction {
                             if ("margin: 25px 15px 6px 15px;overflow:hidden; width:179px".equals(divContent.item(j)
                                     .getTextContent())) {
                                 Element element = (Element) divList.item(i);
-                                result += GeneralUtil.getTagValue("p", element, 0);
-
-                                result = GeneralUtil.addressNormalization(result);
+                                String addressString = GeneralUtil.getTagValue("p", element, 0);
+                                addressString = GeneralUtil.addressNormalization(addressString);
+                                String latlng = GeneralUtil.convertAddressToLatitudeLongitude(addressString);
+                                double lat = Double.parseDouble(latlng.substring(0, latlng.indexOf(",")));
+                                double lng = Double
+                                        .parseDouble(latlng.substring(latlng.indexOf(",") + 1, latlng.length()));
+                                Address address = new Address(addressString, lng, lat, "");
+                                result = AddressBLO.INSTANCE.insert(address);
                                 return result;
                             }
                         }
@@ -86,18 +90,11 @@ public class GetDealFunction {
      * @return a string represent address get from url
      * @throws Exception Exception threw
      */
-    public static String getAddressFromHotDealVn(String url) throws Exception {
-        String result = "";
+    public static Long getAddressFromHotDealVn(String url) throws Exception {
+        Long result = (long) 0;
         try {
-            UtilHtmlToXML util = new UtilHtmlToXML();
-            // Get content HTML and convert to XML
-            String html = util.HtmlToXML(url);
-
-            UtilReadXML reader = new UtilReadXML();
-            Document document = reader.ReadContentXML(html);
-
             // Scan list div tag
-            NodeList divList = document.getElementsByTagName("div");
+            NodeList divList = GeneralUtil.getListDivTag(url);
             for (int i = 0; i < divList.getLength(); i++) {
                 // Check if div tag content not null
                 if (divList.item(i).hasAttributes()) {
@@ -108,17 +105,74 @@ public class GetDealFunction {
                     for (int j = 0; j < divContent.getLength(); j++) {
                         if ("class".equals(divContent.item(j).getNodeName())) {
                             if ("product-location".equals(divContent.item(j).getTextContent())) {
-                                String address = divList.item(i).getTextContent();
-                                if (GeneralUtil.removeSign4VietNameseString(address).toLowerCase().contains("van phong giao hang hotdeal")) {
-                                    result += GeneralUtil.addressNormalization(address);
+                                String addressString = divList.item(i).getTextContent();
+                                String addressDescription = "";
+                                if (GeneralUtil.removeSign4VietNameseString(addressString).toLowerCase()
+                                        .contains("van phong giao hang hotdeal")) {
+                                    addressString = "294 Hòa Bình - Hiệp Tân - Tân Phú - TPHCM";
+                                    addressDescription = "Văn phòng giao hàng HotDeal";
                                 } else {
                                     Element element = (Element) divList.item(i);
-                                    NodeList divContentList = element.getElementsByTagName("p");
-                                    for (int k = 0; k < divContentList.getLength(); k++) {
-                                        result += divContentList.item(k).getTextContent();
+                                    addressString = GeneralUtil.getTagValue("p", element, 0);
+                                    if (addressString.isEmpty()) {
+                                        addressString = element.getTextContent();
                                     }
-                                    result = GeneralUtil.addressNormalization(result);
-                                    return result;
+                                    addressString = GeneralUtil.addressNormalization(addressString);
+                                    addressDescription = GeneralUtil.getTagValue("h2", element, 0);
+                                }
+                                if (!addressString.isEmpty()) {
+                                    String latlng = GeneralUtil.convertAddressToLatitudeLongitude(addressString);
+                                    if (latlng.equals("")) {
+                                        return result;
+                                    }
+                                    double lat = Double.parseDouble(latlng.substring(0, latlng.indexOf(",")));
+                                    double lng = Double
+                                            .parseDouble(latlng.substring(latlng.indexOf(",") + 1, latlng.length()));
+                                    Address address = new Address(addressString, lng, lat, addressDescription);
+                                    result = AddressBLO.INSTANCE.insert(address);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (Exception ex) {
+            throw ex;
+        }
+        return result;
+    }
+    public static Long getAddressFromMuaChungVN(String url) throws Exception {
+        Long result = (long) 0;
+        try {
+         // Scan list div tag
+            NodeList divList = GeneralUtil.getListDivTag(url);
+            for (int i = 0; i < divList.getLength(); i++) {
+                // Check if div tag content not null
+                if (divList.item(i).hasAttributes()) {
+                    // Get all content in div tag present
+                    NamedNodeMap divContent = divList.item(i).getAttributes();
+
+                    // Scan through attributes
+                    for (int j = 0; j < divContent.getLength(); j++) {
+                        if ("class".equals(divContent.item(j).getNodeName())) {
+                            if ("blueTitleDetail mTop5".equals(divContent.item(j).getTextContent())) {
+                                String addressString = "";
+                                String addressDescription = "";
+                                String latlng = "";
+                                Element element = (Element) divList.item(i);
+                                NodeList pTagList = element.getElementsByTagName("p");
+                                for (int k = 0; k < pTagList.getLength(); k++) {
+                                    addressString = pTagList.item(k).getTextContent();
+                                    addressString = GeneralUtil.addressNormalization(addressString);
+                                    latlng = GeneralUtil.convertAddressToLatitudeLongitude(addressString);
+                                    if (!latlng.equals("")) {
+                                        double lat = Double.parseDouble(latlng.substring(0, latlng.indexOf(",")));
+                                        double lng = Double
+                                                .parseDouble(latlng.substring(latlng.indexOf(",") + 1, latlng.length()));
+                                        Address address = new Address(addressString, lng, lat, addressDescription);
+                                        result = AddressBLO.INSTANCE.insert(address);
+                                        return result;
+                                    }
                                 }
                             }
                         }
@@ -141,7 +195,6 @@ public class GetDealFunction {
         String content = "";
         String title = "";
         String description = "";
-        String address = "";
         String link = "";
         String imageLink = "";
         double price = 0;
@@ -153,15 +206,8 @@ public class GetDealFunction {
         java.util.Date endTime = Calendar.getInstance().getTime();
         boolean isVoucher = true;
         try {
-            UtilHtmlToXML util = new UtilHtmlToXML();
-            // Get content HTML and convert to XML
-            String html = util.HtmlToXML(url);
-
-            UtilReadXML reader = new UtilReadXML();
-            Document document = reader.ReadContentXML(html);
-
             // Scan list div tag
-            NodeList nList = document.getElementsByTagName("div");
+            NodeList nList = GeneralUtil.getListDivTag(url);
             content = content + url + "\n";
             int item = 0;
             for (int i = 0; i < nList.getLength(); i++) {
@@ -210,7 +256,7 @@ public class GetDealFunction {
                                 element = (Element) nList.item(i + 4);
                                 description = element.getTextContent();
                                 content = content + "Mô tả: " + description + "\n";
-                                
+
                                 // Price
                                 element = (Element) nList.item(i + 5);
                                 String priceString = element.getElementsByTagName("span").item(0).getTextContent();
@@ -222,8 +268,7 @@ public class GetDealFunction {
 
                                 // Basic price
                                 String basicPriceString = element.getElementsByTagName("span").item(1).getTextContent();
-                                content = content + "Giá gốc: " + basicPriceString
-                                        + "\n";
+                                content = content + "Giá gốc: " + basicPriceString + "\n";
                                 basicPrice = GeneralUtil.getPriceFromString(basicPriceString);
 
                                 // Save
@@ -234,55 +279,52 @@ public class GetDealFunction {
 
                                 // Number of buyer
                                 element = (Element) nList.item(i + 8);
-                                numberBuyer = Integer.parseInt(element.getElementsByTagName("span").item(1).getTextContent());
+                                numberBuyer = Integer.parseInt(element.getElementsByTagName("span").item(1)
+                                        .getTextContent());
                                 content = content + "Số người đã mua: " + numberBuyer + "\n";
 
                                 // Remain time
                                 element = (Element) nList.item(i + 9);
                                 remainTime = element.getElementsByTagName("span").item(1).getTextContent();
-                                content = content + "Thời gian còn lại: " + remainTime
-                                        + "\n";
+                                content = content + "Thời gian còn lại: " + remainTime + "\n";
                                 endTime = GeneralUtil.getEndTime(remainTime);
 
                                 // End of an item
                                 content = content + "______________\n";
-
-                                // Address
-                                address = "";
-                                Deal deal = new Deal(title, description, address, link, imageLink, price, basicPrice,
-                                        unitPrice, save, numberBuyer, endTime, isVoucher);
-                                if (!DealBLO.INSTANCE.isExist(deal)) {
-                                    address = getAddressFromHotDealVn(link);
-                                    deal.setAddress(address);
-                                    DealBLO.INSTANCE.insert(deal);
+                                Deal deal = new Deal(title, description, link, imageLink, price,
+                                        basicPrice, unitPrice, save, numberBuyer, endTime, isVoucher);
+                                Long dealId = DealBLO.INSTANCE.insert(deal);
+                                if (dealId != 0) {
+                                    Long addressId = getAddressFromHotDealVn(link);
+                                    if (addressId != 0) {
+                                        AddressDetail detail = new AddressDetail(dealId, addressId);
+                                        AddressDetailBLO.INSTANCE.insert(detail);
+                                    }
                                 }
                             }
                         }
                     }
                 }
             }
-        } catch(SocketTimeoutException ex) {
+        } catch (SocketTimeoutException ex) {
             getFromHotDealVn(url);
         } catch (IOException ex) {
             getFromHotDealVn(url);
         } catch (Exception ex) {
             throw ex;
         }
+        System.out.println(content);
         return content;
     }
-
     /**
      * Get deal information from http://123do.vn.
-     * @param url Address to get content
-     * @param type If 0: http://123do.vn/, or 1: http://123do.vn/dealhot.php 
-     * @return Content
+     * @param url Link to get content
+     * @param type If 0: http://123do.vn/, or 1: http://123do.vn/dealhot.php
      * @throws Exception Exception maybe happen
      */
-    public static String getFrom123doVn(String url, int type) throws Exception {
-        String content = "";
+    public static void getFrom123doVn(String url, int type) throws Exception {
         String title = "";
         String description = "";
-        String address = "";
         String link = "";
         String imageLink = "";
         double price = 0;
@@ -293,46 +335,29 @@ public class GetDealFunction {
         String remainTime = "";
         java.util.Date endTime = Calendar.getInstance().getTime();
         boolean isVoucher = true;
-
         try {
-            UtilHtmlToXML util = new UtilHtmlToXML();
-            // Get content HTML and convert to XML
-            String html = util.HtmlToXML(url);
-
-            UtilReadXML reader = new UtilReadXML();
-            Document document = reader.ReadContentXML(html);
-
-            // Scan list div tag
-            NodeList divList = document.getElementsByTagName("div");
-            content = content + url + "\n";
+            NodeList divList = GeneralUtil.getListDivTag(url);
             int item = 0;
             for (int i = 0; i < divList.getLength(); i++) {
                 // Check if div tag content not null
                 if (divList.item(i).hasAttributes()) {
                     // Get all content in div tag present
                     NamedNodeMap divContent = divList.item(i).getAttributes();
-
                     // Scan through attributes
                     for (int j = 0; j < divContent.getLength(); j++) {
                         if ("class".equals(divContent.item(j).getNodeName())) {
                             // Get tag has class is "deal_list"
                             if ("box-white".equals(divContent.item(j).getTextContent())) {
-                                if ((item != 1 && item != 0 && type == 0)
-                                        || (type == 1 && item != 0)) {
-                                    content = content + Integer.toString(item) + ": \n";
-                                    
+                                if ((item != 1 && item != 0 && type == 0) || (type == 1 && item != 0)) {
                                     // Image link
                                     Element element = (Element) divList.item(i);
                                     NamedNodeMap divContentList = element.getElementsByTagName("img").item(0)
                                             .getAttributes();
                                     for (int k = 0; k < divContentList.getLength(); k++) {
                                         if ("src".equals(divContentList.item(k).getNodeName())) {
-                                            content = content + "Link ảnh: "
-                                                    + divContentList.item(k).getTextContent().trim() + "\n";
                                             imageLink = divContentList.item(k).getTextContent().trim();
                                         }
                                     }
-
                                     // Title
                                     NodeList divContentListX = element.getElementsByTagName("div");
                                     for (int k = 0; k < divContentListX.getLength(); k++) {
@@ -345,23 +370,15 @@ public class GetDealFunction {
                                                             .getTextContent())
                                                             || "titlemaildealteamcurrent".equals(divContentList.item(l)
                                                                     .getTextContent())) {
-                                                        content = content + "Tiêu đề: "
-                                                                + divContentListX.item(k).getTextContent().trim()
-                                                                + "\n";
                                                         title = divContentListX.item(k).getTextContent().trim();
                                                     }
-
                                                     // Description
                                                     if ("systemreviewdealnext".equals(divContentList.item(l)
                                                             .getTextContent())
                                                             || "systemreviewdealcurrent".equals(divContentList.item(l)
                                                                     .getTextContent())) {
-                                                        content = content + "Mô tả: "
-                                                                + divContentListX.item(k).getTextContent().trim()
-                                                                + "\n";
                                                         description = divContentListX.item(k).getTextContent().trim();
                                                     }
-
                                                     // Link
                                                     if ("buttonmaindealteamnext".equals(divContentList.item(l)
                                                             .getTextContent())
@@ -372,31 +389,22 @@ public class GetDealFunction {
                                                                 .getAttributes();
                                                         for (int m = 0; m < attxy.getLength(); m++) {
                                                             if ("href".equals(attxy.item(m).getNodeName())) {
-                                                                content = content + "Link gốc: " + "http://123do.vn"
-                                                                        + attxy.item(m).getTextContent().trim() + "\n";
                                                                 link = "http://123do.vn"
                                                                         + attxy.item(m).getTextContent().trim();
-                                                                // Address
-                                                                address = getAddressFrom123doVn(link);
                                                             }
                                                         }
                                                     }
-
                                                     // Price
                                                     if ("pricemaindealteamnext".equals(divContentList.item(l)
                                                             .getTextContent())
                                                             || "pricemaindealteamcurrent".equals(divContentList.item(l)
                                                                     .getTextContent())) {
-                                                        content = content + "Giá: "
-                                                                + divContentListX.item(k).getTextContent().trim()
-                                                                + "\n";
                                                         String priceString = divContentListX.item(k).getTextContent()
                                                                 .trim();
                                                         price = GeneralUtil.getPriceFromString(priceString);
                                                         // Unit price
                                                         unitPrice = priceString.substring(priceString.length() - 3);
                                                     }
-
                                                     // Save
                                                     if ("dismaindealteamnext".equals(divContentList.item(l)
                                                             .getTextContent())
@@ -405,47 +413,32 @@ public class GetDealFunction {
                                                         element = (Element) divContentListX.item(k + 1);
                                                         String saveString = GeneralUtil.getTagValue("span", element, 0)
                                                                 .trim();
-                                                        content = content + "Tiết kiệm: "
-                                                                + saveString
-                                                                + "\n";
                                                         save = Float.parseFloat(saveString.substring(0,
                                                                 saveString.length() - 1));
                                                     }
-
                                                     // Number of buyer
                                                     if ("buyermaindealteamcurrent".equals(divContentList.item(l)
                                                             .getTextContent())
                                                             || "buyermaindealteamnext".equals(divContentList.item(l)
                                                                     .getTextContent())) {
                                                         element = (Element) divContentListX.item(k + 1);
-                                                        content = content + "Số người mua: "
-                                                                + GeneralUtil.getTagValue("span", element, 0).trim()
-                                                                + "\n";
                                                         numberBuyer = Integer.parseInt(GeneralUtil.getTagValue("span",
                                                                 element, 0).trim());
                                                     }
-
                                                     // Remain time
                                                     if ("timemaindealteamcurrent".equals(divContentList.item(l)
                                                             .getTextContent())
                                                             || "timemaindealteamnext".equals(divContentList.item(l)
                                                                     .getTextContent())) {
                                                         element = (Element) divContentListX.item(k + 1);
-                                                        content = content + "Thời gian còn lại: "
-                                                                + divContentListX.item(k + 1).getTextContent().trim()
-                                                                + "\n";
                                                         remainTime = divContentListX.item(k + 1).getTextContent()
                                                                 .trim();
                                                         endTime = GeneralUtil.getEndTime(remainTime);
                                                     }
                                                 }
                                                 if ("style".equals(divContentList.item(l).getNodeName())) {
-                                                    // Basic price
                                                     if ("text-decoration:line-through".equals(divContentList.item(l)
                                                             .getTextContent())) {
-                                                        content = content + "Giá gốc: "
-                                                                + divContentListX.item(k).getTextContent().trim()
-                                                                + "\n";
                                                         basicPrice = GeneralUtil.getPriceFromString(divContentListX
                                                                 .item(k).getTextContent().trim());
                                                     }
@@ -453,12 +446,16 @@ public class GetDealFunction {
                                             }
                                         }
                                     }
-
-                                    // End of an item
-                                    content = content + "______________\n";
-                                    Deal deal = new Deal(title, description, address, link, imageLink, price,
+                                    Deal deal = new Deal(title, description, link, imageLink, price,
                                             basicPrice, unitPrice, save, numberBuyer, endTime, isVoucher);
-                                    DealBLO.INSTANCE.insert(deal);
+                                    Long dealId = DealBLO.INSTANCE.insert(deal);
+                                    if (dealId != 0) {
+                                        Long addressId = getAddress(link, ListWebsite.DO123VN.ordinal());
+                                        if (addressId != 0) {
+                                            AddressDetail detail = new AddressDetail(dealId, addressId);
+                                            AddressDetailBLO.INSTANCE.insert(detail);
+                                        }
+                                    }
                                 }
                                 item++;
                             }
@@ -466,16 +463,15 @@ public class GetDealFunction {
                     }
                 }
             }
-        } catch(SocketTimeoutException ex) {
+        } catch (SocketTimeoutException ex) {
             getFrom123doVn(url, type);
         } catch (IOException ex) {
             getFrom123doVn(url, type);
         } catch (Exception ex) {
             throw ex;
         }
-        return content;
     }
-    
+
     /**
      * Get deal information from http://muachung.vn.
      * @return String content
@@ -497,7 +493,7 @@ public class GetDealFunction {
         cal.add(Calendar.HOUR, 100);
         java.util.Date endTime = cal.getTime();
         boolean isVoucher = true;
-        String linkList[] = {"http://muachung.vn/danh-muc/c-999999997/deal-dang-ban/trang-1.html",
+        String[] linkList = {"http://muachung.vn/danh-muc/c-999999997/deal-dang-ban/trang-1.html",
                 "http://muachung.vn/danh-muc/c-999999997/deal-dang-ban/trang-2.html"};
         int count = 0;
         try {
@@ -513,7 +509,7 @@ public class GetDealFunction {
 
                 BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
                 StringBuffer stringHtml = new StringBuffer();
-                while((data = br.readLine()) != null){
+                while ((data = br.readLine()) != null) {
                     stringHtml.append(data);
                 }
                 br.close();
@@ -531,13 +527,14 @@ public class GetDealFunction {
                         + "<div\\s+class=\"realPrice\"(.*?)>(.*?)"
                         + "<div\\s+class=\"fl\"(.*?)>(.*?)"// 34
                         + "<div\\s+class=\"SellingPrice\"(.*?)>(.*?)<span>(.*?)</span>(.*?)</div>"// 38
-                        + "<div\\s+class=\"rootPrice\"(.*?)>(.*?)<strike>(.*?)</strike>(.*?)</div>(.*?)</div><div[^>]*(.*?)>(.*?)</div>(.*?)</div>"// 46
+                        + "<div\\s+class=\"rootPrice\"(.*?)>(.*?)<strike>(.*?)"
+                        + "</strike>(.*?)</div>(.*?)</div><div[^>]*(.*?)>(.*?)</div>(.*?)</div>"// 46
                         + "<div\\s+class=\"bSelling\"(.*?)>(.*?)"
                         + "<div\\s+class=\"bSellingLeft\"(.*?)>(.*?)"
                         + "<div\\s+class=\"bSellingRight\"(.*?)>(.*?)"
                         + "<div\\s+class=\"SellingInfoValue\"(.*?)>(.*?)"// 54
-                        + "<span>(.*?)</span>(.*?)</div>(.*?)<div(.*?)>(.*?)</div>(.*?)<div(.*?)>(.*?)</div>(.*?)</div>(.*?)</div>(.*?)</div>"
-                        + "(.*?)</div>";
+                        + "<span>(.*?)</span>(.*?)</div>(.*?)<div(.*?)>(.*?)</div>(.*?)"
+                        + "<div(.*?)>(.*?)</div>(.*?)</div>(.*?)</div>(.*?)</div>" + "(.*?)</div>";
                 Pattern patt = Pattern.compile(regex);
                 Matcher match = patt.matcher(data);
                 while (match.find()) {
@@ -561,24 +558,29 @@ public class GetDealFunction {
                     description = match.group(29).trim();
                     content += "\nDescription: " + description;
 
-                    price = Double.parseDouble(match.group(36).replace(".", "").trim());// GeneralUtil.getPriceFromString(match.group(36).trim());
+                    price = Double.parseDouble(match.group(36).replace(".", "").trim());
                     unitPrice = match.group(37).trim();
                     content += "\nPrice: " + price + " " + unitPrice;
 
                     String basicPriceString = match.group(41);
-                    basicPrice = Double.parseDouble(basicPriceString.substring(0, basicPriceString.lastIndexOf(" ") - 1).trim()
-                            .replace(".", ""));
+                    basicPrice = Double.parseDouble(basicPriceString
+                            .substring(0, basicPriceString.lastIndexOf(" ") - 1).trim().replace(".", ""));
                     content += "\nReal price: " + basicPrice + " " + unitPrice;
 
                     numberBuyer = Integer.parseInt(match.group(55).trim());
                     content += "\nSold: " + numberBuyer;
                     content += "\n=================================" + String.valueOf(count);
 
-
-                    Deal deal = new Deal(title,  description, address, link, imageLink, price, basicPrice, unitPrice,
-                            save, numberBuyer, endTime, isVoucher);
-                    //deal = GeneralUtil.encodeDeal(deal);
-                    DealBLO.INSTANCE.insert(deal);
+                    Deal deal = new Deal(title, description, link, imageLink, price,
+                            basicPrice, unitPrice, save, numberBuyer, endTime, isVoucher);
+                    Long dealId = DealBLO.INSTANCE.insert(deal);
+                    if (dealId != 0) {
+                        Long addressId = getAddressFromMuaChungVN(link);
+                        if (addressId != 0) {
+                            AddressDetail detail = new AddressDetail(dealId, addressId);
+                            AddressDetailBLO.INSTANCE.insert(detail);
+                        }
+                    }
                 }
             }
         } catch (Exception ex) {
@@ -587,4 +589,3 @@ public class GetDealFunction {
         return content;
     }
 }
-

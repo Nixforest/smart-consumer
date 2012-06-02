@@ -49,11 +49,11 @@ public class MapViewerServlet extends Action {
         }
         try {
             List<Deal> listDeals = new ArrayList<Deal>();
-            for (Deal deal : DealBLO.INSTANCE.getListAllDeals()) {                
+            /*for (Deal deal : DealBLO.INSTANCE.getListAllDeals()) {                
                 if (!checkIfAddressExist(listDeals, deal.getAddress())) {
                     listDeals.add(deal);
                 }
-            }
+            }*/
             request.setAttribute("listDeals", listDeals);
         } catch (Exception ex) {
             request.setAttribute("error", ex.getMessage());
@@ -69,9 +69,9 @@ public class MapViewerServlet extends Action {
      */
     public boolean checkIfAddressExist(List<Deal> deals, String address) {
         for (Deal deal : deals) {
-            if (deal.getAddress().contains(address)) {
+            /*if (deal.getAddress().contains(address)) {
                 return true;
-            }
+            }*/
         }
         return false;
     }

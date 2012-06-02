@@ -15,7 +15,7 @@ import javax.persistence.Id;
  */
 @Entity(name = "Address")
 public class Address {
-    /** Id - Primary key.*/
+    /** Id - Primary key. */
     @Id
     private Long id;
 
@@ -28,22 +28,26 @@ public class Address {
     /** Latitude. */
     private double latitude;
 
+    /** Description. */
+    private String description;
     /**
      * Constructor.
      * @param fullAddress Full address
      * @param longitude Longitude
      * @param latitude Latitude
+     * @param description Description
      */
-    public Address(String fullAddress, double longitude, double latitude) {
+    public Address(String fullAddress, double longitude, double latitude, String description) {
         this.setFullAddress(fullAddress);
         this.setLongitude(longitude);
         this.setLatitude(latitude);
+        this.setDescription(description);
     }
 
     /**
-    * Get value of id.
-    * @return the id
-    */
+     * Get value of id.
+     * @return the id
+     */
     public Long getId() {
         return id;
     }
@@ -57,9 +61,9 @@ public class Address {
     }
 
     /**
-    * Get value of fullAddress.
-    * @return the fullAddress
-    */
+     * Get value of fullAddress.
+     * @return the fullAddress
+     */
     public String getFullAddress() {
         return fullAddress;
     }
@@ -73,9 +77,9 @@ public class Address {
     }
 
     /**
-    * Get value of longitude.
-    * @return the longitude
-    */
+     * Get value of longitude.
+     * @return the longitude
+     */
     public double getLongitude() {
         return longitude;
     }
@@ -89,9 +93,9 @@ public class Address {
     }
 
     /**
-    * Get value of latitude.
-    * @return the latitude
-    */
+     * Get value of latitude.
+     * @return the latitude
+     */
     public double getLatitude() {
         return latitude;
     }
@@ -102,5 +106,21 @@ public class Address {
      */
     public void setLatitude(double latitude) {
         this.latitude = latitude;
+    }
+
+    /**
+    * Get value of description.
+    * @return the description
+    */
+    public String getDescription() {
+        return description;
+    }
+
+    /**
+     * Set the value for description.
+     * @param description the description to set
+     */
+    public void setDescription(String description) {
+        this.description = description;
     }
 }
