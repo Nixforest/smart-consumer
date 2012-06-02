@@ -5,12 +5,11 @@
  */
 package com.gae.java.smartconsumer.blo;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.gae.java.smartconsumer.dao.AddressDetailDAO;
-import com.gae.java.smartconsumer.dao.DealDAO;
 import com.gae.java.smartconsumer.model.AddressDetail;
-import com.gae.java.smartconsumer.model.Deal;
 
 /**
  * Business logic class for AddressDetail object.
@@ -22,7 +21,7 @@ public enum AddressDetailBLO {
     INSTANCE;
     /**
      * List all Address Detail in data store.
-     * @return
+     * @return List all AddressDetail
      */
     public List<AddressDetail> getAllAddressDetails() {
         return AddressDetailDAO.INSTANCE.listAddressDetails();
@@ -33,6 +32,20 @@ public enum AddressDetailBLO {
      */
     public List<AddressDetail> getAllAddressDetailsSortById() {
         return AddressDetailDAO.INSTANCE.listAddressDetailsSortById();
+    }
+    /**
+     * Get all AddressDetail of a Deal by Deal's Id.
+     * @param dealId Deal's Id
+     * @return List AddressDetails
+     */
+    public List<AddressDetail> getAddressDetailsByDealId(Long dealId) {
+        List<AddressDetail> result = new ArrayList<AddressDetail>();
+        for (AddressDetail item : AddressDetailDAO.INSTANCE.listAddressDetails()) {
+            if (item.getDealId().equals(dealId)) {
+                result.add(item);
+            }
+        }
+        return result;
     }
     /**
      * Get AddressDetail by Id.
@@ -55,12 +68,12 @@ public enum AddressDetailBLO {
      */
     public Long insert(AddressDetail detail) throws Exception {
         detail.setId(AddressDetailDAO.INSTANCE.getMaxId() + 1);
-        if (!DealBLO.INSTANCE.isIdExist(detail.getDealId())) {
-            throw new Exception("Id of deal does not exist");
+        /*if (!DealBLO.INSTANCE.isIdExist(detail.getDealId())) {
+            //throw new Exception("Id of deal(" + detail.getDealId() + ") does not exist");
         }
         if (!AddressBLO.INSTANCE.isIdExist(detail.getAddressId())) {
-            throw new Exception("Id of address does not exist");
-        }
+            //throw new Exception("Id of address does not exist");
+        }*/
         AddressDetailDAO.INSTANCE.insert(detail);
         return detail.getId();
     }
@@ -120,10 +133,9 @@ public enum AddressDetailBLO {
         return false;
     }
     /**
-     * 
-     * [Give the description for method].
-     * @param addressId
-     * @return
+     * Method check if Address's Id exist.
+     * @param addressId AddressId need to check
+     * @return if AddressId exist, false otherwise.
      */
     public boolean isAddressIdExist(Long addressId) {
         for (AddressDetail item : getAllAddressDetails()) {

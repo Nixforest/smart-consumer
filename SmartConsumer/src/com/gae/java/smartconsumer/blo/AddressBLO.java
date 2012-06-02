@@ -8,7 +8,6 @@ package com.gae.java.smartconsumer.blo;
 import java.util.List;
 
 import com.gae.java.smartconsumer.dao.AddressDAO;
-import com.gae.java.smartconsumer.dao.AddressDetailDAO;
 import com.gae.java.smartconsumer.model.Address;
 
 /**
@@ -52,9 +51,16 @@ public enum AddressBLO {
      * @throws Exception Exception happen when full address property is empty
      */
     public Long insert(Address address) throws Exception {
+        // Set new Id
         address.setId(AddressDAO.INSTANCE.getMaxId() + 1);
+        // Check full address can not be empty
         if (address.getFullAddress().isEmpty()) {
             throw new Exception("Address can not empty");
+        }
+        // Check address is exist
+        Long addressExist = isAddressExist(address.getFullAddress());
+        if (addressExist != 0) {
+            return addressExist;
         }
         AddressDAO.INSTANCE.insert(address);
         return address.getId();
@@ -101,5 +107,18 @@ public enum AddressBLO {
             }
         }
         return false;
+    }
+    /**
+     * Check if address is exist.
+     * @param address Address to check
+     * @return Id of item which Address match, 0 otherwise.
+     */
+    public Long isAddressExist(String address) {
+        for (Address item : getAllAddresses()) {
+            if (item.getFullAddress().equals(address)) {
+                return item.getId();
+            }
+        }
+        return (long) 0;
     }
 }

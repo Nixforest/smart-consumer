@@ -62,7 +62,7 @@ public class InsertDeal extends Action {
                 //change status ...
                 Date endTime = GeneralUtil.getEndTime(dealForm.getString("endTime"));
                 int status = Status.WAITTOCHECK.ordinal();     
-                Deal deal = new Deal(title, description, address, link, imageLink, price, 
+                Deal deal = new Deal(title, description, link, imageLink, price, 
                         basicPrice, unitPrice, save, numberBuyer, endTime, isVoucher, status);
                 
                 DealBLO.INSTANCE.insert(deal);

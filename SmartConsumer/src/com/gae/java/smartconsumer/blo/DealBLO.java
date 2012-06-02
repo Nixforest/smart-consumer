@@ -114,7 +114,7 @@ public enum DealBLO {
     /**
      * Insert a deal.
      * @param deal object to insert into database
-     * @return Deal's id
+     * @return 0 if Deal is exist, Deal's id otherwise
      * @throws Exception A exception threw when Deal's properties is invalid
      */
     public Long insert(Deal deal) throws Exception {
@@ -146,6 +146,9 @@ public enum DealBLO {
             throw new Exception("Status is invalid");
         }
         deal.setId(DealDAO.INSTANCE.getMaxId() + 1);
+        if (DealDAO.INSTANCE.isExist(deal)) {
+            return (long) 0;
+        }
         DealDAO.INSTANCE.insert(deal);
         return deal.getId();
     }

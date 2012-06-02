@@ -1705,7 +1705,7 @@ public class UtilHtmlToXML {
        return "";
    }
    /*HTML to XML*/
-   public String HtmlToXML(String address)throws Exception{
+   public String HtmlToXML(String address) throws Exception{
        // C1
        URL url = new URL(address);
        URLConnection connection = url.openConnection();
@@ -1720,18 +1720,6 @@ public class UtilHtmlToXML {
        }
        br.close();
        return Convert2XML(stringHtml.toString());
-       
-       // C2
-       /*HTTPRequest request = new HTTPRequest(new URL(address), HTTPMethod.POST);
-       URLFetchService service = URLFetchServiceFactory.getURLFetchService();
-       // sync
-       //HTTPResponse response = service.fetch(request);
-       
-       // async
-       Future<HTTPResponse> future = service.fetchAsync(request);
-       HTTPResponse response = future.get();
-       return Convert2XML(new String(response.getContent()));*/
-       
    }
    
    public static String recodeToUTF(String source) {

@@ -1,3 +1,6 @@
+<%@page import="com.gae.java.smartconsumer.blo.AddressDetailBLO"%>
+<%@page import="com.gae.java.smartconsumer.model.AddressDetail"%>
+<%@page import="com.gae.java.smartconsumer.blo.AddressBLO"%>
 <%@page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8" %>
 <%@page import="com.gae.java.smartconsumer.util.Status"%>
 <%@page import="com.google.appengine.api.users.UserServiceFactory"%>
@@ -176,7 +179,13 @@ function setLinkUpdate(id) {
             <td><%=deal.getId() %></td>
             <td><%=deal.getTitle() %></td>
             <td><%=deal.getDescription() %></td>
-            <td><%=deal.getAddress() %></td>
+            <td>
+                <%
+                for (AddressDetail item : AddressDetailBLO.INSTANCE.getAddressDetailsByDealId(deal.getId())) {
+                    out.print(AddressBLO.INSTANCE.getAddressById(item.getAddressId()).getFullAddress());
+                }
+                %>
+            </td>
             <td><%=deal.getLink() %></td>
             <td><%=deal.getPrice() + " " + deal.getUnitPrice() %></td>
             <td><%=deal.getBasicPrice() + " " + deal.getUnitPrice() %></td>

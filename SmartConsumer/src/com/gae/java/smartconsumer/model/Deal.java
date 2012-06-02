@@ -26,8 +26,6 @@ public class Deal {
     private String title;
     /** Description of deal. */
     private String description;
-    /** Address of deal. */
-    private String address;
     /** Url of deal. */
     private String link;
     /** Url of deal's image. */
@@ -60,7 +58,6 @@ public class Deal {
      * Constructor of Deal class.
      * @param title Title
      * @param description Description
-     * @param address Address
      * @param link Url
      * @param imageLink Image's url
      * @param price Price
@@ -71,11 +68,10 @@ public class Deal {
      * @param endTime End time
      * @param isVoucher Is voucher
      */
-    public Deal(String title, String description, String address, String link, String imageLink, double price,
+    public Deal(String title, String description, String link, String imageLink, double price,
             double basicPrice, String unitPrice, float save, int numberBuyer, Date endTime, boolean isVoucher) {
         this.title = title;
         this.description = description;
-        this.address = address;
         this.link = link;
         this.imageLink = imageLink;
         this.price = price;
@@ -93,7 +89,6 @@ public class Deal {
      * Constructor of Deal class.
      * @param title Title
      * @param description Description
-     * @param address Address
      * @param link Url
      * @param imageLink Image's url
      * @param price Price
@@ -105,12 +100,11 @@ public class Deal {
      * @param isVoucher Is voucher
      * @param status Status of Deal
      */
-    public Deal(String title, String description, String address, String link, String imageLink, double price,
+    public Deal(String title, String description, String link, String imageLink, double price,
             double basicPrice, String unitPrice, float save, int numberBuyer, Date endTime, boolean isVoucher,
             int status) {
         this.title = title;
         this.description = description;
-        this.address = address;
         this.link = link;
         this.imageLink = imageLink;
         this.price = price;
@@ -154,22 +148,6 @@ public class Deal {
      */
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    /**
-     * Get value of address.
-     * @return the address
-     */
-    public String getAddress() {
-        return address;
-    }
-
-    /**
-     * Set the value for address.
-     * @param address the address to set
-     */
-    public void setAddress(String address) {
-        this.address = address;
     }
 
     /**

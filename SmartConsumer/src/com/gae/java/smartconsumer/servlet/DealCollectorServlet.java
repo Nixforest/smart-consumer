@@ -1,8 +1,6 @@
 /**
  * DealCollectorServlet.java
- * 
  * 28/5/2012
- * 
  * Smart Consumer project
  */
 package com.gae.java.smartconsumer.servlet;
@@ -18,24 +16,37 @@ import javax.servlet.http.HttpServletResponse;
 import com.gae.java.smartconsumer.util.GetDealFunction;
 
 /**
- * Controller dealcollector
- * 
+ * Controller dealcollector.
  * @version 1.0 28/5/2012
  * @author Nixforest
  */
 public class DealCollectorServlet extends HttpServlet {
-    /**  . */
+    /** . */
     private static final long serialVersionUID = 1L;
-
-    public void doGet(HttpServletRequest req, HttpServletResponse resp)
-        throws IOException, ServletException {
+    /**
+     * doGet method for DealCollectorServlet.
+     * @param req request
+     * @param resp response
+     * @throws IOException IOException
+     * @throws ServletException ServletException
+     * @see javax.servlet.http.HttpServlet#doGet(javax.servlet.http.HttpServletRequest,
+     *      javax.servlet.http.HttpServletResponse)
+     */
+    public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         RequestDispatcher view = req.getRequestDispatcher("getdeal.jsp");
-        
+
         view.forward(req, resp);
     }
-    
-    public void doPost(HttpServletRequest req, HttpServletResponse resp)
-        throws IOException, ServletException {
+    /**
+     * doPost method for DealCollectorServlet.
+     * @param req request
+     * @param resp response
+     * @throws IOException IOException
+     * @throws ServletException ServletException
+     * @see javax.servlet.http.HttpServlet#doPost(javax.servlet.http.HttpServletRequest,
+     *      javax.servlet.http.HttpServletResponse)
+     */
+    public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         RequestDispatcher view = req.getRequestDispatcher("getdeal.jsp");
         try {
             if (req.getParameter("123do") == "") {
@@ -54,13 +65,6 @@ public class DealCollectorServlet extends HttpServlet {
             }
             if (req.getParameter("muachung") == "") {
                 GetDealFunction.getFromMuaChungVn();
-            }
-            if (req.getParameter("test").isEmpty()) {
-                //throw new Exception(GetDealFunction.getFrom123doVnX("http://123do.vn/"));
-            }
-            if (req.getParameter("url") == "") {
-                //throw new Exception(req.getParameter("link"));
-                //throw new Exception(GetDealFunction.getFrom123doVnY(req.getParameter("link")));
             }
         } catch (Exception ex) {
             String error = ex.getMessage();

@@ -82,6 +82,7 @@ public enum AddressDAO {
             innerAddress.setFullAddress(address.getFullAddress());
             innerAddress.setLongitude(address.getLongitude());
             innerAddress.setLatitude(address.getLatitude());
+            innerAddress.setDescription(address.getDescription());
         } finally {
             em.close();
         }

@@ -38,7 +38,7 @@ public class EditDealDone extends Action {
         
         deal.setTitle(title);
         deal.setDescription(description);
-        deal.setAddress(address);
+        //deal.setAddress(address);
         deal.setImageLink(imageLink);
         deal.setPrice(price);
         deal.setBasicPrice(basicPrice);
