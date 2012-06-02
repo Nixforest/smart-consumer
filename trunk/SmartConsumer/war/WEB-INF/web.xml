@@ -85,7 +85,8 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
         <init-param>
             <param-name>config</param-name>
             <param-value>
-                /WEB-INF/struts-config.xml
+                /WEB-INF/struts-config.xml,
+                /WEB-INF/struts-config-mobile.xml
                 </param-value>
         </init-param>
         <load-on-startup>1</load-on-startup>
