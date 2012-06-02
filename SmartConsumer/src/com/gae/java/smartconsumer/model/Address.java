@@ -8,9 +8,12 @@ package com.gae.java.smartconsumer.model;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
+import com.google.appengine.repackaged.org.json.JSONException;
+import com.google.appengine.repackaged.org.json.JSONObject;
+
 /**
  * Class describe "Address" object, contain data about address.
- * @version 1.0 28/5/2012
+ * @version 2.0 2/6/2012
  * @author Nixforest
  */
 @Entity(name = "Address")
@@ -43,7 +46,43 @@ public class Address {
         this.setLatitude(latitude);
         this.setDescription(description);
     }
-
+    
+    /**
+     * Constructor of Address class.
+     * @param JSONObject
+    */
+    public Address(JSONObject jsonObject) throws JSONException{
+        if(jsonObject.has("id")){
+            id = jsonObject.getLong("id");
+        }
+        if(jsonObject.has("fullAddress")){
+            fullAddress = jsonObject.getString("fullAddress");
+        }
+        if(jsonObject.has("longitude")){
+            longitude = jsonObject.getDouble("longitude");
+        }
+        if(jsonObject.has("latitude")){
+            latitude = jsonObject.getDouble("latitude");
+        }
+        if(jsonObject.has("description")){
+            description = jsonObject.getString("description");
+        }
+    }
+    
+    /**
+     * get Address
+     * @return JSONObject 
+     */
+    public JSONObject toJSONObject() throws JSONException{
+        JSONObject result = new JSONObject();
+        result.put("id", id);
+        result.put("fullAddress", fullAddress);
+        result.put("longitude", longitude);
+        result.put("latitude", latitude);
+        result.put("description", description);
+        
+        return result;
+    }
     /**
      * Get value of id.
      * @return the id
