@@ -15,8 +15,9 @@ import com.gae.java.smartconsumer.util.Status;
 
 /**
  * Data access class for Deal object.
- * @version 1.0 28/5/2012
+ * @version 2.0 3/6/2012
  * @author Nixforest
+ * @update Khoa
  */
 public enum DealDAO {
     /** Instance of class. */
@@ -33,7 +34,32 @@ public enum DealDAO {
         List<Deal> deals = q.getResultList();
         return deals;
     }
-
+    /**
+     * Get all deal selling from data store.
+     * @return List of Deals
+     */
+    public List<Deal> listDealsSelling(){
+        EntityManager em = EMFService.get().createEntityManager();
+        Query q = em.createQuery("select from " + Deal.class.getName() + " where status=" + Status.SELLING.ordinal());
+        @SuppressWarnings("unchecked")
+        List<Deal> deals = q.getResultList();
+        return deals;
+    }   
+    /**
+     * 
+     * limit get deal
+     * @param limit
+     * @return List<Deal>
+     */
+    public List<Deal> listDealsLimit(int limit) {
+        EntityManager em = EMFService.get().createEntityManager();
+        // Read the existing entries
+        Query q = em.createQuery("select m from Deal m order by m.endTime desc");
+        q.setMaxResults(limit);
+        @SuppressWarnings("unchecked")
+        List<Deal> deals = q.getResultList();
+        return deals;
+    }
     /**
      * Method get all deals sort by updateDate property.
      * @return List of deals sort by updateDate property.

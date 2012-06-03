@@ -12,7 +12,10 @@
     </global-forwards>
 
     <action-mappings>
-        
+        <action path="/getDealId" type="com.gae.java.smartconsumer.mobile.action.GetDealById" scope="session" validate="false">
+        </action>
+        <action path="/getListDeal" type="com.gae.java.smartconsumer.mobile.action.GetListDeal" scope="session" validate="false">            
+        </action>
     </action-mappings>
 
 </struts-config>

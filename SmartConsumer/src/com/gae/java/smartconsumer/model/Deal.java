@@ -17,6 +17,7 @@ import com.google.appengine.repackaged.org.json.JSONObject;
  * Class describe "Deal" object, contain data about Deal.
  * @version 2.0 2/6/2012
  * @author Nixforest
+ * @update Khoa
  */
 @Entity(name = "Deal")
 public class Deal {
