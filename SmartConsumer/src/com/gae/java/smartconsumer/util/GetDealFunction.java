@@ -5,17 +5,12 @@
  */
 package com.gae.java.smartconsumer.util;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.SocketTimeoutException;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.Calendar;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.NodeList;
@@ -43,11 +38,10 @@ public class GetDealFunction {
     /**
      * Get address from http://123do.vn.
      * @param url link a deal from http://123do.vn
-     * @param website Website
      * @return a string represent address get from url
      * @throws Exception Exception threw
      */
-    public static Long getAddress(String url, int website) throws Exception {
+    public static Long getAddressFrom123Do(String url) throws Exception {
         Long result = (long) 0;
         try {
             // Scan list div tag
@@ -141,6 +135,12 @@ public class GetDealFunction {
         }
         return result;
     }
+    /**
+     * Get address from http://muachung.vn/ link.
+     * @param url link a deal from http://muachung.vn/
+     * @return a string represent address get from url
+     * @throws Exception Exception threw
+     */
     public static Long getAddressFromMuaChungVN(String url) throws Exception {
         Long result = (long) 0;
         try {
@@ -167,8 +167,8 @@ public class GetDealFunction {
                                     latlng = GeneralUtil.convertAddressToLatitudeLongitude(addressString);
                                     if (!latlng.equals("")) {
                                         double lat = Double.parseDouble(latlng.substring(0, latlng.indexOf(",")));
-                                        double lng = Double
-                                                .parseDouble(latlng.substring(latlng.indexOf(",") + 1, latlng.length()));
+                                        double lng = Double.parseDouble(latlng.substring(latlng.indexOf(",") + 1,
+                                                latlng.length()));
                                         Address address = new Address(addressString, lng, lat, addressDescription);
                                         result = AddressBLO.INSTANCE.insert(address);
                                         return result;
@@ -450,7 +450,7 @@ public class GetDealFunction {
                                             basicPrice, unitPrice, save, numberBuyer, endTime, isVoucher);
                                     Long dealId = DealBLO.INSTANCE.insert(deal);
                                     if (dealId != 0) {
-                                        Long addressId = getAddress(link, ListWebsite.DO123VN.ordinal());
+                                        Long addressId = getAddressFrom123Do(link);
                                         if (addressId != 0) {
                                             AddressDetail detail = new AddressDetail(dealId, addressId);
                                             AddressDetailBLO.INSTANCE.insert(detail);
@@ -497,23 +497,9 @@ public class GetDealFunction {
                 "http://muachung.vn/danh-muc/c-999999997/deal-dang-ban/trang-2.html"};
         int count = 0;
         try {
-            URL url;
-            URLConnection connection;
             for (int i = 0; i < linkList.length; i++) {
-                url = new URL(linkList[i]);
-                connection = url.openConnection();
-
                 String data = "";
-                connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded; charset=ISO-8859-1");
-                connection.setRequestProperty("Content-Encoding", "ISO-8859-1");
-
-                BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
-                StringBuffer stringHtml = new StringBuffer();
-                while ((data = br.readLine()) != null) {
-                    stringHtml.append(data);
-                }
-                br.close();
-                data = stringHtml.toString();
+                data = new UtilHtmlToXML().readHtmlToBuffer(linkList[i]).toString();
 
                 String regex = "<div\\s+class=\"itemSelling\"(.*?)>"// 1
                         + "(.*?)<div\\s+class=\"SellingDate\"(.*?)>(.*?)</div>"// 4
@@ -575,7 +561,7 @@ public class GetDealFunction {
                             basicPrice, unitPrice, save, numberBuyer, endTime, isVoucher);
                     Long dealId = DealBLO.INSTANCE.insert(deal);
                     if (dealId != 0) {
-                        Long addressId = getAddressFromMuaChungVN(link);
+                        Long addressId = (long) 0;
                         if (addressId != 0) {
                             AddressDetail detail = new AddressDetail(dealId, addressId);
                             AddressDetailBLO.INSTANCE.insert(detail);
@@ -585,6 +571,93 @@ public class GetDealFunction {
             }
         } catch (Exception ex) {
             throw ex;
+        }
+        return content;
+    }
+    public static String getFromNhomMuaCom() throws Exception {
+        String content = "";
+        String title = "";
+        String description = "";
+        String link = "";
+        String imageLink = "";
+        double price = 0;
+        double basicPrice = 0;
+        String unitPrice = "";
+        float save = 0;
+        int numberBuyer = 0;
+        Calendar cal = Calendar.getInstance();
+        java.util.Date endTime = cal.getTime();
+        boolean isVoucher = true;
+        String[] linkList = {
+                "http://www.nhommua.com/tp-ho-chi-minh/mua-hang-gia-re.html",
+        };
+        int count = 0;
+        try {
+            for (int i = 0; i < linkList.length; i++) {
+                String data = "";
+                data = new UtilHtmlToXML().readHtmlToBuffer(linkList[i]).toString();
+                String regex = "<div\\s+class=\'small-box-white\'(.*?)>(.*?)"
+                                    + "<h1(.*?)>(.*?)"
+                                        + "<a\\s+href\\s*=\\s*(\"([^\"]*\")|'[^']*'|([^'\">\\s]+))[^>]*>" //link
+                                            + "(.*?)" //title
+                                        + "</a>(.*?)"
+                                    + "</h1>(.*?)"
+                                    + "<div\\s+class=\'small-box-img\'(.*?)>(.*?)"
+                                        + "<a(.*?)>"
+                                            + "<img\\s+src\\s*=\\s*(\"([^\"]*\")|'[^']*'|([^'\">\\s]+))(.*?)/>(.*?)" //imagelink
+                                            + "<span\\s+class=\"(.*?)\"[^>]+>" //is voucher
+                                            + "</span>(.*?)"
+                                        + "</a>(.*?)"
+                                        + "<i(.*?)>(.*?)</i>(.*?)"
+                                    + "</div>(.*?)"
+                                    + "<div\\s+class=\'small-box-text\'(.*?)>(.*?)"
+                                        + "<p(.*?)>"
+                                            + "(.+?)"
+                                        + "</p>(.*?)"
+                                    + "</div>(.*?)"
+                                    + "<div\\s+class=\'small-box-button\'(.*?)>(.*?)"
+                                        + "<a(.*?)>"
+                                        + "</a>(.*?)"
+                                    + "</div>(.*?)"
+                                    + "<div\\s+class=\'small-box-sale\'(.*?)>(.*?)"
+                                        + "<p(.*?)>"
+                                            + "(.*?)"
+                                            + "<span(.*?)>"
+                                                + "(.*?)"
+                                            + "</span>(.*?)"
+                                        + "</p>(.*?)"
+                                        + "<div\\s+class=\'small-box-save\'(.*?)>(.*?)"
+                                            + "<span\\s+class=\'number\'(.*?)>"
+                                                + "(.*?)"
+                                            + "</span>(.*?)"
+                                            + "<span(.*?)>"
+                                                + "(.*?)"
+                                            + "</span>(.*?)"
+                                        + "</div>(.*?)"
+                                        + "<div\\s+class=\'small-box-price\'(.*?)>(.*?)"
+                                            + "<span(.*?)>"
+                                                + "(.*?)"
+                                            + "</span>(.*?)"
+                                            + "<span(.*?)>"
+                                                + "(.*?)"
+                                            + "</span>(.*?)"
+                                        + "</div>(.*?)"
+                                    + "</div>(.*?)<div(.*?)>(.*?)</div>(.*?)"
+                                + "</div>";
+                Pattern patt = Pattern.compile(regex);
+                Matcher match = patt.matcher(data);
+                while (match.find()) {
+                    count++;
+
+                    title = match.group(7).trim();
+                    content += "\nTitle: " + title;
+                    System.out.println(title);
+
+                    content += "\n=================================" + String.valueOf(count);
+                }
+            }
+        } catch (Exception ex) {
+            content += ex.getMessage();
         }
         return content;
     }

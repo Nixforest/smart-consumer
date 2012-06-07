@@ -11,8 +11,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 
 import com.gae.java.smartconsumer.util.Status;
-import com.google.appengine.repackaged.org.json.JSONException;
-import com.google.appengine.repackaged.org.json.JSONObject;
+/*import com.google.appengine.repackaged.org.json.JSONException;
+import com.google.appengine.repackaged.org.json.JSONObject;*/
 /**
  * Class describe "Deal" object, contain data about Deal.
  * @version 2.0 2/6/2012
@@ -91,7 +91,7 @@ public class Deal {
      * Constructor of Deal class.
      * @param jsonObject JSONObject
      */
-    public Deal(JSONObject jsonObject) throws JSONException{
+    /*public Deal(JSONObject jsonObject) throws JSONException{
         if(jsonObject.has("id")){
             id = jsonObject.getLong("id");
         }
@@ -128,12 +128,12 @@ public class Deal {
         if(jsonObject.has("isVoucher")){
             isVoucher = jsonObject.getBoolean("isVoucher");
         }
-    }
+    }*/
     /**
      * get Deal
      * @return JSONObject
      */
-    public JSONObject toJSONObject() throws JSONException{
+    /*public JSONObject toJSONObject() throws JSONException{
         JSONObject result = new JSONObject();
         result.put("id", id);
         result.put("title", title);
@@ -149,7 +149,7 @@ public class Deal {
         result.put("isVoucher", isVoucher);
         
         return result;
-    }
+    }*/
     
     /**
      * Constructor of Deal class.

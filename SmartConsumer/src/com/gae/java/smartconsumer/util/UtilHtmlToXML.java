@@ -1,14 +1,18 @@
 /**
  * UtilHtmlToXML.java
- * 
  * 28/5/2012
- * 
  * Smart Consumer project
  */
 package com.gae.java.smartconsumer.util;
 
-import java.io.*;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
@@ -18,20 +22,63 @@ import java.util.Scanner;
 import java.util.Stack;
 
 /**
- * Class handle convert html to xml
- * 
+ * Class handle convert html to xml.
  * @version 1.0 28/5/2012
  * @author Nixforest
  */
 public class UtilHtmlToXML {
+    /**
+     * Status.
+     * @author Nixforest
+     *
+     */
     enum states {
-
-        text, tag, endtag, attrtext, script, endscript, specialtag, comment, skipcdata, entity, namedentity, numericentity, hexaentity, tillgt, tillquote, tillinst, andgt
+        /**.*/
+        text,
+        /**.*/
+        tag,
+        /**.*/
+        endtag,
+        /**.*/
+        attrtext,
+        /**.*/
+        script,
+        /**.*/
+        endscript,
+        /**.*/
+        specialtag,
+        /**.*/
+        comment,
+        /**.*/
+        skipcdata,
+        /**.*/
+        entity,
+        /**.*/
+        namedentity,
+        /**.*/
+        numericentity,
+        /**.*/
+        hexaentity,
+        /**.*/
+        tillgt,
+        /**.*/
+        tillquote,
+        /**.*/
+        tillinst,
+        /**.*/
+        andgt
     };
+    /**.*/
     private static HashMap<String, Integer> namedentities = new HashMap<String, Integer>();
+    /**.*/
     private static List<String> emptytags = new ArrayList<String>();
+    /**.*/
     private static HashMap<String, List<String>> autoclosetags = new HashMap<String, List<String>>();
-
+    /**
+     * Convert to XML.
+     * @param s String to convert
+     * @return String XML
+     */
     public String Convert2XML(String s) {
 
         namedentities.put("AElig", 198);
@@ -930,7 +977,8 @@ public class UtilHtmlToXML {
 
                     cs = "" + c;
 
-                    name += (Character.isLetterOrDigit(c) && name != "") || Character.isLetter(c) ? cs : (name.equals("") ? "_" : (c == '-' ? "-" : (!name.equals("_") ? "_" : "")));
+                    name += (Character.isLetterOrDigit(c) && name != "") || Character.isLetter(c) ? cs : (name
+                            .equals("") ? "_" : (c == '-' ? "-" : (!name.equals("_") ? "_" : "")));
 
                     break;
 
@@ -1575,6 +1623,8 @@ public class UtilHtmlToXML {
                     state = states.attrtext;
 
                     break;
+                default :
+                    break;
 
             }
 
@@ -1592,18 +1642,18 @@ public class UtilHtmlToXML {
 
     }
     
-    /*
+    /**
     *
-    * Ðọc 1 URL sau ðó chuyển thành XML rồi lưu xuống file
+    * Ðọc 1 URL sau ðó chuyển thành XML rồi lưu xuống file.
     *
     * @param address là ðịa chỉ cần ðọc
     *
     * @param xmlFileName là file xml chỉ ðịnh ðể lưu
     *
-    * @throws Exception
+    * @throws Exception Exception
     *
     */
-   public void URL2XML(String address, String xmlFileName) throws Exception {
+   public void url2XML(String address, String xmlFileName) throws Exception {
 
        URL url = new URL(address);
 
@@ -1637,18 +1687,18 @@ public class UtilHtmlToXML {
 
    }
 
-   /*
+   /**
     *
-    * Ðọc 1 file HTML trên ðĩa sau ðó biến thành xml file rồi lưu xuống ðĩa
+    * Ðọc 1 file HTML trên ðĩa sau ðó biến thành xml file rồi lưu xuống ðĩa.
     *
     * @param htmlFilePath là đường dẫn tuyệt đối đến file html
     *
     * @param xmlFileName là file xml chỉ ðịnh ðể lưu
     *
-    * @throws Exception
+    * @throws Exception Exception
     *
     */
-   public void HtmlFile2XML(String htmlFilePath, String xmlFileName) throws Exception {
+   public void htmlFile2XML(String htmlFilePath, String xmlFileName) throws Exception {
 
        FileReader fr = new FileReader(htmlFilePath);
 
@@ -1680,18 +1730,19 @@ public class UtilHtmlToXML {
 
    }
 
-   /*
+   /**
     *
-    * Chuyển 1 chuỗi html ra dạng xml
+    * Chuyển 1 chuỗi html ra dạng xml.
     *
     * @param htmlString chuỗi chứa ðịnh dạng html
     *
     * @param xmlFileName là file xml chỉ ðịnh ðể lưu
-    *
-    * @throws Exception
+    * @param toFile toFile
+    * @return String
+    * @throws Exception Exception
     *
     */
-   public String StringPattern2XML(String htmlString, String xmlFileName, boolean toFile) throws Exception {
+   public String stringPattern2XML(String htmlString, String xmlFileName, boolean toFile) throws Exception {
        if (!toFile) {
            return Convert2XML(htmlString);
        }
@@ -1704,9 +1755,17 @@ public class UtilHtmlToXML {
        pw.close();
        return "";
    }
-   /*HTML to XML*/
-   public String HtmlToXML(String address) throws Exception{
-       // C1
+   /**
+    * Html to XML.
+    * @param address link
+    * @return String XML
+    * @throws Exception Exception
+    */
+   public String htmlToXML(String address) throws Exception {
+       StringBuffer stringHtml = readHtmlToBuffer(address);
+       return Convert2XML(stringHtml.toString());
+   }
+   public StringBuffer readHtmlToBuffer(String address) throws Exception {
        URL url = new URL(address);
        URLConnection connection = url.openConnection();
        connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded; charset=ISO-8859-1");
@@ -1715,13 +1774,17 @@ public class UtilHtmlToXML {
        BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
        String temp = "";
        StringBuffer stringHtml = new StringBuffer();
-       while((temp = br.readLine()) != null){
+       while ((temp = br.readLine()) != null) {
            stringHtml.append(temp);
        }
        br.close();
-       return Convert2XML(stringHtml.toString());
+       return stringHtml;
    }
-   
+   /**
+    * Recode to UTF.
+    * @param source source
+    * @return String recode
+    */
    public static String recodeToUTF(String source) {
        if (source != null) {
             try {
