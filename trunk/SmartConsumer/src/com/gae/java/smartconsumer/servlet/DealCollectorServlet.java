@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.gae.java.smartconsumer.util.GetDealFunction;
+import com.gae.java.smartconsumer.util.UtilHtmlToXML;
 
 /**
  * Controller dealcollector.
@@ -64,7 +65,15 @@ public class DealCollectorServlet extends HttpServlet {
                 GetDealFunction.getFromHotDealVn("http://www.hotdeal.vn/ha-noi/page-3/");
             }
             if (req.getParameter("muachung") == "") {
-                GetDealFunction.getFromMuaChungVn();
+                System.out.println(GetDealFunction.getFromMuaChungVn());
+            }
+            if (req.getParameter("nhommua") == "") {
+                System.out.println("adfd");
+                System.out.println(GetDealFunction.getFromNhomMuaCom());
+            }
+            if (req.getParameter("url") == "") {
+                System.out.println("adfd");
+                System.out.println(new UtilHtmlToXML().readHtmlToBuffer(req.getParameter("link")).toString());
             }
         } catch (Exception ex) {
             String error = ex.getMessage();

@@ -368,7 +368,7 @@ public final class GeneralUtil {
         String geocoderUri = String.format("http://maps.googleapis.com/maps/api/geocode/xml?address="
                 + address.replace(" ", "+") + "&sensor=false");
         // Convert to XML response return
-        String html = new UtilHtmlToXML().HtmlToXML(geocoderUri);
+        String html = new UtilHtmlToXML().htmlToXML(geocoderUri);
         UtilReadXML reader = new UtilReadXML();
         Document document = reader.ReadContentXML(html);
         // Read status of response
@@ -420,7 +420,7 @@ public final class GeneralUtil {
         try {
             UtilHtmlToXML util = new UtilHtmlToXML();
             // Get content HTML and convert to XML
-            String html = util.HtmlToXML(url);
+            String html = util.htmlToXML(url);
 
             UtilReadXML reader = new UtilReadXML();
             Document document = reader.ReadContentXML(html);

@@ -8,8 +8,7 @@ package com.gae.java.smartconsumer.model;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
-import com.google.appengine.repackaged.org.json.JSONException;
-import com.google.appengine.repackaged.org.json.JSONObject;
+
 
 /**
  * Class describe "Address" object, contain data about address.
@@ -51,7 +50,7 @@ public class Address {
      * Constructor of Address class.
      * @param JSONObject
     */
-    public Address(JSONObject jsonObject) throws JSONException{
+    /*public Address(JSONObject jsonObject) throws JSONException{
         if(jsonObject.has("id")){
             id = jsonObject.getLong("id");
         }
@@ -67,13 +66,13 @@ public class Address {
         if(jsonObject.has("description")){
             description = jsonObject.getString("description");
         }
-    }
+    }*/
     
     /**
      * get Address
      * @return JSONObject 
      */
-    public JSONObject toJSONObject() throws JSONException{
+    /*public JSONObject toJSONObject() throws JSONException{
         JSONObject result = new JSONObject();
         result.put("id", id);
         result.put("fullAddress", fullAddress);
@@ -82,7 +81,7 @@ public class Address {
         result.put("description", description);
         
         return result;
-    }
+    }*/
     /**
      * Get value of id.
      * @return the id
