@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 1.3//EN"
+       "http://struts.apache.org/dtds/tiles-config_1_3.dtd">
+
+<tiles-definitions>
+  <definition name="admin" path="/layout.jsp">
+      <put name="title" value="SmartConsumer"/>
+      <put name="menu" value="/menu.jsp"/>  
+      <put name="header" value="/header.jsp"/>  
+      <put name="body" value="/body.jsp"/>
+      <put name="footer" value="/footer.jsp"/>
+  </definition>
+  <definition name="linsertdeal" extends="admin">
+    <put name="title" value="Insert Deal" />
+    <put name="body" value="/insert_deal.jsp" />
+  </definition>
+  <definition name="lmanagedeal" extends="admin">
+    <put name="title" value="Manage Deal" />
+    <put name="body" value="/manage_deal.jsp" />
+  </definition>
+  <definition name="lviewdeal" extends="admin">
+    <put name="title" value="View Deal" />
+    <put name="body" value="/viewdeal.jsp" />
+  </definition>
+  <definition name="leditdeal" extends="admin">
+    <put name="title" value="Edit Deal" />
+    <put name="body" value="/editdeal.jsp" />
+  </definition>
+  <definition name="smartconsumer" extends="admin">
+    <put name="title" value="Trang Chủ" />
+    <put name="body" value="/home.jsp" />
+  </definition>
+  <definition name="map" extends="admin">
+    <put name="title" value="Xem bản đồ" />
+    <put name="body" value="/map.jsp" />
+  </definition>
+  <definition name="lchangestatus" extends="admin">
+    <put name="title" value="Thay đổi trạng thái" />
+    <put name="body" value="/changestatus.jsp" />
+  </definition>
+
+  <definition name="lmycart" extends="admin">
+    <put name="title" value="Giỏ hàng" />
+    <put name="body" value="/viewcart.jsp" />
+  </definition>
+  <definition name="lmanagebill" extends="admin">
+    <put name="title" value="Quản lý đơn đặt hàng" />
+    <put name="body" value="managebill.jsp" />
+  </definition>
+  <definition name="buycomplete" extends="admin">
+    <put name="title" value="Hoàn thành" />
+    <put name="body" value="buycomplete.jsp" />
+  </definition>
+  <definition name="lviewbill" extends="admin">
+    <put name="title" value="Quản lý đơn đặt hàng" />
+    <put name="body" value="viewbill.jsp" />
+  </definition>
+  <definition name="order" extends="admin">
+    <put name="title" value="Order" />
+    <put name="body" value="order.jsp" />
+  </definition>
+  <definition name="lviewdealcart" extends="admin">
+    <put name="title" value="View Deal" />
+    <put name="body" value="viewdeal.jsp" />
+  </definition>
+</tiles-definitions>
