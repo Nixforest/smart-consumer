@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.2//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_2.dtd">
+<struts-config>
+
+    <form-beans>
+    </form-beans>
+
+    <global-exceptions>
+    </global-exceptions>
+
+    <global-forwards>
+    </global-forwards>
+
+    <action-mappings>
+        <action path="/getDealId" type="com.gae.java.smartconsumer.mobile.action.GetDealById" scope="session" validate="false">
+        </action>
+        <action path="/getListDeal" type="com.gae.java.smartconsumer.mobile.action.GetListDeal" scope="session" validate="false">            
+        </action>
+        <action path="/getAddressByDealId" type="com.gae.java.smartconsumer.mobile.action.GetAddressByDealId" scope="session" validate="false">
+        </action>
+        <action path="/getListAddress" type="com.gae.java.smartconsumer.mobile.action.GetListAddress" scope="session" validate="false"></action>
+    </action-mappings>
+
+</struts-config>
