@@ -18,7 +18,11 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import com.gae.java.smartconsumer.blo.AddressBLO;
+import com.gae.java.smartconsumer.blo.AddressDetailBLO;
 import com.gae.java.smartconsumer.blo.DealBLO;
+import com.gae.java.smartconsumer.model.Address;
+import com.gae.java.smartconsumer.model.AddressDetail;
 import com.gae.java.smartconsumer.model.Deal;
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
@@ -49,12 +53,19 @@ public class MapViewerServlet extends Action {
         }
         try {
             List<Deal> listDeals = new ArrayList<Deal>();
+            List<Address> listAddresses = new ArrayList<Address>();
+            for (Deal deal : DealBLO.INSTANCE.getListAllDealsSelling()) {
+                List<AddressDetail> listAddressDetails = AddressDetailBLO.INSTANCE.getAddressDetailsByDealId(deal.getId());
+                for (AddressDetail addressDetail : listAddressDetails) {
+                    listAddresses.add(AddressBLO.INSTANCE.getAddressById(addressDetail.getAddressId()));
+                }
+            }
             /*for (Deal deal : DealBLO.INSTANCE.getListAllDeals()) {                
                 if (!checkIfAddressExist(listDeals, deal.getAddress())) {
                     listDeals.add(deal);
                 }
             }*/
-            request.setAttribute("listDeals", listDeals);
+            request.setAttribute("listDeals", DealBLO.INSTANCE.getListAllDealsSelling());
         } catch (Exception ex) {
             request.setAttribute("error", ex.getMessage());
         }

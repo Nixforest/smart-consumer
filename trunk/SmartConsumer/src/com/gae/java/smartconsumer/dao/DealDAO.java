@@ -17,7 +17,6 @@ import com.gae.java.smartconsumer.util.Status;
  * Data access class for Deal object.
  * @version 2.0 3/6/2012
  * @author Nixforest
- * @update Khoa
  */
 public enum DealDAO {
     /** Instance of class. */
@@ -38,17 +37,16 @@ public enum DealDAO {
      * Get all deal selling from data store.
      * @return List of Deals
      */
-    public List<Deal> listDealsSelling(){
+    public List<Deal> listDealsSelling() {
         EntityManager em = EMFService.get().createEntityManager();
         Query q = em.createQuery("select from " + Deal.class.getName() + " where status=" + Status.SELLING.ordinal());
         @SuppressWarnings("unchecked")
         List<Deal> deals = q.getResultList();
         return deals;
-    }   
+    }
     /**
-     * 
-     * limit get deal
-     * @param limit
+     * Limit get deal.
+     * @param limit limit
      * @return List<Deal>
      */
     public List<Deal> listDealsLimit(int limit) {

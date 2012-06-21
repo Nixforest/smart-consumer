@@ -8,6 +8,7 @@ package com.gae.java.smartconsumer.util;
 import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.util.Calendar;
+import java.util.concurrent.TimeoutException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -574,6 +575,11 @@ public class GetDealFunction {
         }
         return content;
     }
+    /**
+     * Get deal information from http://www.nhommua.com.
+     * @return String represent content collected
+     * @throws Exception Exception maybe happen
+     */
     public static String getFromNhomMuaCom() throws Exception {
         String content = "";
         String title = "";
@@ -591,74 +597,160 @@ public class GetDealFunction {
         String[] linkList = {
                 "http://www.nhommua.com/tp-ho-chi-minh/mua-hang-gia-re.html",
         };
+        String regexItem1 =  "<span\\s+class=\'amo\'>.*?"
+                               + "<i\\s+class=\'text\'>(.*?)</i>"
+                           + "</span>.*?<i.*?>.*?</i>.*?"
+                           + "<span\\s+class=\'time\'>"
+                               + "<i.*?>.*?</i>.*?"
+                               + "<i\\s+class=\'text\'.*?>(.*?)</i></span>";
+        String regexItem2 =   "<div\\s+class=\'save-amo-time smallbox\'>.*?"
+                                + "<span.*?>.*?"
+                                    + "<i.*?>.*?</i>.*?<i.*?>.*?</i>.*?"
+                                + "</span>.*?<i.*?>.*?</i>.*?"
+                                + "<span\\s+class=\'time\'>"
+                                    + "<i.*?>.*?</i>.*?<i\\s+class=\'text\'.*?>(.*?)</i>.*?"
+                                + "</span>.*?</div>.*?"
+                            + "<div\\s+class=\'save-amo-time smallbox1\'>.*?"
+                                + "<span.*?>.*?"
+                                    + "<i.*?>.*?</i>.*?<i.*?>.*?</i>.*?"
+                                + "</span>.*?<i.*?>.*?</i>.*?"
+                                + "<span\\s+class=\'time\'>.*?"
+                                    + "<i.*?>.*?</i>.*?<i\\s+class=\'text\'>(.*?)</i>.*?"
+                                + "</span>.*?</div>";
         int count = 0;
         try {
             for (int i = 0; i < linkList.length; i++) {
                 String data = "";
                 data = new UtilHtmlToXML().readHtmlToBuffer(linkList[i]).toString();
-                String regex = "<div\\s+class=\'small-box-white\'(.*?)>(.*?)"
-                                    + "<h1(.*?)>(.*?)"
-                                        + "<a\\s+href\\s*=\\s*(\"([^\"]*\")|'[^']*'|([^'\">\\s]+))[^>]*>" //link
-                                            + "(.*?)" //title
-                                        + "</a>(.*?)"
-                                    + "</h1>(.*?)"
-                                    + "<div\\s+class=\'small-box-img\'(.*?)>(.*?)"
-                                        + "<a(.*?)>"
-                                            + "<img\\s+src\\s*=\\s*(\"([^\"]*\")|'[^']*'|([^'\">\\s]+))(.*?)/>(.*?)" //imagelink
-                                            + "<span\\s+class=\"(.*?)\"[^>]+>" //is voucher
-                                            + "</span>(.*?)"
-                                        + "</a>(.*?)"
-                                        + "<i(.*?)>(.*?)</i>(.*?)"
-                                    + "</div>(.*?)"
-                                    + "<div\\s+class=\'small-box-text\'(.*?)>(.*?)"
-                                        + "<p(.*?)>"
-                                            + "(.+?)"
-                                        + "</p>(.*?)"
-                                    + "</div>(.*?)"
-                                    + "<div\\s+class=\'small-box-button\'(.*?)>(.*?)"
-                                        + "<a(.*?)>"
-                                        + "</a>(.*?)"
-                                    + "</div>(.*?)"
-                                    + "<div\\s+class=\'small-box-sale\'(.*?)>(.*?)"
-                                        + "<p(.*?)>"
-                                            + "(.*?)"
-                                            + "<span(.*?)>"
-                                                + "(.*?)"
-                                            + "</span>(.*?)"
-                                        + "</p>(.*?)"
-                                        + "<div\\s+class=\'small-box-save\'(.*?)>(.*?)"
-                                            + "<span\\s+class=\'number\'(.*?)>"
-                                                + "(.*?)"
-                                            + "</span>(.*?)"
-                                            + "<span(.*?)>"
-                                                + "(.*?)"
-                                            + "</span>(.*?)"
-                                        + "</div>(.*?)"
-                                        + "<div\\s+class=\'small-box-price\'(.*?)>(.*?)"
-                                            + "<span(.*?)>"
-                                                + "(.*?)"
-                                            + "</span>(.*?)"
-                                            + "<span(.*?)>"
-                                                + "(.*?)"
-                                            + "</span>(.*?)"
-                                        + "</div>(.*?)"
-                                    + "</div>(.*?)<div(.*?)>(.*?)</div>(.*?)"
-                                + "</div>";
+                String regex = "<div\\s+class=\'small-box-white\'>.*?"
+                                 + "<h1><a\\s+href=\'(.*?)\'.*?>(.*?)</a></h1>.*?"
+                                 + "<div\\s+class=\'small-box-img\'>.*?"
+                                     + "<a.*?>"
+                                         + "<img\\s+src=\'(.*?)\'.*?/>"
+                                         + "<span\\s+class=\'(.*?)\'></span>"
+                                     + "</a><i></i>.*?"
+                                 + "</div>.*?"
+                                 + "<div\\s+class=\'small-box-text\'>.*?"
+                                     + "<p>(.*?)</p>.*?</div>.*?"
+                                 + "<div\\s+class=\'small-box-button\'>.*?"
+                                     + "<a.*?></a>.*?</div>.*?"
+                                 + "<div\\s+class=\'small-box-sale\'>.*?"
+                                     + "<p>(.*?)<span>(.*?)</span></p>.*?"
+                                     + "<div\\s+class=\'small-box-save\'>.*?"
+                                         + "<span.*?>(.*?)%</span>.*?"
+                                         + "<span>.*?</span>.*?"
+                                     + "</div>.*?"
+                                     + "<div\\s+class=\'small-box-price\'>.*?"
+                                         + "<span.*?>(.*?)</span>.*?"
+                                         + "<span>.*?</span>.*?"
+                                     + "</div>.*?"
+                                 + "</div>.*?<div.*?></div>.*?"
+                             + "</div>";
                 Pattern patt = Pattern.compile(regex);
                 Matcher match = patt.matcher(data);
                 while (match.find()) {
                     count++;
-
-                    title = match.group(7).trim();
+                    boolean flagNumberBuyer = false;
+                    link = match.group(1).trim();
+                    content += "\nLink: " + link;
+                    // Get info from local link
+                    String dataItem = new UtilHtmlToXML().readHtmlToBuffer(link).toString();
+                    Pattern pattItem = Pattern.compile(regexItem1);
+                    Matcher matchItem = pattItem.matcher(dataItem);
+                    String remainTime = "";
+                    String numberBuyerString = "";
+                    if (matchItem.find()) {
+                        numberBuyerString = matchItem.group(1).trim();
+                        numberBuyer = Integer.parseInt(numberBuyerString);
+                        remainTime = matchItem.group(2).trim();
+                        endTime = GeneralUtil.getEndTime(remainTime);
+                        flagNumberBuyer = true;
+                    }
+                    if (!flagNumberBuyer) {
+                        pattItem = Pattern.compile(regexItem2);
+                        matchItem = pattItem.matcher(dataItem);
+                    }
+                    if (matchItem.find()) {
+                        remainTime = matchItem.group(1).trim();
+                        endTime = GeneralUtil.getEndTime(remainTime);
+                        numberBuyerString = matchItem.group(2).trim();
+                        numberBuyer = Integer.parseInt(numberBuyerString);
+                    }
+                    content += "\nRemain time: " + remainTime;
+                    content += "\nNumber buyer: " + numberBuyerString;
+                    title = match.group(2).trim();
                     content += "\nTitle: " + title;
-                    System.out.println(title);
+                    imageLink = match.group(3).trim();
+                    content += "\nImage: " + imageLink;
+                    String voucher = match.group(4).trim();
+                    isVoucher = voucher.equals("giaovoucher");
+                    content += "\nIs voucher: " + isVoucher;
+                    description = match.group(5).trim();
+                    content += "\nDescription: " + description;
+                    price = GeneralUtil.getPriceFromString(match.group(6).trim());
+                    content += "\nPrice: " + price;
+                    unitPrice = match.group(7).trim();
+                    content += "\nUnit price: " + unitPrice;
+                    String saveString = match.group(8).trim();
+                    save = Float.parseFloat(saveString);
+                    content += "\nSave: " + saveString;
+                    basicPrice = price / (1 - save / 100);
 
                     content += "\n=================================" + String.valueOf(count);
+                    
+                    Deal deal = new Deal(title, description, link, imageLink, price,
+                            basicPrice, unitPrice, save, numberBuyer, endTime, isVoucher);
+                    Long dealId = DealBLO.INSTANCE.insert(deal);
+                    getAddressFromNhomMua(dataItem, dealId);
                 }
             }
         } catch (Exception ex) {
             content += ex.getMessage();
         }
         return content;
+    }
+    /**
+     * Get address from http://www.nhommua.com.
+     * @param data Data html
+     * @param dealId Deal's Id
+     * @throws Exception Exception
+     */
+    public static void getAddressFromNhomMua(String data, Long dealId) throws Exception {
+        String addressString = "";
+        String addressDescription = "";
+        String regex = "<li>.*?"
+                         + "<a.*?>.*?"
+                             + "<em>.*?</em>.*?"
+                         + "</a>.*?"
+                         + "<p>"
+                             + "<span\\s+itemprop=\'tel\'>(.*?)</span>.*?"
+                         + "</p>.*?"
+                         + "<span.*?>.*?</span>.*?"
+                         + "<a.*?>.*?</a>.*?"
+                     + "</li>";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(data);
+        if (matcher.find()) {
+            // Get address content
+            addressString = matcher.group(1).trim();
+            addressString = GeneralUtil.addressNormalization(addressString);
+            //System.out.println(addressString);
+            // Convert to latitude and longitude
+            String latlng = GeneralUtil.convertAddressToLatitudeLongitude(addressString);
+            //System.out.println(latlng);
+            if (!latlng.equals("")) {   // Convert success
+                double lat = Double.parseDouble(latlng.substring(0, latlng.indexOf(",")));
+                double lng = Double
+                        .parseDouble(latlng.substring(latlng.indexOf(",") + 1, latlng.length()));
+                Address address = new Address(addressString, lng, lat, addressDescription);
+                // Insert address to data store
+                Long addressId = AddressBLO.INSTANCE.insert(address);
+                if (addressId != 0) {
+                    AddressDetail addressDetail = new AddressDetail(dealId, addressId);
+                    // Insert address detail to data store
+                    AddressDetailBLO.INSTANCE.insert(addressDetail);
+                }
+            }
+        }
     }
 }

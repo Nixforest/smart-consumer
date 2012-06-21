@@ -8,6 +8,8 @@ package com.gae.java.smartconsumer.model;
 import java.util.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import com.gae.java.smartconsumer.util.Status;
@@ -17,12 +19,12 @@ import com.google.appengine.repackaged.org.json.JSONObject;*/
  * Class describe "Deal" object, contain data about Deal.
  * @version 2.0 2/6/2012
  * @author Nixforest
- * @update Khoa
  */
 @Entity(name = "Deal")
 public class Deal {
     /** Id - Primary key. */
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY, generator="DealID")
     private Long id;
     /** Title of deal. */
     private String title;
