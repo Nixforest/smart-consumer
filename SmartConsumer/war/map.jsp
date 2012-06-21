@@ -1,3 +1,6 @@
+<%@page import="com.gae.java.smartconsumer.model.Address"%>
+<%@page import="com.gae.java.smartconsumer.blo.AddressDetailBLO"%>
+<%@page import="com.gae.java.smartconsumer.blo.AddressBLO"%>
 <%@page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8"%>
 
 <%@page import="com.gae.java.smartconsumer.model.Deal"%>
@@ -36,7 +39,9 @@ body {
 	var geocoder;
 	var map;
 	var side_bar_html = "";
+	var listAddresses = [];
     var gmarkers = [];
+    var iterator = 0;
     var htmls = [];
     //var i = 0;
     var clicknumber = 0;
@@ -53,8 +58,36 @@ body {
 	    }
 	    map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
 	    
-        setAddressFromDatabaseX();
+	    setListAddresses();
 	}
+	
+	function setListAddresses() {
+      var numberOfDeal = document.getElementById("numberOfDeal").innerText;
+      for (var i = 0; i < numberOfDeal; i++) {
+    	  var lat = document.getElementById("lat" + i).innerText;
+          var lng = document.getElementById("lng" + i).innerText;
+    	  listAddresses[i] = new google.maps.LatLng(lat, lng);
+      }
+	}
+	
+	function drop() {
+		for (var i = 0; i < listAddresses.length; i++) {
+			setTimeout(function() {
+				addMarker();
+			}, i * 200);
+		}
+	}
+	
+	function addMarker() {
+		gmarkers.push(new google.maps.Marker({
+			position: listAddresses[iterator],
+			map: map,
+			draggable: true,
+			animation: google.maps.Animation.DROP
+		}));
+		iterator++;
+	}
+	
 	function codeAddress() {
 		var address = document.getElementById("address").value;
 		codeAddressWithParam(address, "Vị trí của bạn");
@@ -86,6 +119,7 @@ body {
                     }
                 });
 	}
+	
 	function codeAddressWithIndex(index) {
 		var address = document.getElementById("address" + index).innerText;
         var title = document.getElementById("title" + index).innerText;
@@ -94,6 +128,9 @@ body {
         var basicPrice = document.getElementById("basicPrice" + index).innerText;
         var numberBuyer = document.getElementById("numberBuyer" + index).innerText;
         var remainTime = document.getElementById("remainTime" + index).innerText;
+        var lat = document.getElementById("lat" + index).innerText;
+        var lng = document.getElementById("lng" + index).innerText;
+        
         geocoder.geocode(
                 {'address': address},
                 function(results, status) {
@@ -103,7 +140,7 @@ body {
                             map: map,
                             draggable: true,
                             animation: google.maps.Animation.DROP,
-                            position: results[0].geometry.location,
+                            position: new google.maps.LatLng(lat, lng),
                             title: address
                         });
                         var html = "<table>" +
@@ -147,28 +184,10 @@ body {
     }
 	function setAddressFromDatabase() {
 		var numberOfDeal = document.getElementById("numberOfDeal").innerText;
-		clicknumber++;
-		start = (clicknumber - 1) * 10;
-		end = (clicknumber - 1) * 10 + 10;
-		if (end > numberOfDeal) {
-			end = numberOfDeal
-		}
-		for (var i = start; i < end; i++) {
-            codeAddressWithIndex(i);
-        }
-	}
-	function setAddressFromDatabaseX() {
-        var numberOfDeal = document.getElementById("numberOfDeal").innerText;
         for (var i = 0; i < numberOfDeal; i++) {
             codeAddressWithIndex(i);
         }
-    }
-	function setAddressFromDatabaseRevert() {
-        var numberOfDeal = document.getElementById("numberOfDeal").innerText;
-        for (var i = numberOfDeal - 1; i >= 0; i--) {
-            codeAddressWithIndex(i);
-        }
-    }
+	}
 	
 	function showLocation(position) {
 		  var latitude = position.coords.latitude;
@@ -208,20 +227,20 @@ body {
 </head>
 <body onload="initialize()">
   <%
-  String url = "";
-  String urlLinktext = "";
-  String nickName = "";
-  
-  if (request.getAttribute("url") != null) {
-      url = (String)request.getAttribute("url");
-  }
-  if (request.getAttribute("urlLinktext") != null) {
-      urlLinktext = (String)request.getAttribute("urlLinktext");
-  }
-  if (request.getAttribute("nickName") != null) {
-      nickName = (String)request.getAttribute("nickName");
-  }
-  List<Deal> deals = (List<Deal>)request.getAttribute("listDeals");
+      String url = "";
+      String urlLinktext = "";
+      String nickName = "";
+
+      if (request.getAttribute("url") != null) {
+          url = (String) request.getAttribute("url");
+      }
+      if (request.getAttribute("urlLinktext") != null) {
+          urlLinktext = (String) request.getAttribute("urlLinktext");
+      }
+      if (request.getAttribute("nickName") != null) {
+          nickName = (String) request.getAttribute("nickName");
+      }
+      List<Deal> deals = (List<Deal>) request.getAttribute("listDeals");
   %>
   <div style="width: 100%;">
     <div class="line"></div>
@@ -242,15 +261,15 @@ body {
         <td>
             <div id="side_bar" style="float:right;height:480px;overflow: scroll;">
                 <%
-                int i = -1;
-                for (Deal item : deals) {
-                    i++;
-                    %>
-                    <a class="titlelinkmap" href="javascript:myclick(<%=i %>)"><%=item.getTitle() %></a>
+                    int i = -1;
+                    for (Deal item : deals) {
+                        i++;
+                %>
+                    <a class="titlelinkmap" href="javascript:myclick(<%=i%>)"><%=item.getTitle()%></a>
                     <br/>
                     <%
-                }
-                %>
+                        }
+                    %>
             </div>
         </td>
     </tr>
@@ -258,39 +277,70 @@ body {
   
   <div>
     <form>
-      <input id="address" type="textbox" value="Thành Phố Hồ Chí Minh" size="100"> <input type="button"
-        value="Vị trí của bạn" onclick="getLocation();"> <input type="button" value="Tìm địa điểm"
-          onclick="codeAddress()">
-          <input type="button" value="Load dữ liệu" onclick="setAddressFromDatabase()">
-          
-          <input type="button" value="Load ngược" onclick="setAddressFromDatabaseRevert()">
+      <input id="address" type="textbox" value="Thành Phố Hồ Chí Minh" size="100"></input>
+      <input type="button" value="Vị trí của bạn" onclick="getLocation();"></input>
+      <input type="button" value="Tìm địa điểm" onclick="codeAddress()"></input>
+      <input type="button" value="Load dữ liệu" onclick="setAddressFromDatabase()"></input>
+      <input type="button" value="Load ngược" onclick="setAddressFromDatabaseRevert()"></input>
     </form>
 
   </div>
   <div style="display: none;">
-    <label id="numberOfDeal" name="numberOfDeal"><%=deals.size() %></label>
+    <label id="numberOfDeal" name="numberOfDeal"><%=deals.size()%></label>
     <table>
       <%
-    i = -1;
-    for (Deal item : deals) {
-        i++;
-        %>
-      <tr>
-        <td><label id="id<%=i %>" name="id<%=i %>"><%=i %></label></td>
-        <td><label id="title<%=i %>" name="title<%=i %>"><%=item.getTitle() %></label></td>
-        <td><label id="image<%=i %>" name="image<%=i %>"><%=item.getImageLink() %></label></td>
-        <td><label id="price<%=i %>" name="price<%=i %>"><%=GeneralUtil.convertPriceToText(item.getPrice()) %></label>
-        </td>
-        <td><label id="basicPrice<%=i %>" name="basicPrice<%=i %>"><%=GeneralUtil.convertPriceToText(item.getBasicPrice()) %></label>
-        </td>
-        <td><label id="numberBuyer<%=i %>" name="numberBuyer<%=i %>"><%=item.getNumberBuyer() %></label></td>
-        <td><label id="remainTime<%=i %>" name="remainTime<%=i %>"><%=GeneralUtil.getRemainTime(item.getEndTime()) %></label>
-        </td>
-        <td><label id="address<%=i %>" name="address<%=i %>"><%=item.getAddress() %></label></td>
-      </tr>
-      <%
-    }
-    %>
+          i = 0;
+          for (Deal item : deals) {
+              if (AddressDetailBLO.INSTANCE.getAddressDetailsByDealId(item.getId()).size() > 0) {
+                  Address address = AddressBLO.INSTANCE.getAddressById(
+                          AddressDetailBLO.INSTANCE.getAddressDetailsByDealId(item.getId()).get(0).getAddressId());
+      %>
+            <tr>
+              <td><label id="id<%=i%>" name="id<%=i%>"><%=i%></label></td>
+              <td><label id="title<%=i%>" name="title<%=i%>"><%=item.getTitle()%></label></td>
+              <td><label id="image<%=i%>" name="image<%=i%>"><%=item.getImageLink()%></label></td>
+              <td>
+                <label id="price<%=i%>" name="price<%=i%>">
+                    <%=GeneralUtil.convertPriceToText(item.getPrice())%>
+                </label>
+              </td>
+              <td>
+                <label id="basicPrice<%=i%>" name="basicPrice<%=i%>">
+                    <%=GeneralUtil.convertPriceToText(item.getBasicPrice())%>
+                </label>
+              </td>
+              <td><label id="numberBuyer<%=i%>" name="numberBuyer<%=i%>"><%=item.getNumberBuyer()%></label></td>
+              <td>
+                <label id="remainTime<%=i%>" name="remainTime<%=i%>">
+                    <%=GeneralUtil.getRemainTime(item.getEndTime())%>
+                </label>
+              </td>
+              <td>
+                <label id="address<%=i%>" name="address<%=i%>">
+                    <%=address.getFullAddress()%>
+                </label>
+              </td>
+              <td>
+                <label id="lat<%=i%>" name="lat<%=i%>">
+                    <%=address.getLatitude()%>
+                </label>
+              </td>
+              <td>
+                <label id="lng<%=i%>" name="lng<%=i%>">
+                    <%=address.getLongitude()%>
+                </label>
+              </td>
+            </tr>
+            <%
+                }
+                    i++;
+                }
+            %>
+            <tr>
+                <label id="numberOfAddress" name="numberOfAddress">
+                    <%=i %>
+                </label>
+            </tr>
     </table>
   </div>
 </body>

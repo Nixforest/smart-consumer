@@ -327,6 +327,7 @@ public final class GeneralUtil {
         String address = result.trim();
         address = address.replaceFirst("Địa chỉ:", "");
         address = address.replaceAll("\u00a0", "");
+        address = address.replaceAll("<br />", " ");
         int location = GeneralUtil.removeSign4VietNameseString(address).toLowerCase().indexOf("dt");
         if (location != -1) {
             address = address.substring(0, location);

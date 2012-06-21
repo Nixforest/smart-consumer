@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.gae.java.smartconsumer.util.GeneralUtil;
 import com.gae.java.smartconsumer.util.GetDealFunction;
 import com.gae.java.smartconsumer.util.UtilHtmlToXML;
 
@@ -68,12 +69,14 @@ public class DealCollectorServlet extends HttpServlet {
                 System.out.println(GetDealFunction.getFromMuaChungVn());
             }
             if (req.getParameter("nhommua") == "") {
-                System.out.println("adfd");
+                //System.out.println("adfd");
                 System.out.println(GetDealFunction.getFromNhomMuaCom());
+                //GetDealFunction.getFromNhomMuaCom();
             }
             if (req.getParameter("url") == "") {
-                System.out.println("adfd");
-                System.out.println(new UtilHtmlToXML().readHtmlToBuffer(req.getParameter("link")).toString());
+                //System.out.println("adfd");
+                //System.out.println(new UtilHtmlToXML().readHtmlToBuffer(req.getParameter("link")).toString());
+                GetDealFunction.getAddressFromNhomMua(new UtilHtmlToXML().readHtmlToBuffer(req.getParameter("link")).toString(), (long) 0);
             }
         } catch (Exception ex) {
             String error = ex.getMessage();

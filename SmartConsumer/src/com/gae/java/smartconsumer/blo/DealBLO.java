@@ -17,7 +17,6 @@ import com.gae.java.smartconsumer.util.Status;
  * Business logic class for Deal object.
  * @version 2.0 3/6/2012
  * @author Nixforest
- * @update Khoa
  */
 public enum DealBLO {
     /** Instance of class. */
@@ -30,18 +29,18 @@ public enum DealBLO {
         return DealDAO.INSTANCE.listDeals();
     }
     /**
-     * List all of Deal are selling in data store
+     * List all of Deal are selling in data store.
      * @return List<Deal>
      */
-    public List<Deal> getListAllDealsSelling(){
+    public List<Deal> getListAllDealsSelling() {
         return DealDAO.INSTANCE.listDealsSelling();
     }
     /**
-     * limit get deal
-     * @param limit
-     * @return
+     * limit get deal.
+     * @param limit limit
+     * @return List deals
      */
-    public List<Deal> getDealsLimit(int limit){
+    public List<Deal> getDealsLimit(int limit) {
         return DealDAO.INSTANCE.listDealsLimit(limit);
     }
     /**
