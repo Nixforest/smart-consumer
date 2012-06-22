@@ -11,6 +11,7 @@ import java.util.List;
 import com.gae.java.smartconsumer.blo.DealBLO;
 import com.gae.java.smartconsumer.model.Deal;
 import com.google.appengine.repackaged.org.json.JSONException;
+import com.google.appengine.repackaged.org.json.JSONObject;
 
 /**
  * Business logic mobile class for Deal object.
@@ -23,9 +24,6 @@ public class DealMobileBLO {
      * @param id id of Deal
      * @return JSONObject
      */
-    /*public JSONObject getDealById(Long id) {
-        
-        return DealDAO.INSTANCE.getDealById(id);
     public static JSONObject getDealById(Long id) throws JSONException {
         Deal deal = DealBLO.INSTANCE.getDealById(id);
         JSONObject jsonObject = new JSONObject();
@@ -42,7 +40,7 @@ public class DealMobileBLO {
         jsonObject.put("endTime", deal.getEndTime());
         jsonObject.put("isVoucher", deal.getisVoucher());
         return jsonObject;
-    }*/
+    }
     
     /**
      * 

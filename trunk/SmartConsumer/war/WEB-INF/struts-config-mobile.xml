@@ -16,6 +16,9 @@
         </action>
         <action path="/getListDeal" type="com.gae.java.smartconsumer.mobile.action.GetListDeal" scope="session" validate="false">            
         </action>
+        <action path="/getAddressByDealId" type="com.gae.java.smartconsumer.mobile.action.GetAddressByDealId" scope="session" validate="false">
+        </action>
+        <action path="/getListAddress" type="com.gae.java.smartconsumer.mobile.action.GetListAddress" scope="session" validate="false"></action>
     </action-mappings>
 
 </struts-config>

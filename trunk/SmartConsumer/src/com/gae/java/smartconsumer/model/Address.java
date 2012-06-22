@@ -34,6 +34,12 @@ public class Address {
     private String description;
     /**
      * Constructor.
+     */
+    public Address(){
+        
+    }
+    /**
+     * Constructor.
      * @param fullAddress Full address
      * @param longitude Longitude
      * @param latitude Latitude
