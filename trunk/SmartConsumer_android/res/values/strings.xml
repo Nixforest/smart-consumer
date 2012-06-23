@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="hello">Hello World, SmartConsumer_androidActivity!</string>
+    <string name="app_name">SmartConsumer Android</string>
+    <string name="button_view">Danh sách Deal</string>
+    <string name="btnview_listdeal">Xem vị trí</string>
+    <string name="imagedescription_listdeal"></string>
+    <string name="map_view">Bản đồ</string>
+    <string name="btnlocation">get position</string>
+    <string name="tbxsearch">Tìm kiếm vị trí</string>
+    <string name="btnsearch">Search</string>
+    <string name="about">Giới thiệu</string>
+</resources>
