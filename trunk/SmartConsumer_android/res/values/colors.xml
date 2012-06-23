@@ -152,5 +152,5 @@
     <color name="light_slate_gray">#FF778899</color>
     <color name="slate_gray">#FF708090</color>
     <color name="dark_slate_gray">#FF2F4F4F</color>
-    <color name="black">#FF000000</color>
+    <color name="black">#000000</color>
 </resources>

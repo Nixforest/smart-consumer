@@ -44,181 +44,8 @@ import android.widget.Toast;
 
 public class MapView extends MapActivity// implements android.content.DialogInterface.OnClickListener {
 {
-    private com.google.android.maps.MapView mapview;
-    /*private LocationManager locationManager;
-    private EditText showLocation;
-    private Button btnGetLocation;
-    private LocationListener locListener = new myLocationListener();
-    private ProgressBar progress;
-    private boolean gps_enabled = false;
-    private boolean networl_enabled = false;
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-      super.onCreate(savedInstanceState);
-      setContentView(R.layout.map_view);
-      //mapview = (com.google.android.maps.MapView)findViewById(R.id.mapview);
-      //mapview.setBuiltInZoomControls(true);
-      showLocation = (EditText)findViewById(R.id.txtShowLoc);
-      showLocation.setEnabled(false);
-      
-      progress = (ProgressBar)findViewById(R.id.progressBar);
-      progress.setEnabled(false);
-      
-      btnGetLocation = (Button)findViewById(R.id.btnlocation);
-     // btnGetLocation.setOnClickListener(this);
-      progress.setVisibility(View.VISIBLE);
-      try{
-          gps_enabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-      }catch(Exception ex){
-          System.out.println(ex.toString());
-      }
-      try{
-          networl_enabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-      }catch(Exception ex){
-          System.out.println(ex.toString());
-      }
-      if(!gps_enabled && !networl_enabled){
-          AlertDialog.Builder builder = new Builder(this);
-          builder.setTitle("Attention!");
-          builder.setMessage("Sorry, location is not determined. Please enable location providers");
-          builder.setPositiveButton("OK", this);
-          builder.create().show();
-          progress.setVisibility(View.GONE);
-      }
-      if(gps_enabled){
-          locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locListener);
-      }
-      if(networl_enabled){
-          locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locListener);
-      }
-    }
-    @Override
-    protected boolean isRouteDisplayed() {
-        // TODO Auto-generated method stub
-        return false;
-    }
-    @Override
-    protected void onResume() {
-        // TODO Auto-generated method stub
-        super.onResume();
-        
-    }
-    @Override
-    protected void onPause() {
-        // TODO Auto-generated method stub
-        super.onPause();
-    }
-    private class myLocationListener implements LocationListener{
-        @Override
-        public void onLocationChanged(Location location) {
-            // TODO Auto-generated method stub
-            if(location != null){
-                locationManager.removeUpdates(locListener);
-                String speed = "Device Speed : " + location.getSpeed();
-                String longitude = "Longitude : " + location.getLongitude();
-                String latitude = "Latitude : " + location.getLatitude();
-                String accuracy = "Accuracy : " + location.getAccuracy();
-                String time = "Time : " + location.getTime();
-                
-                String cityName = "";
-                
-                Geocoder gcd = new Geocoder(getBaseContext(), Locale.getDefault());
-                
-                List<Address> addresses;
-                
-                try{
-                        addresses = gcd.getFromLocation(location.getLatitude() , location.getLongitude(), 1);
-                        if(addresses.size() > 0){
-                            System.out.println(addresses.get(0).getLocality());
-                            cityName = addresses.get(0).getLocality();
-                        }
-                    }catch(IOException ex){
-                        ex.printStackTrace();
-                }
-                showLocation.setText("city name : " + cityName + "\n" + speed + "\n" + longitude + "\n" + latitude + "\n" + latitude + "\n" + accuracy + "\n" + time);
-                progress.setVisibility(View.GONE);
-            }
-                
-            }
-        @Override
-        public void onProviderDisabled(String provider) {
-            // TODO Auto-generated method stub
-            
-        }
-        @Override
-        public void onProviderEnabled(String provider) {
-            // TODO Auto-generated method stub
-            
-        }
-        @Override
-        public void onStatusChanged(String provider, int status, Bundle extras) {
-            // TODO Auto-generated method stub
-            
-        }
-        
-   }
-    @Override  
-    public void onClick(DialogInterface dialog, int which) {  
-     // TODO Auto-generated method stub  
-     if(which == DialogInterface.BUTTON_NEUTRAL){  
-      showLocation.setText("location is not getting due to location provider");  
-        
-     }  
-     else if (which == DialogInterface.BUTTON_POSITIVE){  
-      startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));  
-        
-     }  
-    } */
-    /*@Override
-    protected void onCreate(Bundle arg0) {
-        // TODO Auto-generated method stub
-        super.onCreate(arg0);
-        setContentView(R.layout.map_view);
-        LocationManager mlocManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-        LocationListener mlocListener = new MyLocationListener();
-        mlocManager.requestLocationUpdates( LocationManager.GPS_PROVIDER, 0, 0, mlocListener);
-    }
-    @Override
-    protected boolean isRouteDisplayed() {
-        // TODO Auto-generated method stub
-        return false;
-    }
-    public class MyLocationListener implements LocationListener
-    {
-        @Override
-        public void onLocationChanged(Location loc)
-        {
-            loc.getLatitude();
-            loc.getLongitude();
- 
-            String Text = "My current location is: " +
-                          "Latitude = " + loc.getLatitude() +
-                          "Longitude = " + loc.getLongitude();
- 
-            Toast.makeText( getApplicationContext(), Text, Toast.LENGTH_SHORT).show();
-        }
- 
-        @Override
-        public void onProviderDisabled(String provider)
-        {
-            Toast.makeText( getApplicationContext(), "Gps Disabled", Toast.LENGTH_SHORT ).show();
-        }
- 
-        @Override
-        public void onProviderEnabled(String provider)
-        {
-            Toast.makeText( getApplicationContext(), "Gps Enabled", Toast.LENGTH_SHORT).show();
-        }
- 
-        @Override
-        public void onStatusChanged(String provider, int status, Bundle extras)
-        {
-        }
- 
-    }*/
     @Override
     protected void onCreate(Bundle arg0) {
-        
         super.onCreate(arg0);
         setContentView(R.layout.map_view);
         
@@ -272,8 +99,13 @@ public class MapView extends MapActivity// implements android.content.DialogInte
                     JSONObject json = new JSONObject();
                     json = resultJson.getJSONObject(i);
                     if(json != null){
+                        StringBuilder description = new StringBuilder();
+                        description.append(json.getString("title") + "\n");
+                        description.append("Giá bán : " + json.getDouble("price") + " VNĐ\n");
+                        description.append("Giá gốc : " + json.getDouble("basicPrice") + " VNĐ\n");
+                        description.append("Thời gian còn lại : " + json.getString("remainTime") + "\n");
                         myItemizedOverlay.addItem(new GeoPoint((int)(json.getDouble("latitude")*1E6),
-                            (int)(json.getDouble("longitude")*1E6)), json.getString("title"), json.getString("link"));
+                            (int)(json.getDouble("longitude")*1E6)), description.toString(), json.getString("link")+"*"+json.getString("linkImage"));
                     }
                 }
             }
@@ -312,8 +144,7 @@ public class MapView extends MapActivity// implements android.content.DialogInte
     };
     private void searchFromLocationName(String name){
         try {
-         List<Address> result
-         = myGeocoder.getFromLocationName(name, 10);
+         List<Address> result = myGeocoder.getFromLocationName(name, 10);
           
          if ((result == null)||(result.isEmpty())){
           Toast.makeText(MapView.this,
@@ -359,7 +190,7 @@ public class MapView extends MapActivity// implements android.content.DialogInte
         //GeoPoint myLocationGeoPoint = new GeoPoint((int)(10.827784*1000000), (int)(106.691848*1000000));
         if(myLocationGeoPoint != null) {
             mapview.getController().animateTo(myLocationGeoPoint);
-            mapview.getController().setZoom(17);
+            mapview.getController().setZoom(12);
         }
         else {
             Toast.makeText(this, "Cannot determine location", Toast.LENGTH_SHORT).show();
@@ -391,8 +222,8 @@ public class MapView extends MapActivity// implements android.content.DialogInte
          return rowAddress;
        
         }
-       
-       }
+    }
+    private com.google.android.maps.MapView mapview;
     private FixedMyLocationOverlay myLocationOverLay;
     private MyItemizedOverlay myItemizedOverlay;
     private JSONArray resultJson = new JSONArray();
