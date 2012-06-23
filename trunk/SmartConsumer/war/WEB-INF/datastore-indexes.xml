@@ -3,4 +3,10 @@
     <datastore-index kind="Deal" ancestor="false">
         <property name="__key__" direction="desc"/>
     </datastore-index>
+    <datastore-index kind="Address" ancestor="false">
+        <property name="__key__" direction="desc"/>
+    </datastore-index>
+    <datastore-index kind="AddressDetail" ancestor="false">
+        <property name="__key__" direction="desc"/>
+    </datastore-index>
 </datastore-indexes>

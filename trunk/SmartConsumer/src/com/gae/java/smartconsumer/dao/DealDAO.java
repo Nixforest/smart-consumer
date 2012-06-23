@@ -52,7 +52,7 @@ public enum DealDAO {
     public List<Deal> listDealsLimit(int limit) {
         EntityManager em = EMFService.get().createEntityManager();
         // Read the existing entries
-        Query q = em.createQuery("select m from Deal m order by m.endTime desc");
+        Query q = em.createQuery("select m from Deal m where status=" + Status.SELLING.ordinal() + " order by m.endTime desc");
         q.setMaxResults(limit);
         @SuppressWarnings("unchecked")
         List<Deal> deals = q.getResultList();
