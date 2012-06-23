@@ -13,6 +13,7 @@ import com.gae.java.smartconsumer.blo.AddressDetailBLO;
 import com.gae.java.smartconsumer.blo.DealBLO;
 import com.gae.java.smartconsumer.model.Address;
 import com.gae.java.smartconsumer.model.Deal;
+import com.gae.java.smartconsumer.util.GeneralUtil;
 import com.google.appengine.repackaged.org.json.JSONException;
 import com.google.appengine.repackaged.org.json.JSONObject;
 
@@ -38,9 +39,13 @@ public class AddressMobileBLO {
                 jsonObject.put("id", deal.getId());
                 jsonObject.put("title", deal.getTitle());
                 jsonObject.put("link", deal.getLink());
+                jsonObject.put("linkImage", deal.getImageLink());
+                jsonObject.put("price", deal.getPrice());
+                jsonObject.put("basicPrice", deal.getBasicPrice());
+                jsonObject.put("remainTime", GeneralUtil.getRemainTime(deal.getEndTime()));
                 jsonObject.put("fullAddress", address.getFullAddress());
-                jsonObject.put("longitude", address.getLongitude());
                 jsonObject.put("latitude", address.getLatitude());
+                jsonObject.put("longitude", address.getLongitude());
                 listJson.add(jsonObject);
             }
         } catch (JSONException ex) {
@@ -67,14 +72,20 @@ public class AddressMobileBLO {
                 for(int i=0;i<listDeal.size();i++){
                     for(int j=0;j<AddressDetailBLO.INSTANCE.getAddressDetailsByDealId(listDeal.get(i).getId()).size();j++){
                         address = AddressBLO.INSTANCE.getAddressById(AddressDetailBLO.INSTANCE.getAddressDetailsByDealId(listDeal.get(i).getId()).get(j).getAddressId());
-                        JSONObject json = new JSONObject();
-                        json.put("id", listDeal.get(i).getId());
-                        json.put("title", listDeal.get(i).getTitle());
-                        json.put("link", listDeal.get(i).getLink());
-                        json.put("fullAddress", address.getFullAddress());
-                        json.put("latitude", address.getLatitude());
-                        json.put("longitude", address.getLongitude());
-                        listJson.add(json);
+                        if(address != null){
+                            JSONObject json = new JSONObject();
+                            json.put("id", listDeal.get(i).getId());
+                            json.put("title", listDeal.get(i).getTitle());
+                            json.put("linkImage", listDeal.get(i).getImageLink());
+                            json.put("link", listDeal.get(i).getLink());
+                            json.put("price", listDeal.get(i).getPrice());
+                            json.put("basicPrice", listDeal.get(i).getBasicPrice());
+                            json.put("remainTime", GeneralUtil.getRemainTime(listDeal.get(i).getEndTime()));
+                            json.put("fullAddress", address.getFullAddress());
+                            json.put("latitude", address.getLatitude());
+                            json.put("longitude", address.getLongitude());
+                            listJson.add(json);
+                        }
                     }
                 }
             }catch (JSONException ex) {

@@ -41,8 +41,8 @@ public class GetDealById extends Action {
     @Override
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
             HttpServletResponse response) throws Exception {
-        response.setContentType("application/json");
-        //response.setContentType("text/html;charset=UTF-8");
+        //response.setContentType("application/json");
+        response.setContentType("text/html;charset=UTF-8");
         PrintWriter write;
         JSONObject object = new JSONObject();
         try{
