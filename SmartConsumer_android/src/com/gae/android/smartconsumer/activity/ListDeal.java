@@ -31,7 +31,7 @@ public class ListDeal extends Activity {
         listAdapter = new ListAdapter_ListDeal(this, R.layout.list_deal_items, toArray(resultJson));
         super.onCreate(savedInstanceState);
         setContentView(R.layout.list_deal);        
-        ListView listview = (ListView)findViewById(R.id.listview_listdeal);System.out.println("testsetsetest");
+        ListView listview = (ListView) findViewById(R.id.listview_listdeal);
         listview.setAdapter(listAdapter);
     }
     private TextView textview;
