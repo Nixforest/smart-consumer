@@ -85,6 +85,7 @@ public class MyItemizedOverlay extends ItemizedOverlay<OverlayItem> {
         
         builder = new AlertDialog.Builder(context);
         builder.setView(layout);
+        
         alertDialog = builder.create();
         alertDialog.show();
 

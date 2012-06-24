@@ -112,6 +112,7 @@ public class MapView extends MapActivity// implements android.content.DialogInte
                             }
                         }
                         description.append(json.getString("title") + "\n");
+                        description.append(json.getString("isVoucher") + "\n");
                         description.append("Giá bán : " + json.getDouble("price") + " VNĐ\n");
                         description.append("Giá gốc : " + json.getDouble("basicPrice") + " VNĐ\n");
                         description.append("Thời gian còn lại : " + json.getString("remainTime") + "\n");
@@ -130,8 +131,8 @@ public class MapView extends MapActivity// implements android.content.DialogInte
         
         GeoPoint myPoint1 = new GeoPoint((int)(10.827784*1000000), (int)(106.691848*1000000));
         myItemizedOverlay.addItem(myPoint1, "myPoint1", "description");
-        GeoPoint myPoint2 = new GeoPoint((int)(10.798856*1000000), (int)(106.666646*1000000));
-        myItemizedOverlay.addItem(myPoint2, "myPoint2", "description");
+        //GeoPoint myPoint2 = new GeoPoint((int)(10.798856*1000000), (int)(106.666646*1000000));
+        //myItemizedOverlay.addItem(myPoint2, "myPoint2", "description");
         myLocationOverLay = new FixedMyLocationOverlay(this, mapview);
         
         mapview.getOverlays().add(myLocationOverLay);
@@ -204,7 +205,7 @@ public class MapView extends MapActivity// implements android.content.DialogInte
         //GeoPoint myLocationGeoPoint = new GeoPoint((int)(10.827784*1000000), (int)(106.691848*1000000));
         if(myLocationGeoPoint != null) {
             mapview.getController().animateTo(myLocationGeoPoint);
-            mapview.getController().setZoom(17);
+            mapview.getController().setZoom(14);
         }
         else {
             Toast.makeText(this, "Cannot determine location", Toast.LENGTH_SHORT).show();
