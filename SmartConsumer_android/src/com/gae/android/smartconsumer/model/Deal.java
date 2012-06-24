@@ -9,7 +9,7 @@ import android.widget.TextView;
 import com.gae.android.smartconsumer.activity.R;
 
 public class Deal {
-    //private Long id;
+    private Long id;
     /** Title of deal. */
     private String title;
     /** Description of deal. */
@@ -44,9 +44,9 @@ public class Deal {
      * @param endTime End time
      * @param isVoucher Is voucher
      */
-    public Deal(String title, String description, String link, String imageLink, double price,
+    public Deal(Long id, String title, String description, String link, String imageLink, double price,
             double basicPrice, boolean isVoucher) {
-        //this.id = id;
+        this.id = id;
         this.title = title;
         this.description = description;
         this.link = link;
@@ -59,6 +59,22 @@ public class Deal {
         this.isVoucher = isVoucher;
     }
     
+    /**
+     * Get value of id.
+     * @return the id
+     */
+    public Long getId() {
+        return id;
+    }
+
+    /**
+     * Set the value for id.
+     * @param id the id to set
+     */
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     /**
      * Get value of title.
      * @return the title

@@ -51,13 +51,18 @@ public class MapView extends MapActivity// implements android.content.DialogInte
         
       //get position
         try {
-            resultJson = new Engine().execute("/getListAddress.app?limit=","10").get();
+            resultJson = new Engine().execute("/getListAddress.app?limit=","100").get();
         } catch (InterruptedException ex) {
             // TODO Auto-generated catch block
             ex.printStackTrace();
         } catch (ExecutionException ex) {
             // TODO Auto-generated catch block
             ex.printStackTrace();
+        }
+        
+        Bundle extras = getIntent().getExtras();
+        if(extras !=null) {
+            idValue = extras.getLong("id");
         }
         
         mapview = (com.google.android.maps.MapView)findViewById(R.id.mapview);
@@ -100,6 +105,12 @@ public class MapView extends MapActivity// implements android.content.DialogInte
                     json = resultJson.getJSONObject(i);
                     if(json != null){
                         StringBuilder description = new StringBuilder();
+                        if(idValue != null){
+                            if(idValue == json.getLong("id")){
+                                tempLatitude = json.getDouble("latitude")*1E6;
+                                tempLongitude = json.getDouble("longitude")*1E6;
+                            }
+                        }
                         description.append(json.getString("title") + "\n");
                         description.append("Giá bán : " + json.getDouble("price") + " VNĐ\n");
                         description.append("Giá gốc : " + json.getDouble("basicPrice") + " VNĐ\n");
@@ -125,8 +136,11 @@ public class MapView extends MapActivity// implements android.content.DialogInte
         
         mapview.getOverlays().add(myLocationOverLay);
         mapview.postInvalidate();
-        
-        zoomToMyLocation(myPoint1);
+        if(idValue != null){
+            zoomToMyLocation(new GeoPoint((int)tempLatitude, (int)tempLongitude));
+        }else{
+            zoomToMyLocation(myPoint1);
+        }
     }
     OnItemClickListener listviewResultOnItemClickListener = new OnItemClickListener() {
         public void onItemClick(android.widget.AdapterView<?> parent, View view, int position, long id) {
@@ -190,7 +204,7 @@ public class MapView extends MapActivity// implements android.content.DialogInte
         //GeoPoint myLocationGeoPoint = new GeoPoint((int)(10.827784*1000000), (int)(106.691848*1000000));
         if(myLocationGeoPoint != null) {
             mapview.getController().animateTo(myLocationGeoPoint);
-            mapview.getController().setZoom(12);
+            mapview.getController().setZoom(17);
         }
         else {
             Toast.makeText(this, "Cannot determine location", Toast.LENGTH_SHORT).show();
@@ -231,6 +245,9 @@ public class MapView extends MapActivity// implements android.content.DialogInte
     private Button searchButton;
     private ListView listviewResult;
     private Geocoder myGeocoder;
+    private double tempLatitude = 0.0;
+    private double tempLongitude = 0.0;
+    private Long idValue = null;
 }
 
 

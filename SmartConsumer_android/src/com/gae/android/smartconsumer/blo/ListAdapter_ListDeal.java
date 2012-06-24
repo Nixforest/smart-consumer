@@ -1,24 +1,26 @@
 package com.gae.android.smartconsumer.blo;
 
-import java.net.URI;
 import java.util.ArrayList;
 
 import com.gae.android.smartconsumer.model.Deal;
 import com.gae.android.smartconsumer.util.LoadImage;
 
+import com.gae.android.smartconsumer.activity.MapView;
 import com.gae.android.smartconsumer.activity.R;
 import com.gae.android.smartconsumer.activity.ViewDealBrowser;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class ListAdapter_ListDeal extends ArrayAdapter<Deal> {
     private ArrayList<Deal> arrayList;
@@ -47,9 +49,17 @@ public class ListAdapter_ListDeal extends ArrayAdapter<Deal> {
             TextView tbxPrice = ((ListItem_ListDeal)dealView).price;
             TextView tbxBasicPrice = ((ListItem_ListDeal)dealView).basicPrice;
             Button btnView = ((ListItem_ListDeal)dealView).btnview;
-            
-            dealView.setOnClickListener(new OnClickListener() {
+            dealView.setOnLongClickListener(new OnLongClickListener() {
                 
+                @Override
+                public boolean onLongClick(View v) {
+                    Intent intent = new Intent(context, MapView.class);
+                    intent.putExtra("id", deal.getId());
+                    context.startActivity(intent);
+                    return false;
+                }
+            });
+            dealView.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(context, ViewDealBrowser.class);

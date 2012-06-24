@@ -20,7 +20,7 @@ public class ListDeal extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
-            resultJson = new Engine().execute("/getListDeal.app?limit=","10").get();
+            resultJson = new Engine().execute("/getListDeal.app?limit=","30").get();
         } catch (InterruptedException ex) {
             // TODO Auto-generated catch block
             ex.printStackTrace();
@@ -46,7 +46,7 @@ public class ListDeal extends Activity {
             if(json.length()>0){
                 for(int i=0;i<json.length();i++){
                     JSONObject obj = json.getJSONObject(i);
-                    Deal deal = new Deal( obj.getString("title"), obj.getString("description"),
+                    Deal deal = new Deal(obj.getLong("id"), obj.getString("title"), obj.getString("description"),
                             obj.getString("link"), obj.getString("imageLink"), obj.getDouble("price"),
                             obj.getDouble("basicPrice"), obj.getBoolean("isVoucher"));
                     array.add(deal);                                   
