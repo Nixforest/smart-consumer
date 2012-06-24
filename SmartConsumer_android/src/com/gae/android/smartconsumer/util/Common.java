@@ -4,5 +4,5 @@ public final class Common {
     //public final static String SERVICE_URL = "http://localhost:8888";
     //public final static String SERVICE_URL = "http://smartconsumer.appspot.com";
     //public final static String SERVICE_URL = "http://6.demosmartconsumer.appspot.com";
-    public final static String SERVICE_URL = "http://8.demosmartconsumermobile.appspot.com";
+    public final static String SERVICE_URL = "http://9.demosmartconsumermobile.appspot.com";
 }

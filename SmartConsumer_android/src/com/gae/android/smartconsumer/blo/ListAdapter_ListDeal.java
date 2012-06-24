@@ -49,7 +49,16 @@ public class ListAdapter_ListDeal extends ArrayAdapter<Deal> {
             TextView tbxPrice = ((ListItem_ListDeal)dealView).price;
             TextView tbxBasicPrice = ((ListItem_ListDeal)dealView).basicPrice;
             Button btnView = ((ListItem_ListDeal)dealView).btnview;
-            dealView.setOnLongClickListener(new OnLongClickListener() {
+            dealView.findViewById(R.id.btnview_listdeal).setOnClickListener(new OnClickListener() {
+                
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(context, MapView.class);
+                    intent.putExtra("id", deal.getId());
+                    context.startActivity(intent);
+                }
+            });
+            /*dealView.setOnLongClickListener(new OnLongClickListener() {
                 
                 @Override
                 public boolean onLongClick(View v) {
@@ -58,7 +67,7 @@ public class ListAdapter_ListDeal extends ArrayAdapter<Deal> {
                     context.startActivity(intent);
                     return false;
                 }
-            });
+            });*/
             dealView.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
