@@ -73,7 +73,8 @@ public class MyItemizedOverlay extends ItemizedOverlay<OverlayItem> {
         //textName.setOnClickListener(onclickviewdeal);
 
         ImageView image = (ImageView) v.findViewById(R.id.image);
-        String linkimg = overlayItemList.get(index_id).getSnippet().substring(overlayItemList.get(index_id).getSnippet().indexOf("*")+1);
+        String linkimg = overlayItemList.get(index_id).getSnippet().substring(
+                overlayItemList.get(index_id).getSnippet().indexOf("*")+1);
         
         if (isValidUrl(linkimg)) {
             new LoadImage(image).execute(linkimg);
