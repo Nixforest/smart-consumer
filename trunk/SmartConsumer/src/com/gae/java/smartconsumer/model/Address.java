@@ -6,6 +6,8 @@
 package com.gae.java.smartconsumer.model;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 
@@ -19,6 +21,7 @@ import javax.persistence.Id;
 public class Address {
     /** Id - Primary key. */
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "AddressID")
     private Long id;
 
     /** Full address. */
@@ -35,8 +38,7 @@ public class Address {
     /**
      * Constructor.
      */
-    public Address(){
-        
+    public Address() {
     }
     /**
      * Constructor.
@@ -51,43 +53,6 @@ public class Address {
         this.setLatitude(latitude);
         this.setDescription(description);
     }
-    
-    /**
-     * Constructor of Address class.
-     * @param JSONObject
-    */
-    /*public Address(JSONObject jsonObject) throws JSONException{
-        if(jsonObject.has("id")){
-            id = jsonObject.getLong("id");
-        }
-        if(jsonObject.has("fullAddress")){
-            fullAddress = jsonObject.getString("fullAddress");
-        }
-        if(jsonObject.has("longitude")){
-            longitude = jsonObject.getDouble("longitude");
-        }
-        if(jsonObject.has("latitude")){
-            latitude = jsonObject.getDouble("latitude");
-        }
-        if(jsonObject.has("description")){
-            description = jsonObject.getString("description");
-        }
-    }*/
-    
-    /**
-     * get Address
-     * @return JSONObject 
-     */
-    /*public JSONObject toJSONObject() throws JSONException{
-        JSONObject result = new JSONObject();
-        result.put("id", id);
-        result.put("fullAddress", fullAddress);
-        result.put("longitude", longitude);
-        result.put("latitude", latitude);
-        result.put("description", description);
-        
-        return result;
-    }*/
     /**
      * Get value of id.
      * @return the id

@@ -6,17 +6,22 @@
 package com.gae.java.smartconsumer.blo;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.gae.java.smartconsumer.dao.DealDAO;
 import com.gae.java.smartconsumer.model.Deal;
+import com.gae.java.smartconsumer.model.DealSortByEndTime;
+import com.gae.java.smartconsumer.model.DealSortById;
+import com.gae.java.smartconsumer.model.DealSortByUpdateDate;
 import com.gae.java.smartconsumer.util.GeneralUtil;
 import com.gae.java.smartconsumer.util.Status;
 
 /**
  * Business logic class for Deal object.
- * @version 2.0 3/6/2012
- * @author Nixforest
+ * @version 2.0 03/06/2012 - Update
+ *              13/09/2012 - Update
+ * @author NguyenPT
  */
 public enum DealBLO {
     /** Instance of class. */
@@ -26,95 +31,104 @@ public enum DealBLO {
      * @return List of all Deal
      */
     public List<Deal> getListAllDeals() {
-        return DealDAO.INSTANCE.listDeals();
+        return DealDAO.INSTANCE.getListAllDeals();
     }
     /**
      * List all of Deal are selling in data store.
      * @return List<Deal>
      */
     public List<Deal> getListAllDealsSelling() {
-        return DealDAO.INSTANCE.listDealsSelling();
+        return DealDAO.INSTANCE.getListActiveDeals();
     }
     /**
-     * limit get deal.
+     * Limit get deal.
      * @param limit limit
-     * @return List deals
+     * @return List<Deal>
      */
-    public List<Deal> getDealsLimit(int limit) {
-        return DealDAO.INSTANCE.listDealsLimit(limit);
+    public List<Deal> listDealsLimit(int limit) {
+        List<Deal> listAllDeals = DealDAO.INSTANCE.getListAllDeals();
+        Collections.sort(listAllDeals, new DealSortByEndTime());
+        return listAllDeals.subList(0, limit - 1);
     }
     /**
-     * Method get all deals has been created by user (not auto collect).
-     * @return List of Deals
+     * Method get all deals sort by updateDate property.
+     * @return List of deals sort by updateDate property.
      */
-    public List<Deal> listDealByCreate() {
-        List<Deal> result = new ArrayList<Deal>();
-        for (Deal item : DealDAO.INSTANCE.listDeals()) {
-            if (item.getLink().substring(0, 9).equals("/viewdeal")) {
-                result.add(item);
-            }
-        }
-        return result;
+    public List<Deal> listDealsSortByUpdateDate() {
+        List<Deal> listAllDeals = DealDAO.INSTANCE.getListAllDeals();
+        Collections.sort(listAllDeals, new DealSortByUpdateDate());
+        return listAllDeals;
     }
     /**
-     * Method get all deals (selling) has been created by user (not auto collect).
-     * @return List of Deals
+     * Method get all deals sort by EndTime property.
+     * @return List of deals sort by EndTime property.
      */
-    public List<Deal> listDealSellingByCreate() {
-        List<Deal> result = new ArrayList<Deal>();
-        for (Deal item : listDealByCreate()) {
-            if (item.getStatus() == Status.SELLING.ordinal()) {
-                result.add(item);
+    public List<Deal> listDealsSortByEndTime() {
+        List<Deal> listAllDeals = DealDAO.INSTANCE.getListAllDeals();
+        Collections.sort(listAllDeals, new DealSortByEndTime());
+        return listAllDeals;
+    }
+    /**
+     * Method get all deals sort by Id property.
+     * @return List of deals sort by Id property.
+     */
+    public List<Deal> listDealsSortById() {
+        List<Deal> listAllDeals = DealDAO.INSTANCE.getListAllDeals();
+        Collections.sort(listAllDeals, new DealSortById());
+        return listAllDeals;
+    }
+    /**
+     * Get Deal by Id.
+     * @param id Id of Deal
+     * @return Deal object has Id match
+     */
+    public Deal getDealById(Long id) {
+        List<Deal> listAllDeals = DealDAO.INSTANCE.getListAllDeals();
+        for (Deal deal : listAllDeals) {
+            if (deal.getId().equals(id)) {
+                return deal;
             }
         }
-        return result;
+        return null;
     }
-
+    /**
+     * Get max Id in Deal data.
+     * @return Max Id if it is exist, 0 otherwise
+     */
+    public Long getMaxId() {
+        List<Deal> listDealsSortById = this.listDealsSortById();
+        if (listDealsSortById.size() == 0) {
+            return (long) 0;
+        } else {
+            return listDealsSortById.get(0).getId();
+        }
+    }
     /**
      * Method get all deals has Status = SELLING.
      * @return List of Deals sort by update date
      */
     public List<Deal> listDealsSellingSortByUpdateDate() {
-        List<Deal> result = new ArrayList<Deal>();
-        for (Deal item : DealDAO.INSTANCE.listDealsSortByUpdateDate()) {
-            if (item.getStatus() == Status.SELLING.ordinal()) {
-                result.add(item);
-            }
-        }
+        List<Deal> result = DealDAO.INSTANCE.getListActiveDeals();
+        Collections.sort(result, new DealSortByUpdateDate());
         return result;
     }
-
     /**
      * Method get all deals has Status = SELLING.
      * @return List of Deals sort by EndTime
      */
     public List<Deal> listDealsSellingSortByEndTime() {
-        List<Deal> result = new ArrayList<Deal>();
-        for (Deal item : DealDAO.INSTANCE.listDealsSortByEndTime()) {
-            if (item.getStatus() == Status.SELLING.ordinal()) {
-                result.add(item);
-            }
-        }
+        List<Deal> result = DealDAO.INSTANCE.getListActiveDeals();
+        Collections.sort(result, new DealSortByEndTime());
         return result;
     }
-
-    /**
-     * Get a deal by Id.
-     * @param id id of Deal
-     * @return Deal object
-     */
-    public Deal getDealById(Long id) {
-        return DealDAO.INSTANCE.getDealById(id);
-    }
-
     /**
      * Get a deal by title.
      * @param title title of deal (formatted)
      * @return Deal object
      */
     public Deal getDealByTitle(String title) {
-        for (Deal item : DealDAO.INSTANCE.listDeals()) {
-            // Remove sign for vietnamese string
+        for (Deal item : DealDAO.INSTANCE.getListActiveDeals()) {
+            // Remove sign for Vietnamese string
             String innerTitle = GeneralUtil.removeSign4VietNameseString(item.getTitle());
             // Replace white space in string by "-"
             innerTitle = GeneralUtil.replaceNotation(innerTitle, " ", "-");
@@ -124,7 +138,6 @@ public enum DealBLO {
         }
         return null;
     }
-
     /**
      * Insert a deal.
      * @param deal object to insert into database
@@ -159,14 +172,13 @@ public enum DealBLO {
         if ((deal.getStatus() < Status.WAITTOCHECK.ordinal()) || (deal.getStatus() > Status.OUTOFTIME.ordinal())) {
             throw new Exception("Status is invalid");
         }
-        deal.setId(DealDAO.INSTANCE.getMaxId() + 1);
+        deal.setId(getMaxId() + 1);
         if (DealDAO.INSTANCE.isExist(deal)) {
             return (long) 0;
         }
         DealDAO.INSTANCE.insert(deal);
         return deal.getId();
     }
-
     /**
      * Delete a deal.
      * @param id object's id
@@ -178,7 +190,6 @@ public enum DealBLO {
         }
         DealDAO.INSTANCE.changeStatus(id, Status.DELETED.ordinal());
     }
-
     /**
      * Restore a deal.
      * @param id object's id
@@ -203,7 +214,6 @@ public enum DealBLO {
         }
         DealDAO.INSTANCE.changeStatus(id, changeToStatus);
     }
-
     /**
      * Method check if Id exist.
      * @param id id need to check
@@ -211,14 +221,13 @@ public enum DealBLO {
      */
     public boolean isIdExist(long id) {
         boolean result = false;
-        for (Deal item : DealDAO.INSTANCE.listDeals()) {
+        for (Deal item : DealDAO.INSTANCE.getListAllDeals()) {
             if (item.getId().equals(id)) {
                 return true;
             }
         }
         return result;
     }
-
     /**
      * Check if a deal exist.
      * @param deal object need to check

@@ -13,8 +13,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import com.gae.java.smartconsumer.util.Status;
-/*import com.google.appengine.repackaged.org.json.JSONException;
-import com.google.appengine.repackaged.org.json.JSONObject;*/
 /**
  * Class describe "Deal" object, contain data about Deal.
  * @version 2.0 2/6/2012
@@ -24,7 +22,7 @@ import com.google.appengine.repackaged.org.json.JSONObject;*/
 public class Deal {
     /** Id - Primary key. */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY, generator="DealID")
+    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "DealID")
     private Long id;
     /** Title of deal. */
     private String title;
@@ -88,71 +86,6 @@ public class Deal {
         this.setUpdateDate(java.util.Calendar.getInstance().getTime());
         this.status = Status.SELLING.ordinal();
     }
-    
-    /**
-     * Constructor of Deal class.
-     * @param jsonObject JSONObject
-     */
-    /*public Deal(JSONObject jsonObject) throws JSONException{
-        if(jsonObject.has("id")){
-            id = jsonObject.getLong("id");
-        }
-        if(jsonObject.has("title")){
-            title = jsonObject.getString("title");
-        }
-        if(jsonObject.has("description")){
-            description = jsonObject.getString("description");
-        }
-        if(jsonObject.has("link")){
-            link = jsonObject.getString("link");
-        }
-        if(jsonObject.has("imageLink")){
-            imageLink = jsonObject.getString("imageLink");
-        }
-        if(jsonObject.has("price")){
-            price = jsonObject.getDouble("price");
-        }
-        if(jsonObject.has("basicPrice")){
-            basicPrice = jsonObject.getDouble("basicPrice");
-        }
-        if(jsonObject.has("unitPrice")){
-            unitPrice = jsonObject.getString("unitPrice");
-        }
-        if(jsonObject.has("save")){
-            save = (Float)jsonObject.get("save");
-        }
-        if(jsonObject.has("numberBuyer")){
-            numberBuyer = jsonObject.getInt("numberBuyer");
-        }
-        if(jsonObject.has("endTime")){
-            endTime = (Date)jsonObject.get("endTime");
-        }
-        if(jsonObject.has("isVoucher")){
-            isVoucher = jsonObject.getBoolean("isVoucher");
-        }
-    }*/
-    /**
-     * get Deal
-     * @return JSONObject
-     */
-    /*public JSONObject toJSONObject() throws JSONException{
-        JSONObject result = new JSONObject();
-        result.put("id", id);
-        result.put("title", title);
-        result.put("description", description);
-        result.put("link", link);
-        result.put("imageLink", imageLink);
-        result.put("price", price);
-        result.put("basicPrice", basicPrice);
-        result.put("unitPrice", unitPrice);
-        result.put("save", save);
-        result.put("numberBuyer", numberBuyer);
-        result.put("endTime", endTime);
-        result.put("isVoucher", isVoucher);
-        
-        return result;
-    }*/
-    
     /**
      * Constructor of Deal class.
      * @param title Title

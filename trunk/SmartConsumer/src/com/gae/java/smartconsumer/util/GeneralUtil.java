@@ -371,7 +371,7 @@ public final class GeneralUtil {
         // Convert to XML response return
         String html = new UtilHtmlToXML().htmlToXML(geocoderUri);
         UtilReadXML reader = new UtilReadXML();
-        Document document = reader.ReadContentXML(html);
+        Document document = reader.readContentXML(html);
         // Read status of response
         String status = document.getElementsByTagName("status").item(0).getTextContent();
         if (!status.equals("OK")) {
@@ -424,7 +424,7 @@ public final class GeneralUtil {
             String html = util.htmlToXML(url);
 
             UtilReadXML reader = new UtilReadXML();
-            Document document = reader.ReadContentXML(html);
+            Document document = reader.readContentXML(html);
             return document.getElementsByTagName("div");
         } catch (Exception ex) {
             throw ex;

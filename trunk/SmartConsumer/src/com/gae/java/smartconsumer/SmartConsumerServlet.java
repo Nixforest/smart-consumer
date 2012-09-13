@@ -14,8 +14,6 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import com.gae.java.smartconsumer.blo.DealBLO;
-import com.gae.java.smartconsumer.util.GeneralUtil;
-import com.gae.java.smartconsumer.util.GetDealFunction;
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
@@ -23,7 +21,7 @@ import com.google.appengine.api.users.UserServiceFactory;
 /**
  * Controller smartconsumer.
  * @version 1.0 28/5/2012
- * @author Nixforest
+ * @author NguyenPT
  */
 public class SmartConsumerServlet extends Action {
     @Override
@@ -46,7 +44,6 @@ public class SmartConsumerServlet extends Action {
         }
         try {
             request.setAttribute("listDeals", DealBLO.INSTANCE.listDealsSellingSortByUpdateDate());
-            request.setAttribute("listDealsCreated", DealBLO.INSTANCE.listDealSellingByCreate());
         } catch (Exception ex) {
             request.setAttribute("error", ex.getMessage());
         }
