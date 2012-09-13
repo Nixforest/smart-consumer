@@ -6,6 +6,8 @@
 package com.gae.java.smartconsumer.model;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 /**
@@ -17,6 +19,7 @@ import javax.persistence.Id;
 public class AddressDetail {
     /** Id - Primary key. */
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "AddressDetailID")
     private Long id;
     /** Deal's Id. */
     private Long dealId;

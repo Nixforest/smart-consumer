@@ -7,8 +7,9 @@ package com.gae.java.smartconsumer.util;
 
 import java.io.IOException;
 import java.net.SocketTimeoutException;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.Calendar;
-import java.util.concurrent.TimeoutException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -695,9 +696,12 @@ public class GetDealFunction {
                     save = Float.parseFloat(saveString);
                     content += "\nSave: " + saveString;
                     basicPrice = price / (1 - save / 100);
+                    NumberFormat df = new DecimalFormat("0");
+                    String basicPriceString = df.format(basicPrice);
+                    basicPrice = Double.parseDouble(basicPriceString);
 
                     content += "\n=================================" + String.valueOf(count);
-                    
+
                     Deal deal = new Deal(title, description, link, imageLink, price,
                             basicPrice, unitPrice, save, numberBuyer, endTime, isVoucher);
                     Long dealId = DealBLO.INSTANCE.insert(deal);

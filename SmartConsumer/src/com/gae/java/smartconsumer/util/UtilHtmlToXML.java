@@ -24,6 +24,7 @@ import java.util.Stack;
 /**
  * Class handle convert html to xml.
  * @version 1.0 28/5/2012
+ *          2.0 22/07/2012 - Mod in line 995
  * @author Nixforest
  */
 public class UtilHtmlToXML {
@@ -79,7 +80,7 @@ public class UtilHtmlToXML {
      * @param s String to convert
      * @return String XML
      */
-    public String Convert2XML(String s) {
+    public String convert2XML(String s) {
 
         namedentities.put("AElig", 198);
 
@@ -990,12 +991,11 @@ public class UtilHtmlToXML {
 
                         if (opentags.search(name) != -1) {
 
-                            String prevtag;
+                            String prevtag = opentags.pop();
 
-                            while (!(prevtag = opentags.pop()).equals(name)) {
-
+                            while (!(prevtag).equals(name)) {
                                 r += "</" + prevtag + ">";
-
+                                prevtag = opentags.pop();
                             }
 
                             r += "</" + name + ">";
@@ -1392,7 +1392,8 @@ public class UtilHtmlToXML {
 
                         name = name.toLowerCase();
 
-                        if (name.equals("amp") || name.equals("lt") || name.equals("gt") || name.equals("quot") || name.equals("apos")) {
+                        if (name.equals("amp") || name.equals("lt") || name.equals("gt") || name.equals("quot")
+                                || name.equals("apos")) {
 
                             ent = "&" + name + ";";
 
@@ -1641,7 +1642,6 @@ public class UtilHtmlToXML {
         return "<?xml version=\"1.0\" encoding=\"" + encoding + "\"?>\n" + r2;
 
     }
-    
     /**
     *
     * Ðọc 1 URL sau ðó chuyển thành XML rồi lưu xuống file.
@@ -1681,7 +1681,7 @@ public class UtilHtmlToXML {
 
        PrintWriter pw = new PrintWriter(fw, true);
 
-       pw.print(Convert2XML(s));
+       pw.print(convert2XML(s));
 
        pw.close();
 
@@ -1724,7 +1724,7 @@ public class UtilHtmlToXML {
 
        PrintWriter pw = new PrintWriter(fw, true);
 
-       pw.print(Convert2XML(s));
+       pw.print(convert2XML(s));
 
        pw.close();
 
@@ -1744,14 +1744,14 @@ public class UtilHtmlToXML {
     */
    public String stringPattern2XML(String htmlString, String xmlFileName, boolean toFile) throws Exception {
        if (!toFile) {
-           return Convert2XML(htmlString);
+           return convert2XML(htmlString);
        }
        if (!xmlFileName.endsWith(".xml")) {
            xmlFileName += ".xml";
        }
        FileWriter fw = new FileWriter(xmlFileName);
        PrintWriter pw = new PrintWriter(fw, true);
-       pw.print(Convert2XML(htmlString));
+       pw.print(convert2XML(htmlString));
        pw.close();
        return "";
    }
@@ -1763,8 +1763,14 @@ public class UtilHtmlToXML {
     */
    public String htmlToXML(String address) throws Exception {
        StringBuffer stringHtml = readHtmlToBuffer(address);
-       return Convert2XML(stringHtml.toString());
+       return convert2XML(stringHtml.toString());
    }
+   /**
+    * Read Html to buffer.
+    * @param address address of html
+    * @return String Buffer
+    * @throws Exception Exception maybe happen when connect to Internet
+    */
    public StringBuffer readHtmlToBuffer(String address) throws Exception {
        URL url = new URL(address);
        URLConnection connection = url.openConnection();

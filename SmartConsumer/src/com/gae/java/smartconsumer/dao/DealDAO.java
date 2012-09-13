@@ -15,141 +15,98 @@ import com.gae.java.smartconsumer.util.Status;
 
 /**
  * Data access class for Deal object.
- * @version 2.0 3/6/2012
- * @author Nixforest
+ * @version 2.0 03/06/2012 - Update - NguyenPT
+ *              13/09/2012 - Update - NguyenPT
+ * @author NguyenPT
  */
 public enum DealDAO {
     /** Instance of class. */
     INSTANCE;
-    /**
-     * Get all deal from data store.
-     * @return List of Deals
-     */
-    public List<Deal> listDeals() {
-        EntityManager em = EMFService.get().createEntityManager();
-        // Read the existing entries
-        Query q = em.createQuery("select m from Deal m");
-        @SuppressWarnings("unchecked")
-        List<Deal> deals = q.getResultList();
-        return deals;
-    }
+    /** List all deals from data store has Status is SELLING. */
+    private List<Deal> listActiveDeals = null;
+    /** List all deals from data store has Status is not SELLING. */
+    private List<Deal> listInActiveDeals = null;
+    /** List all deals has just insert in this session. */
+    private List<Deal> listInsertDeals = null;
+    /** List all deals has just updated in this session. */
+    private List<Deal> listUpdateDeals = null;
+    /** List all deals in this session. */
+    private List<Deal> listAllDeals = null;
     /**
      * Get all deal selling from data store.
+     * If listActiveDeals variable is null,
+     * create a connection to data store.
      * @return List of Deals
      */
-    public List<Deal> listDealsSelling() {
-        EntityManager em = EMFService.get().createEntityManager();
-        Query q = em.createQuery("select from " + Deal.class.getName() + " where status=" + Status.SELLING.ordinal());
-        @SuppressWarnings("unchecked")
-        List<Deal> deals = q.getResultList();
-        return deals;
+    @SuppressWarnings("unchecked")
+    public List<Deal> getListActiveDeals() {
+        if (this.listActiveDeals == null) {
+            EntityManager em = EMFService.get().createEntityManager();
+            Query q = em.createQuery("select from " + Deal.class.getName() + " where status="
+                    + Status.SELLING.ordinal());
+            this.listActiveDeals = q.getResultList();
+        }
+        return this.listActiveDeals;
     }
     /**
-     * Limit get deal.
-     * @param limit limit
-     * @return List<Deal>
+     * Get all deal is not selling from data store.
+     * If listInActiveDeals variable is null,
+     * create a connection to data store.
+     * @return List of Deals
      */
-    public List<Deal> listDealsLimit(int limit) {
-        EntityManager em = EMFService.get().createEntityManager();
-        // Read the existing entries
-        Query q = em.createQuery("select m from Deal m where status=" + Status.SELLING.ordinal() + " order by m.endTime desc");
-        q.setMaxResults(limit);
-        @SuppressWarnings("unchecked")
-        List<Deal> deals = q.getResultList();
-        return deals;
+    @SuppressWarnings("unchecked")
+    public List<Deal> getListInActiveDeals() {
+        if (this.listInActiveDeals == null) {
+            EntityManager em = EMFService.get().createEntityManager();
+            Query q = em.createQuery("select from " + Deal.class.getName() + "where status!="
+                    + Status.SELLING.ordinal());
+            this.listInActiveDeals = q.getResultList();
+        }
+        return this.listInActiveDeals;
     }
     /**
-     * Method get all deals sort by updateDate property.
-     * @return List of deals sort by updateDate property.
+     * Get all deals from data store.
+     * @return List of Deals
      */
-    public List<Deal> listDealsSortByUpdateDate() {
-        EntityManager em = EMFService.get().createEntityManager();
-        // Read the existing entries
-        Query q = em.createQuery("select m from Deal m order by m.updateDate desc");
-        @SuppressWarnings("unchecked")
-        List<Deal> deals = q.getResultList();
-        return deals;
+    public List<Deal> getListAllDeals() {
+        if (this.listAllDeals == null) {
+            for (Deal deal : this.listActiveDeals) {
+                this.listAllDeals.add(deal);
+            }
+            for (Deal deal : this.listInActiveDeals) {
+                this.listAllDeals.add(deal);
+            }
+        }
+        return this.listAllDeals;
     }
-
     /**
-     * Method get all deals sort by EndTime property.
-     * @return List of deals sort by EndTime property.
-     */
-    public List<Deal> listDealsSortByEndTime() {
-        EntityManager em = EMFService.get().createEntityManager();
-        // Read the existing entries
-        Query q = em.createQuery("select m from Deal m order by m.endTime desc");
-        @SuppressWarnings("unchecked")
-        List<Deal> deals = q.getResultList();
-        return deals;
-    }
-
-    /**
-     * Method get all deals sort by Id property.
-     * @return List of deals sort by Id property.
-     */
-    public List<Deal> listDealsSortById() {
-        EntityManager em = EMFService.get().createEntityManager();
-        Query q = em.createQuery("select m from Deal m order by m.id desc");
-        @SuppressWarnings("unchecked")
-        List<Deal> deals = q.getResultList();
-        return deals;
-    }
-
-    /**
-     * Get Deal by Id.
-     * @param id Id of Deal
-     * @return Deal object has Id match
-     */
-    public Deal getDealById(Long id) {
-        EntityManager em = EMFService.get().createEntityManager();
-        Query q = em.createQuery("select from " + Deal.class.getName() + " where id=" + id);
-        Deal deal = (Deal) q.getSingleResult();
-        return deal;
-    }
-
-    /**
-     * Insert a deal to data store.
+     * Insert a deal to template variable, not insert to data store yet.
      * @param deal entity to insert
      */
     public void insert(Deal deal) {
+        // Insert to List insert deals
+        this.listInsertDeals.add(deal);
+        // Insert to List active or inactive deals (depend on Status property)
+        if (deal.getStatus() == Status.SELLING.ordinal()) {
+            this.listActiveDeals.add(deal);
+        } else {
+            this.listInActiveDeals.add(deal);
+        }
+        // Insert to List all deals
+        this.listAllDeals.add(deal);
+    }
+    /**
+     * Insert list insert deals into data store.
+     */
+    public void insertIntoDatastore() {
         synchronized (this) {
             EntityManager em = EMFService.get().createEntityManager();
-            em.persist(deal);
-            em.close();
-        }
-    }
-
-    /**
-     * Remove all record in deal table.
-     */
-    public void removeAll() {
-        EntityManager em = EMFService.get().createEntityManager();
-        // Remove all record in table Deal
-        try {
-            for (Deal deal : listDeals()) {
-                Deal dealx = em.find(Deal.class, deal.getId());
-                em.remove(dealx);
+            for (Deal deal : this.listInsertDeals) {
+                em.persist(deal);
             }
-        } finally {
             em.close();
         }
     }
-
-    /**
-     * Remove a record by Id.
-     * @param id id of record
-     */
-    public void delete(long id) {
-        EntityManager em = EMFService.get().createEntityManager();
-        try {
-            Deal deal = em.find(Deal.class, id);
-            em.remove(deal);
-        } finally {
-            em.close();
-        }
-    }
-
     /**
      * Method change status of deal.
      * @param id id of deal
@@ -164,57 +121,117 @@ public enum DealDAO {
             em.close();
         }
     }
-
-    /**
-     * Update deal.
-     * @param deal deal wish to update
-     */
-    public void update(Deal deal) {
-        EntityManager em = EMFService.get().createEntityManager();
-        try {
-            Deal innerDeal = em.find(Deal.class, deal.getId());
-            innerDeal.setTitle(deal.getTitle());
-            innerDeal.setDescription(deal.getDescription());
-            innerDeal.setLink(deal.getLink());
-            innerDeal.setImageLink(deal.getImageLink());
-            innerDeal.setPrice(deal.getPrice());
-            innerDeal.setBasicPrice(deal.getBasicPrice());
-            innerDeal.setUnitPrice(deal.getUnitPrice());
-            innerDeal.setSave(deal.getSave());
-            innerDeal.setNumberBuyer(deal.getNumberBuyer());
-            innerDeal.setEndTime(deal.getEndTime());
-            innerDeal.setVoucher(deal.getisVoucher());
-            innerDeal.setUpdateDate(deal.getUpdateDate());
-            innerDeal.setStatus(deal.getStatus());
-        } finally {
-            // Close connection
-            em.close();
-        }
-    }
-
     /**
      * Check if a deal exist.
      * @param deal object need to check
-     * @return True if deal has a link exist in data store and deal has status not DELETED, false otherwise.
+     * @return True if deal has a link exist in data store and
+     * deal has status not DELETED, false otherwise.
      */
     public boolean isExist(Deal deal) {
-        for (Deal item : this.listDeals()) {
-            if (deal.getLink().equals(item.getLink()) && (deal.getStatus() != Status.DELETED.ordinal())) {
+        for (Deal item : this.listAllDeals) {
+            if (deal.getLink().equals(item.getLink())
+                    && (deal.getStatus() != Status.DELETED.ordinal())) {
                 return true;
             }
         }
         return false;
     }
-
     /**
-     * Get max Id in Deal data.
-     * @return Max Id if it is exist, 0 otherwise
+     * Update a deal to a list of deals.
+     * @param deal Deal to update
+     * @param listDeals List deals
+     * @return True if update action success, false otherwise
      */
-    public Long getMaxId() {
-        if (listDealsSortById().size() == 0) {
-            return (long) 0;
+    public boolean updateDealToList(Deal deal, List<Deal> listDeals) {
+        for (Deal item : listDeals) {
+            if (deal.getId().equals(item.getId())) {
+                item.setTitle(deal.getTitle());
+                item.setDescription(deal.getDescription());
+                item.setLink(deal.getLink());
+                item.setImageLink(deal.getImageLink());
+                item.setPrice(deal.getPrice());
+                item.setBasicPrice(deal.getBasicPrice());
+                item.setUnitPrice(deal.getUnitPrice());
+                item.setSave(deal.getSave());
+                item.setNumberBuyer(deal.getNumberBuyer());
+                item.setEndTime(deal.getEndTime());
+                item.setVoucher(deal.getisVoucher());
+                item.setUpdateDate(deal.getUpdateDate());
+                item.setStatus(deal.getStatus());
+                return true;
+            }
+        }
+        return false;
+    }
+    /**
+     * Update deal to template variable, not update to data store yet.
+     * @param deal deal wish to update
+     */
+    public void update(Deal deal) {
+        // Insert deal need to update to List update deals
+        this.listUpdateDeals.add(deal);
+        // Update this deal to List active or inactive deals (depend on Status Property)
+        if (deal.getStatus() == Status.SELLING.ordinal()) {
+            this.updateDealToList(deal, this.listActiveDeals);
         } else {
-            return listDealsSortById().get(0).getId();
+            this.updateDealToList(deal, this.listInActiveDeals);
+        }
+        // Update this deal to List all deals
+        this.updateDealToList(deal, this.listAllDeals);
+    }
+    /**
+     * Insert list update deals into data store.
+     */
+    public void updateIntoDatastore() {
+        EntityManager em = EMFService.get().createEntityManager();
+        try {
+            for (Deal deal : this.listUpdateDeals) {
+                Deal innerDeal = em.find(Deal.class, deal.getId());
+                innerDeal.setTitle(deal.getTitle());
+                innerDeal.setDescription(deal.getDescription());
+                innerDeal.setLink(deal.getLink());
+                innerDeal.setImageLink(deal.getImageLink());
+                innerDeal.setPrice(deal.getPrice());
+                innerDeal.setBasicPrice(deal.getBasicPrice());
+                innerDeal.setUnitPrice(deal.getUnitPrice());
+                innerDeal.setSave(deal.getSave());
+                innerDeal.setNumberBuyer(deal.getNumberBuyer());
+                innerDeal.setEndTime(deal.getEndTime());
+                innerDeal.setVoucher(deal.getisVoucher());
+                innerDeal.setUpdateDate(deal.getUpdateDate());
+                innerDeal.setStatus(deal.getStatus());
+            }
+        } finally {
+            // Close connection
+            em.close();
+        }
+    }
+    /**
+     * Remove a record by Id.
+     * @param id id of record
+     */
+    public void delete(long id) {
+        EntityManager em = EMFService.get().createEntityManager();
+        try {
+            Deal deal = em.find(Deal.class, id);
+            em.remove(deal);
+        } finally {
+            em.close();
+        }
+    }
+    /**
+     * Remove all record in deal table.
+     */
+    public void removeAll() {
+        EntityManager em = EMFService.get().createEntityManager();
+        // Remove all record in table Deal
+        try {
+            for (Deal deal : this.listAllDeals) {
+                Deal dealx = em.find(Deal.class, deal.getId());
+                em.remove(dealx);
+            }
+        } finally {
+            em.close();
         }
     }
 }

@@ -1,8 +1,6 @@
 /**
  * UtilReadXML.java
- * 
  * 28/5/2012
- * 
  * Smart Consumer project
  */
 package com.gae.java.smartconsumer.util;
@@ -17,8 +15,7 @@ import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 
 /**
- * Class handle to read xml
- * 
+ * Class handle to read xml.
  * @version 1.0 28/5/2012
  * @author Nixforest
  */
@@ -29,21 +26,20 @@ public class UtilReadXML {
      * @return Document
      * @throws Exception maybe happen
      */
-    public Document ReadFileXML(String fileName)throws Exception{
+    public Document readFileXML(String fileName) throws Exception {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder build = dbf.newDocumentBuilder();
         File file = new File(fileName);
         Document document = build.parse(file);
         return document;
     }
-    
     /**
      * Read content xml directly.
      * @param content XML content
      * @return Document
      * @throws Exception maybe happen
      */
-    public Document ReadContentXML(String content)throws Exception{
+    public Document readContentXML(String content)throws Exception {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder build = dbf.newDocumentBuilder();
         InputSource is = new InputSource(new StringReader(content));
