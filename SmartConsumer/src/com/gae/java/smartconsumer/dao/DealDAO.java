@@ -5,33 +5,33 @@
  */
 package com.gae.java.smartconsumer.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-
 import com.gae.java.smartconsumer.model.Deal;
 import com.gae.java.smartconsumer.util.Status;
 
 /**
  * Data access class for Deal object.
  * @version 2.0 03/06/2012 - Update - NguyenPT
- *              13/09/2012 - Update - NguyenPT
+ * @version 2.0 13/09/2012 - Update - NguyenPT
  * @author NguyenPT
  */
 public enum DealDAO {
     /** Instance of class. */
     INSTANCE;
     /** List all deals from data store has Status is SELLING. */
-    private List<Deal> listActiveDeals = null;
+    private List<Deal> listActiveDeals = new ArrayList<Deal>();
     /** List all deals from data store has Status is not SELLING. */
-    private List<Deal> listInActiveDeals = null;
-    /** List all deals has just insert in this session. */
-    private List<Deal> listInsertDeals = null;
+    private List<Deal> listInActiveDeals = new ArrayList<Deal>();
+    /** List all deals has just inserted in this session. */
+    private List<Deal> listInsertDeals = new ArrayList<Deal>();
     /** List all deals has just updated in this session. */
-    private List<Deal> listUpdateDeals = null;
+    private List<Deal> listUpdateDeals = new ArrayList<Deal>();
     /** List all deals in this session. */
-    private List<Deal> listAllDeals = null;
+    private List<Deal> listAllDeals = new ArrayList<Deal>();
     /**
      * Get all deal selling from data store.
      * If listActiveDeals variable is null,
@@ -40,7 +40,7 @@ public enum DealDAO {
      */
     @SuppressWarnings("unchecked")
     public List<Deal> getListActiveDeals() {
-        if (this.listActiveDeals == null) {
+        if (this.listActiveDeals.isEmpty()) {
             EntityManager em = EMFService.get().createEntityManager();
             Query q = em.createQuery("select from " + Deal.class.getName() + " where status="
                     + Status.SELLING.ordinal());
@@ -56,7 +56,7 @@ public enum DealDAO {
      */
     @SuppressWarnings("unchecked")
     public List<Deal> getListInActiveDeals() {
-        if (this.listInActiveDeals == null) {
+        if (this.listInActiveDeals.isEmpty()) {
             EntityManager em = EMFService.get().createEntityManager();
             Query q = em.createQuery("select from " + Deal.class.getName() + "where status!="
                     + Status.SELLING.ordinal());
@@ -69,7 +69,7 @@ public enum DealDAO {
      * @return List of Deals
      */
     public List<Deal> getListAllDeals() {
-        if (this.listAllDeals == null) {
+        if (this.listAllDeals.isEmpty()) {
             for (Deal deal : this.listActiveDeals) {
                 this.listAllDeals.add(deal);
             }
@@ -81,7 +81,7 @@ public enum DealDAO {
     }
     /**
      * Insert a deal to template variable, not insert to data store yet.
-     * @param deal entity to insert
+     * @param deal Entity to insert
      */
     public void insert(Deal deal) {
         // Insert to List insert deals
@@ -101,10 +101,14 @@ public enum DealDAO {
     public void insertIntoDatastore() {
         synchronized (this) {
             EntityManager em = EMFService.get().createEntityManager();
-            for (Deal deal : this.listInsertDeals) {
-                em.persist(deal);
+            try {
+                for (Deal deal : this.listInsertDeals) {
+                    em.persist(deal);
+                }
+                this.listInsertDeals.clear();
+            } finally {
+                em.close();
             }
-            em.close();
         }
     }
     /**
@@ -201,6 +205,7 @@ public enum DealDAO {
                 innerDeal.setUpdateDate(deal.getUpdateDate());
                 innerDeal.setStatus(deal.getStatus());
             }
+            this.listUpdateDeals.clear();
         } finally {
             // Close connection
             em.close();

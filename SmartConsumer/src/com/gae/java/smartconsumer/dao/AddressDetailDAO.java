@@ -5,79 +5,65 @@
  */
 package com.gae.java.smartconsumer.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import com.gae.java.smartconsumer.model.AddressDetail;
-import com.gae.java.smartconsumer.model.Deal;
 
 /**
  * Data access class for AddressDetail object.
- * @version 1.0 28/5/2012
- * @author Nixforest
+ * @version 1.0 28/05/2012 - Update - NguyenPT
+ * @version 2.0 13/09/2012 - Update - NguyenPT
+ * @author NguyenPT
  */
 public enum AddressDetailDAO {
     /** Instance of class. */
     INSTANCE;
+    /** List all address details in this session. */
+    private List<AddressDetail> listAllAddressDetails = new ArrayList<AddressDetail>();
+    /** List all address details has just inserted in this session. */
+    private List<AddressDetail> listInsertAddressDetails = new ArrayList<AddressDetail>();
     /**
      * Get all address detail from data store.
      * @return List of AddressDetails
      */
-    public List<AddressDetail> listAddressDetails() {
-        EntityManager em = EMFService.get().createEntityManager();
-        // Read the existing entries
-        Query q = em.createQuery("select m from AddressDetail m");
-        @SuppressWarnings("unchecked")
-        List<AddressDetail> details = q.getResultList();
-        return details;
-    }
-    /**
-     * Method get all address detail sort by Id property.
-     * @return List of AddressDetails sort by Id property.
-     */
-    public List<AddressDetail> listAddressDetailsSortById() {
-        EntityManager em = EMFService.get().createEntityManager();
-        Query q = em.createQuery("select m from AddressDetail m order by m.id desc");
-        @SuppressWarnings("unchecked")
-        List<AddressDetail> details = q.getResultList();
-        return details;
-    }
-    /**
-     * Get AddressDetail by Id.
-     * @param id Id of AddressDetail
-     * @return AddressDetail object has Id match
-     */
-    public AddressDetail getAddressDetailById(Long id) {
-        EntityManager em = EMFService.get().createEntityManager();
-        Query q = em.createQuery("select from " + Deal.class.getName() + " where id=" + id);
-        AddressDetail detail = (AddressDetail) q.getSingleResult();
-        return detail;
+    @SuppressWarnings("unchecked")
+    public List<AddressDetail> getListAllAddressDetails() {
+        if (this.listAllAddressDetails.isEmpty()) {
+            EntityManager em = EMFService.get().createEntityManager();
+            // Read the existing entries
+            Query q = em.createQuery("select m from AddressDetail m");
+            this.listAllAddressDetails = q.getResultList();
+        }
+        return this.listAllAddressDetails;
     }
     /**
      * Insert method.
      * @param detail AddressDetail to insert
      */
     public void insert(AddressDetail detail) {
-        synchronized (this) {
-            EntityManager em = EMFService.get().createEntityManager();
-            em.persist(detail);
-            em.close();
-        }
+        // Insert to list insert address details
+        this.listInsertAddressDetails.add(detail);
+        // Insert to list all address details
+        this.listAllAddressDetails.add(detail);
     }
     /**
-     * Update method.
-     * @param detail AddressDetail to update
+     * Insert list insert address details into data store.
      */
-    public void update(AddressDetail detail) {
-        EntityManager em = EMFService.get().createEntityManager();
-        try {
-            AddressDetail innerDetail = em.find(AddressDetail.class, detail.getId());
-            innerDetail.setDealId(detail.getDealId());
-            innerDetail.setAddressId(detail.getAddressId());
-        } finally {
-            em.close();
+    public void insertIntoDatastore() {
+        synchronized (this) {
+            EntityManager em = EMFService.get().createEntityManager();
+            try {
+                for (AddressDetail detail : this.listInsertAddressDetails) {
+                    em.persist(detail);
+                }
+                this.listInsertAddressDetails.clear();
+            } finally {
+                em.close();
+            }
         }
     }
     /**
@@ -91,17 +77,6 @@ public enum AddressDetailDAO {
             em.remove(detail);
         } finally {
             em.close();
-        }
-    }
-    /**
-     * Get max Id in Deal data.
-     * @return Max Id if it is exist, 0 otherwise
-     */
-    public Long getMaxId() {
-        if (listAddressDetailsSortById().size() == 0) {
-            return (long) 0;
-        } else {
-            return listAddressDetailsSortById().get(0).getId();
         }
     }
 }

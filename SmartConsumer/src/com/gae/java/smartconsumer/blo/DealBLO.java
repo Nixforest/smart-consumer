@@ -5,7 +5,6 @@
  */
 package com.gae.java.smartconsumer.blo;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -19,8 +18,8 @@ import com.gae.java.smartconsumer.util.Status;
 
 /**
  * Business logic class for Deal object.
- * @version 2.0 03/06/2012 - Update
- *              13/09/2012 - Update
+ * @version 2.0 03/06/2012 - Update - NguyenPT
+ * @version 2.0 13/09/2012 - Update - NguyenPT
  * @author NguyenPT
  */
 public enum DealBLO {
@@ -178,6 +177,12 @@ public enum DealBLO {
         }
         DealDAO.INSTANCE.insert(deal);
         return deal.getId();
+    }
+    /**
+     * Insert list insert deals into data store.
+     */
+    public void insertIntoDataStore() {
+        DealDAO.INSTANCE.insertIntoDatastore();
     }
     /**
      * Delete a deal.
