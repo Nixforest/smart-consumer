@@ -6,15 +6,17 @@
 package com.gae.java.smartconsumer.blo;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-
 import com.gae.java.smartconsumer.dao.AddressDetailDAO;
 import com.gae.java.smartconsumer.model.AddressDetail;
+import com.gae.java.smartconsumer.model.AddressDetailSortById;
 
 /**
  * Business logic class for AddressDetail object.
- * @version 1.0 29/5/2012
- * @author Nixforest
+ * @version 1.0 29/05/2012
+ * @version 2.0 15/09/2012 - Update - NguyenPT
+ * @author NguyenPT
  */
 public enum AddressDetailBLO {
     /** Instance of class. */
@@ -24,14 +26,16 @@ public enum AddressDetailBLO {
      * @return List all AddressDetail
      */
     public List<AddressDetail> getAllAddressDetails() {
-        return AddressDetailDAO.INSTANCE.listAddressDetails();
+        return AddressDetailDAO.INSTANCE.getListAllAddressDetails();
     }
     /**
      * List all Address Detail sort by Id property.
      * @return List all Address Detail sort by Id property.
      */
     public List<AddressDetail> getAllAddressDetailsSortById() {
-        return AddressDetailDAO.INSTANCE.listAddressDetailsSortById();
+        List<AddressDetail> listAllAddressDetails = AddressDetailDAO.INSTANCE.getListAllAddressDetails();
+        Collections.sort(listAllAddressDetails, new AddressDetailSortById());
+        return listAllAddressDetails;
     }
     /**
      * Get all AddressDetail of a Deal by Deal's Id.
@@ -40,7 +44,7 @@ public enum AddressDetailBLO {
      */
     public List<AddressDetail> getAddressDetailsByDealId(Long dealId) {
         List<AddressDetail> result = new ArrayList<AddressDetail>();
-        for (AddressDetail item : AddressDetailDAO.INSTANCE.listAddressDetails()) {
+        for (AddressDetail item : AddressDetailDAO.INSTANCE.getListAllAddressDetails()) {
             if (item.getDealId().equals(dealId)) {
                 result.add(item);
             }
@@ -51,13 +55,26 @@ public enum AddressDetailBLO {
      * Get AddressDetail by Id.
      * @param id Id of AddressDetail
      * @return AddressDetail has Id match with parameter
-     * @throws Exception Exception threw when id is invalid
      */
-    public AddressDetail getAddressDetailById(Long id) throws Exception {
-        if (!isIdExist(id)) {
-            throw new Exception("Id does not exist");
+    public AddressDetail getAddressDetailById(Long id) {
+        for (AddressDetail detail : AddressDetailDAO.INSTANCE.getListAllAddressDetails()) {
+            if (detail.getId().equals(id)) {
+                return detail;
+            }
         }
-        return AddressDetailDAO.INSTANCE.getAddressDetailById(id);
+        return null;
+    }
+    /**
+     * Get max Id in Deal data.
+     * @return Max Id if it is exist, 0 otherwise
+     */
+    public Long getMaxId() {
+        List<AddressDetail> listAllAddressDetails = AddressDetailDAO.INSTANCE.getListAllAddressDetails();
+        if (listAllAddressDetails.size() == 0) {
+            return (long) 0;
+        } else {
+            return listAllAddressDetails.get(0).getId();
+        }
     }
     /**
      * Insert an AddressDetail.
@@ -67,33 +84,15 @@ public enum AddressDetailBLO {
      * address does not exist
      */
     public Long insert(AddressDetail detail) throws Exception {
-        detail.setId(AddressDetailDAO.INSTANCE.getMaxId() + 1);
-        /*if (!DealBLO.INSTANCE.isIdExist(detail.getDealId())) {
-            //throw new Exception("Id of deal(" + detail.getDealId() + ") does not exist");
-        }
-        if (!AddressBLO.INSTANCE.isIdExist(detail.getAddressId())) {
-            //throw new Exception("Id of address does not exist");
-        }*/
+        detail.setId(this.getMaxId() + 1);
         AddressDetailDAO.INSTANCE.insert(detail);
         return detail.getId();
     }
     /**
-     * Update method.
-     * @param detail AddressDetail
-     * @throws Exception Exception happen when Id of deal or
-     * address does not exist or Id does not exist
+     * Insert list insert address details into data store.
      */
-    public void update(AddressDetail detail) throws Exception {
-        if (!isIdExist(detail.getId())) {
-            throw new Exception("Id does not exist");
-        }
-        if (!DealBLO.INSTANCE.isIdExist(detail.getDealId())) {
-            throw new Exception("Id of deal does not exist");
-        }
-        if (!AddressBLO.INSTANCE.isIdExist(detail.getAddressId())) {
-            throw new Exception("Id of address does not exist");
-        }
-        AddressDetailDAO.INSTANCE.update(detail);
+    public void insertIntoDataStore() {
+        AddressDetailDAO.INSTANCE.insertIntoDatastore();
     }
     /**
      * Delete method.

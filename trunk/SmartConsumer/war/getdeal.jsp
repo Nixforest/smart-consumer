@@ -29,7 +29,7 @@
               url = userService.createLogoutURL(request.getRequestURI());
               urlLinktext = "Logout";
             }
-            deals = dao.listDeals();
+            deals = dao.getListAllDeals();
             String error = (String)request.getAttribute("error");
     %>
     <div class="errorview">

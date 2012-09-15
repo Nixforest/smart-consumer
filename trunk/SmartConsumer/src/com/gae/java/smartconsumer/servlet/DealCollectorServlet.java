@@ -13,6 +13,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.gae.java.smartconsumer.blo.AddressBLO;
+import com.gae.java.smartconsumer.blo.AddressDetailBLO;
+import com.gae.java.smartconsumer.blo.DealBLO;
 import com.gae.java.smartconsumer.util.GeneralUtil;
 import com.gae.java.smartconsumer.util.GetDealFunction;
 import com.gae.java.smartconsumer.util.UtilHtmlToXML;
@@ -78,6 +81,9 @@ public class DealCollectorServlet extends HttpServlet {
                 //System.out.println(new UtilHtmlToXML().readHtmlToBuffer(req.getParameter("link")).toString());
                 GetDealFunction.getAddressFromNhomMua(new UtilHtmlToXML().readHtmlToBuffer(req.getParameter("link")).toString(), (long) 0);
             }
+            DealBLO.INSTANCE.insertIntoDataStore();
+            AddressBLO.INSTANCE.insertIntoDataStore();
+            AddressDetailBLO.INSTANCE.insertIntoDataStore();
         } catch (Exception ex) {
             String error = ex.getMessage();
             req.setAttribute("error", error);

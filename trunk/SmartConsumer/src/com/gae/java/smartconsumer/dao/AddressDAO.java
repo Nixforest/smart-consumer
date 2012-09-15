@@ -5,6 +5,7 @@
  */
 package com.gae.java.smartconsumer.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -13,81 +14,60 @@ import javax.persistence.Query;
 import com.gae.java.smartconsumer.model.Address;
 
 /**
- * Data access class for Deal object.
- * @version 1.0 28/5/2012
- * @author Nixforest
+ * Data access class for Address object.
+ * @version 1.0 28/05/2012
+ * @version 2.0 15/09/2012 - Update - NguyenPT
+ * @author NguyenPT
  */
 public enum AddressDAO {
     /** Instance of class. */
     INSTANCE;
-
+    /** List all addresses in this session. */
+    private List<Address> listAllAddresses = new ArrayList<Address>();
+    /** List all addresses has just inserted in this session. */
+    private List<Address> listInsertAddresses = new ArrayList<Address>();
     /**
      * Get all addresses in data store.
+     * If listAddresses variable is null,
+     * create a connection to data store.
      * @return List of Addresses
      */
-    public List<Address> listAddresses() {
-        EntityManager em = EMFService.get().createEntityManager();
-        // Read the existing entries
-        Query q = em.createQuery("select m from Address m");
-        @SuppressWarnings("unchecked")
-        List<Address> addresses = q.getResultList();
-        return addresses;
+    @SuppressWarnings("unchecked")
+    public List<Address> getListAllAddresses() {
+        if (this.listAllAddresses.isEmpty()) {
+            EntityManager em = EMFService.get().createEntityManager();
+            // Read the existing entries
+            Query q = em.createQuery("select m from Address m");
+            this.listAllAddresses = q.getResultList();
+        }
+        return this.listAllAddresses;
     }
-
     /**
-     * Get all addresses in data store.
-     * @return List of addresses sort by Id property
-     */
-    public List<Address> listAddressesSortById() {
-        EntityManager em = EMFService.get().createEntityManager();
-        // Read the existing entries
-        Query q = em.createQuery("select m from Address m order by m.id desc");
-        @SuppressWarnings("unchecked")
-        List<Address> addresses = q.getResultList();
-        return addresses;
-    }
-
-    /**
-     * Get address by Id.
-     * @param id id of address
-     * @return Address has Id match parameter
-     */
-    public Address getAddressById(Long id) {
-        EntityManager em = EMFService.get().createEntityManager();
-        Query q = em.createQuery("select from " + Address.class.getName() + " where id=" + id);
-        Address address = (Address) q.getSingleResult();
-        return address;
-    }
-
-    /**
-     * Insert address.
-     * @param address address to insert
+     * Insert a address to template variable, not insert to data store yet.
+     * @param address Address to insert
      */
     public void insert(Address address) {
+        // Insert to list insert addresses
+        this.listInsertAddresses.add(address);
+        // Insert to list all addresses
+        this.listAllAddresses.add(address);
+    }
+    /**
+     * Insert list insert addresses into data store.
+     */
+    public void insertIntoDatastore() {
         synchronized (this) {
             EntityManager em = EMFService.get().createEntityManager();
-            em.persist(address);
-            em.close();
+            try {
+                for (Address address : this.listInsertAddresses) {
+                    em.persist(address);
+                }
+                this.listInsertAddresses.clear();
+            } finally {
+                em.close();
+            }
         }
     }
-
-    /**
-     * Update address.
-     * @param address address to update
-     */
-    public void update(Address address) {
-        EntityManager em = EMFService.get().createEntityManager();
-        try {
-            Address innerAddress = em.find(Address.class, address.getId());
-            innerAddress.setFullAddress(address.getFullAddress());
-            innerAddress.setLongitude(address.getLongitude());
-            innerAddress.setLatitude(address.getLatitude());
-            innerAddress.setDescription(address.getDescription());
-        } finally {
-            em.close();
-        }
-    }
-
     /**
      * Delete.
      * @param id id of address to delete
@@ -99,18 +79,6 @@ public enum AddressDAO {
             em.remove(address);
         } finally {
             em.close();
-        }
-    }
-
-    /**
-     * Get max id in Address data.
-     * @return Max id if it is exist, 0 otherwise
-     */
-    public Long getMaxId() {
-        if (listAddressesSortById().size() == 0) {
-            return (long) 0;
-        } else {
-            return listAddressesSortById().get(0).getId();
         }
     }
 }
