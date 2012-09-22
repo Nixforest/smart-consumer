@@ -137,9 +137,8 @@
                           </div>
                           <div class="deal_list_view">
                               <div class="view_list_bt">
-                                  <input onclick="window.location='<%=deal.getLink() %>'" 
-                                      class="view_bt" 
-                                      type="button" name="" value="">
+                                  <div onclick="window.location='<%=deal.getLink() %>'" 
+                                      class="view_bt logo"></div>
                               </div>
                           </div>
                           <div class="list_view_price">

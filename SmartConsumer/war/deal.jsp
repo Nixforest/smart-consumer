@@ -9,6 +9,7 @@
 <%@page import="java.net.URLDecoder"%>
 
 <%@page import="com.gae.java.smartconsumer.dao.DealDAO" %>
+<%@page import="com.gae.java.smartconsumer.blo.DealBLO" %>
 <%@page import="com.gae.java.smartconsumer.model.Deal" %>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
@@ -154,7 +155,7 @@ function setLinkUpdate(id) {
     <div style="clear: both;"></div>
     Number of Deals: <%=deals.size() %>
     [<a href="/getdeal">Cập nhật</a>]
-    [<a href="/manage.app">Quản lý Deal tự tạo</a>] [<%=DealDAO.INSTANCE.getMaxId() %>]
+    [<a href="/manage.app">Quản lý Deal tự tạo</a>] [<%=DealBLO.INSTANCE.getMaxId() %>]
     <table>
         <tr>
             <th>Id</th>

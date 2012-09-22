@@ -15,7 +15,7 @@ legend{color:#000;}
 .cf{zoom:1;}
 .cf:after{content:'';display:block;clear:both;height:0;overflow:hidden;visibility:hidden;}
 body{font:normal 13px/1.3 Arial,Tahoma,Helvetica,sans-serif;color:#333333}
-a{color:#399;text-decoration:none;}
+a{color:#258023;text-decoration:none;}
 a:hover{text-decoration:underline;}
 span.money{font-family:Helvetica,arial,sans-serif;}
 span.required{color:red;}
@@ -120,7 +120,7 @@ dd.formbutton:focus{border-color:#000;}
 
 /*body{background:#89b556 url(i/bg-bd.jpg) no-repeat 50% 150px;}*/
 body{background:#89b556 url(i/bg-deal.jpg) no-repeat 0 147px;}
-body.bg-alt{background:#89b556 url(i/bg-deal.jpg) no-repeat 0 147px;}
+body.bg-alt{background:#89b556 url(i/background.png) repeat fixed 0 0;}
 /*body.newbie{background-position:50% 167px;}*/
 
 #hdw{height:167px;background:url(i/bg-hd.gif) repeat-x 0 0; z-index:10;}
@@ -382,20 +382,21 @@ width: 145px;
 height: 71px;
 border: none;
 }
-.deal_list_view div.view_list_bt input{
-background:url(i/list_deal_view.gif) no-repeat;
+.deal_list_view .view_bt{
+background:url(i/btnView.jpg) no-repeat;
+background-position: 0px 0px; 
 cursor:pointer;
-width: 102px;
-height: 57px;
-border: none;
+display: block;
+}
+.deal_list_view .logo{
+width:99px;
+height:41px;
 }
 
-.deal_list_view div.view_list_bt input:hover{
-background:url(i/list_deal_view_hover.gif) no-repeat;
-cursor:pointer;
-width: 102px;
-height: 57px;
-border: none;
+.deal_list_view .logo:hover{
+width:99px;
+height:41px;
+background-position: 0px -42px;
 }
 
 #listdeal{ float:left; margin-left:8px; margin-top:-20px; margin-bottom:-55px;}
@@ -429,7 +430,7 @@ border: none;
 	behavior: url(/hotdeal/static/css/PIE.htc);
 }
 .deal_list_end{ margin-right:0;}
-.deal_list_title{ font-size:18px; font-weight:bold; color:#036b94; line-height:120%; overflow:hidden;height:41px;}
+.deal_list_title{ font-size:18px; font-weight:bold; color:#3A4276; line-height:120%; overflow:hidden;height:41px;}
 .deal_list_img{ margin-top:9px; -moz-border-radius: 5px;
 border-radius: 5px;
 -moz-box-shadow: 5px 5px 5px black;
@@ -439,7 +440,7 @@ box-shadow: 2px 2px 2px black; width:267px; min-height:183px; margin-left:3px;}
 .deal_list_view{ margin-top:10px; float:left;}
 .deal_list_view_price{ float:left;margin-top:15px; width:146px; line-height:180%;}
 .deal_list_view_price span{ font-size:12px;}
-.deal_list_view_price .number{color:#c22227; font-size:21px; font-weight:bold;}
+.deal_list_view_price .number{color:#FF4200; font-size:21px; font-weight:bold;}
 .submit_newsletter{background: url("i/bt_email_regis.gif") no-repeat scroll left top #FFFEDF;
     border: medium none;
     color: #626262;
