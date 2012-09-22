@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk1.6.0_16"/>
-	<classpathentry kind="lib" path="C:/Program Files/appengine-java-sdk-1.6.5/lib/impl/appengine-api-stubs.jar"/>
-	<classpathentry kind="lib" path="C:/Program Files/appengine-java-sdk-1.6.5/lib/shared/servlet-api.jar">
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk1.7.0"/>
+	<classpathentry kind="lib" path="D:/Eclipse/eclipse-jee-indigo-SR1-win32-OOG-0.7/eclipse/appengine-java-sdk-1.6.5/lib/impl/appengine-api-stubs.jar"/>
+	<classpathentry kind="lib" path="D:/Eclipse/eclipse-jee-indigo-SR1-win32-OOG-0.7/eclipse/appengine-java-sdk-1.6.5/lib/shared/servlet-api.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="file:/C:/Program%20Files/appengine-java-sdk-1.6.5/docs/javadoc/"/>
 		</attributes>
