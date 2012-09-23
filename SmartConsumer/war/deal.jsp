@@ -154,8 +154,9 @@ function setLinkUpdate(id) {
     </div>
     <div style="clear: both;"></div>
     Number of Deals: <%=deals.size() %>
-    [<a href="/getdeal">Cập nhật</a>]
-    [<a href="/manage.app">Quản lý Deal tự tạo</a>] [<%=DealBLO.INSTANCE.getMaxId() %>]
+    [<a href="/getdeal.app">Cập nhật</a>]
+    <!-- [<a href="/manage.app">Quản lý Deal tự tạo</a>] -->
+    [<%=DealBLO.INSTANCE.getMaxId() %>]
     <table>
         <tr>
             <th>Id</th>

@@ -77,6 +77,13 @@
     <action path="/order" type="com.gae.java.smartconsumer.action.customer.Order"  scope="session">
         <forward name="success" redirect="true" path="order" />
     </action>
+    <action path="/getdeal" type="com.gae.java.smartconsumer.action.admin.DealCollector" scope="request">
+        <forward name="success" redirect="true" path="getdeal" />
+    </action>
+    <action path="/dealmanager" type="com.gae.java.smartconsumer.action.admin.DealManager" scope="request">
+        <forward name="success" redirect="true" path="dealmanager" />
+        <forward name="failed" redirect="true" path="/smartconsumer.app" />
+    </action>
     
   </action-mappings>
   <controller processorClass="org.apache.struts.tiles.TilesRequestProcessor"/>

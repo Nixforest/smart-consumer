@@ -65,4 +65,12 @@
     <put name="title" value="View Deal" />
     <put name="body" value="viewdeal.jsp" />
   </definition>
+  <definition name="getdeal" extends="admin">
+    <put name="title" value="Get Deal" />
+    <put name="body" value="getdeal.jsp" />
+  </definition>
+  <definition name="dealmanager" extends="admin">
+    <put name="title" value="Deal Manager" />
+    <put name="body" value="manage_deal.jsp" />
+  </definition>
 </tiles-definitions>

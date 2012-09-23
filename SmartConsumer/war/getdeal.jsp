@@ -54,7 +54,7 @@
       </div>
     </div>
     <div class="linkchoose">
-        <form action="/getdeal" method="post" accept-charset="utf-8">
+        <form action="/getdeal.app" method="post" accept-charset="utf-8">
           <table>
               <tr>
                   <td><input type="checkbox" id="123do" name="123do" value=""/>http://123do.vn/</td>

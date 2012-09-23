@@ -32,12 +32,13 @@
     </div>
     
     <div style="clear: both;"></div>
-    <a href="/insert.app">Tạo mới Deal</a>
+    <!-- <a href="/insert.app">Tạo mới Deal</a> -->
+    <a href="/getdeal.app">Cập nhật Deal</a>
 <table>
     <tr>
         <td>STT</td>
         <td>Tiêu đề</td>
-        <td>Địa chỉ</td>
+        <!-- <td>Địa chỉ</td>-->
         <td>Giá bán</td>
         <td>Giá gốc</td>
         <td>Phương thức</td>
@@ -46,11 +47,11 @@
         <td>Sửa</td>
     </tr>
     
-    <logic:iterate id="element" name="listDeal" indexId="index">
+    <logic:iterate id="element" name="listDeals" indexId="index">
     <tr>
         <td><%=index.intValue() + 1%></td>
         <td><bean:write name="element" property="title" /></td>
-        <td><bean:write name="element" property="address" /></td>
+        
         <td><bean:write name="element" property="price" /></td>
         <td><bean:write name="element" property="basicPrice" /></td>
         <td><bean:write name="element" property="imageLink" /></td>
