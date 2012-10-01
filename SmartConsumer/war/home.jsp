@@ -9,8 +9,8 @@
 <%@page import="com.google.appengine.api.users.UserService"%>
 <%@page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8" %>
 
-<%@  page import="com.gae.java.smartconsumer.dao.DealDAO" %>
-<%@  page import="com.gae.java.smartconsumer.model.Deal" %>
+<%@page import="com.gae.java.smartconsumer.dao.DealDAO" %>
+<%@page import="com.gae.java.smartconsumer.model.Deal" %>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
 
@@ -18,9 +18,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 <title>Trang chủ</title>
-<link rel="stylesheet"
-        type="text/css"
-        href="css/index.css"/>
+<link rel="stylesheet" type="text/css" href="css/index.css"/>
 </head>
 <body class="bg-alt">
     <%

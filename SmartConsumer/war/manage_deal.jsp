@@ -17,7 +17,7 @@
     if (request.getAttribute("nickName") != null) {
         nickName = (String)request.getAttribute("nickName");
     }
-    %>
+%>
 <div style="width: 100%;">
       <div class="line"></div>
       <div class="topLine">

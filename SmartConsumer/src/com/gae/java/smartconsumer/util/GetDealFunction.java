@@ -10,12 +10,17 @@ import java.net.SocketTimeoutException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.NodeList;
+import org.w3c.dom.Document;
 
 import com.gae.java.smartconsumer.blo.AddressBLO;
 import com.gae.java.smartconsumer.blo.AddressDetailBLO;
@@ -756,5 +761,183 @@ public class GetDealFunction {
                 }
             }
         }
+    }
+    /**
+     * Get deal information from http://www.muachung.vn
+     * @return String represent content collected
+     * @throws Exception Exception maybe happen
+     */
+    public static String getFromMuaChungVn_New() throws Exception {
+        String content = "";
+        String title = "";
+        String description = "";
+        String address = "";
+        String link = "";
+        String imageLink = "";
+        double price = 0;
+        double basicPrice = 0;
+        String unitPrice = "";
+        Calendar cal = Calendar.getInstance();
+        java.util.Date endTime = cal.getTime();
+        float save = 0;
+        int numberBuyer = 0;
+        boolean isVoucher = true;
+        String listLink[] = {"http://muachung.vn/danh-muc/c-999999997/deal-dang-ban/trang-1.html"};
+        UtilReadXML reader = new UtilReadXML();
+        UtilHtmlToXML util = new UtilHtmlToXML();
+
+        try{
+            String data = new UtilHtmlToXML().readHtmlToBuffer(listLink[0]).toString();
+             String regex = "<div\\s+class=\"box-frame-center\".*?>"
+                    + ".*?<div\\s+class=\"v6ItemHotImg\".*?>"
+                    + ".*?<div.*?>"
+                    //+".*?</div>"//end div
+                    + ".*?<a.*?href=(\"([^\"]*\")|'[^']*'|([^'\">\\s]+)).*?>"//link
+                    + ".*?<div.*?>.*?</div>"
+                    + ".*?<div\\s+class=\"v6ItemHotHoverTextT\".*?>"
+                    + ".*?<div>.*?<b>(.*?)</b>.*?</div>"//save 4
+                    + "(.*?)"//address 5
+                    //+"<span.*?>.*?</span>"
+                    + "</div>"//end div v6ItemHotHoverTextT
+                    + ".*?</a>"//end a
+                    + ".*?<div\\s+class=\"v6HotItemHoverButton\".*?>"
+                    + ".*?<div.*?>"
+                    + ".*?<a.*?href=(\"([^\"]*\")|'[^']*'|([^'\">\\s]+)).*?>"//link image 6
+                    + ".*?</a>"//end a
+                    + ".*?</div>"//end div
+                    + ".*?</div>"//end div v6HotItemHoverButton
+                    + ".*?</div>"//add
+                    + ".*?</div>"//end div v6ItemHotImg
+                    //+".*?<div\\s+class=\"v6ContentHot\".*?>"
+                    + ".*?<div.*?>"
+                    + "<h3.*?>"
+                    + ".*?<a.*?href=(\"([^\"]*\")|'[^']*'|([^'\">\\s]+)).*?>(.*?)</a>"// link 9 title 12
+                    + "</h3>"
+                    + "(.*?)</div>"// 13end div description
+                    + ".*?<div\\s+class=\"v6TopBorder\".*?>"
+                    + ".*?<div.*?>"
+                    + ".*?<div.*?>(.*?)</div>"//price 14
+                    + ".*?<div.*?>(.*?)</div>"//basic price 15
+                    + ".*?</div>"//end div f1
+                    + ".*?<div.*?>"
+                    + ".*?<div.*?>.*?</div>"
+                    + ".*?<div.*?>(.*?)</div>"//number buy 16
+                    + ".*?</div>"//end div
+                    + ".*?<div.*?>.*?</div>"
+                    + ".*?</div>"//end div v6TopBorder
+                   // +".*?</div>"//end div v6ContentHot
+                   + "</div>";//end div
+            Pattern patt = Pattern.compile(regex);
+            Matcher match = patt.matcher(data);
+            while (match.find()) {
+                //System.out.println("Save " + count);
+                //System.out.println("Save : " + match.group(4));
+                //System.out.println("address " + count);
+                //System.out.println("address : " + match.group(5));
+                //System.out.println("link image " + count);
+                //System.out.println("link image : " + match.group(6).replace("\"", "").trim());
+                //System.out.println("link : " + match.group(9).replace("\"", "").trim());
+                //System.out.println("title " + count);
+                //System.out.println("title : " + match.group(12));
+                //System.out.println("price " + count);
+                //System.out.println("description : " + match.group(13).replace("-", "").trim());
+                //System.out.println("price : " + Double.parseDouble(match.group(14).trim().replace(".", "").replace("d", "")));
+                //System.out.println("basic price " + count);
+                //System.out.println("basic price : " + Double.parseDouble(match.group(15).trim().replace(".", "").replace("d", "")));
+                //System.out.println("number buy " + count);
+                //System.out.println("number buy : " + match.group(16));
+                //get address
+                String stringHtml = new String();
+                String endTimeNum = "";
+                while (stringHtml.isEmpty()) { 
+                    try {
+                        stringHtml = new UtilHtmlToXML().readHtmlToBuffer(match.group(9).replace("\"", "").trim()).toString();
+                    } catch (java.net.SocketTimeoutException e) {
+                        continue;
+                    }
+                }
+                if (!stringHtml.isEmpty()) {
+                    Document document = new UtilReadXML().readContentXML(stringHtml);
+                    NodeList nList = document.getElementsByTagName("a");
+                    for (int i = 0; i < nList.getLength(); i++) {
+                        if (nList.item(i).hasAttributes()) {
+                            //L?y các thu?c tính c?a th? div hi?n th?i
+                            NamedNodeMap att = nList.item(i).getAttributes();
+                            for (int j = 0; j < att.getLength(); j++) {
+                                if (att.item(j).getNodeName().equals("class")) {
+                                    if (att.item(j).getTextContent().equals("adrname")) {
+                                        System.out.println("Address : " + nList.item(i).getFirstChild().getNextSibling().getTextContent().trim());
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    //get long end time
+                    String _endTime = "shop.product.init";
+                    int indexStringEndTime = stringHtml.indexOf(_endTime) + 18;
+                    StringBuilder stringEndTime = new StringBuilder();
+                    int countComma = 0;
+                    Boolean getString = false;
+                    while (true) {
+                        indexStringEndTime++;
+                        /*if (stringHtml.charAt(indexStringEndTime) == ')') {
+                            break;
+                        }*/
+                        if (stringHtml.charAt(indexStringEndTime) == ',') {
+                            if (countComma == 1) {
+                                getString = true;
+                            }
+                            if (countComma == 2) {
+                                break;
+                            }
+                            countComma++;
+                        }
+                        if (getString) {
+                            stringEndTime.append(stringHtml.charAt(indexStringEndTime));
+                        }
+                    }
+                    endTimeNum = String.valueOf(Long.valueOf(stringEndTime.toString().replace(",", "")) * 1000);
+                }
+                ScriptEngineManager factory = new ScriptEngineManager();
+                ScriptEngine engine = factory.getEngineByName("js");
+                StringBuilder script = new StringBuilder();
+                script.append("var time  = new Date(");
+                script.append(endTimeNum);
+                script.append(");");
+                script.append("var date = time.getDate();");
+                script.append("var month = time.getMonth() + 1;");
+                script.append("var year = time.getFullYear();");
+                script.append("var hour = time.getHours();");
+                script.append("var minute = time.getMinutes();");
+                script.append("var second = time.getSeconds();");
+                engine.eval(script.toString());
+                int date = Integer.valueOf(engine.get("date").toString().substring(0, engine.get("date").toString().indexOf(".")));
+                int month = Integer.valueOf(engine.get("month").toString().substring(0, engine.get("month").toString().indexOf(".")));
+                int year = Integer.valueOf(engine.get("year").toString().substring(0, engine.get("year").toString().indexOf(".")));
+                int hour = Integer.valueOf(engine.get("hour").toString().substring(0, engine.get("hour").toString().indexOf(".")));
+                int minute = Integer.valueOf(engine.get("minute").toString().substring(0, engine.get("minute").toString().indexOf(".")));
+                int second = Integer.valueOf(engine.get("second").toString().substring(0, engine.get("second").toString().indexOf(".")));
+                //Date _date = new Date(year, month, date, hour, minute, second);
+                cal.set(year, month, date, hour, minute, second);
+                endTime = cal.getTime();
+                title = match.group(12);
+                description = match.group(13).replace("-", "").trim();
+                //address = "";
+                link = match.group(9).replace("\"", "").trim();
+                imageLink = match.group(6).replace("\"", "").trim();
+                price = Double.parseDouble(match.group(14).trim().replace(".", "").replace("d", ""));
+                basicPrice = Double.parseDouble(match.group(15).trim().replace(".", "").replace("d", ""));
+                unitPrice = "";
+                //float save = 0;
+                numberBuyer = Integer.valueOf(match.group(16));
+                Deal deal = new Deal(title, description, link, imageLink, price,
+                        basicPrice, unitPrice, save, numberBuyer, endTime, isVoucher);
+                Long dealId = DealBLO.INSTANCE.insert(deal);
+            }
+        } catch (Exception ex) {
+            System.out.println(ex.toString());
+        }
+        return content;
     }
 }

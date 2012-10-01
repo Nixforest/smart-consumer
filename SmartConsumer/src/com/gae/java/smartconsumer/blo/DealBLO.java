@@ -5,6 +5,7 @@
  */
 package com.gae.java.smartconsumer.blo;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -276,5 +277,21 @@ public enum DealBLO {
         deal.setUpdateDate(java.util.Calendar.getInstance().getTime());
 
         DealDAO.INSTANCE.update(deal);
+    }
+    /**
+     * Search Deal by Price
+     * @param priceFrom
+     * @param priceTo
+     * @return list Deal
+     */
+    public List<Deal> searchByPrice(double priceFrom, double priceTo) {
+        List<Deal> lst = new ArrayList<Deal>();
+        List<Deal> lstActiveDeal = DealDAO.INSTANCE.getListActiveDeals();
+        for (Deal deal : lstActiveDeal) {
+            if (deal.getPrice() <= priceTo && deal.getPrice() >= priceFrom) {
+                lst.add(deal);
+            }
+        }
+        return lst;
     }
 }
