@@ -84,6 +84,9 @@
         <forward name="success" redirect="true" path="dealmanager" />
         <forward name="failed" redirect="true" path="/smartconsumer.app" />
     </action>
+    <action path="/searchdeal" type="com.gae.java.smartconsumer.action.customer.SearchDeal" scope="session">
+        <forward name="success" redirect="true" path="searchdeal" />
+    </action>
     
   </action-mappings>
   <controller processorClass="org.apache.struts.tiles.TilesRequestProcessor"/>

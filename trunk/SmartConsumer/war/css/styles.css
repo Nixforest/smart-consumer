@@ -1219,3 +1219,23 @@ a.orangeButtonRegis{display:block;padding:0 0 0 10px;width:226px;height:46px;bac
   border:1px solid black;
   margin-top:1px;
 }
+/*search*/
+#search{
+  float: left;
+  width: 80%;
+  height: 37px;
+  background: #E5ECF9;
+  margin-left: 10%;
+}
+.searchDeal{
+  float:left;
+  margin-left: 100px;
+}
+.searchDeal ul{
+  display: inline;
+}
+.searchDeal li{
+  float:left;
+  min-width: 100px;
+  line-height: 37px;
+}
