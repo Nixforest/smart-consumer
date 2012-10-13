@@ -1787,6 +1787,30 @@ public class UtilHtmlToXML {
        return stringHtml;
    }
    /**
+    * Read Html to buffer.
+    * @param address address of html
+    * @param id of city
+    * @return String Buffer
+    * @throws Exception Exception maybe happen when connect to Internet
+    */
+   public StringBuffer readHtmlToBuffer_Cookie(String address, int cityId) throws Exception {
+       URL url = new URL(address);
+       String cookie = "mc_cityMC=" + String.valueOf(cityId);
+       URLConnection connection = url.openConnection();
+       connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded; charset=ISO-8859-1");
+       connection.setRequestProperty("Content-Encoding", "ISO-8859-1");
+       connection.setRequestProperty("Cookie", cookie);
+
+       BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
+       String temp = "";
+       StringBuffer stringHtml = new StringBuffer();
+       while ((temp = br.readLine()) != null) {
+           stringHtml.append(temp);
+       }
+       br.close();
+       return stringHtml;
+   }
+   /**
     * Recode to UTF.
     * @param source source
     * @return String recode
