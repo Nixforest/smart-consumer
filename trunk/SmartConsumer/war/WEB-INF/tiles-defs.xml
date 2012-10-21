@@ -9,7 +9,6 @@
       <put name="title" value="SmartConsumer"/>
       <put name="menu" value="/menu.jsp"/>  
       <put name="header" value="/header.jsp"/>  
-      <put name="search" value="" />
       <put name="body" value="/body.jsp"/>
       <put name="footer" value="/footer.jsp"/>
   </definition>
@@ -31,7 +30,6 @@
   </definition>
   <definition name="smartconsumer" extends="admin">
     <put name="title" value="Trang Chủ" />
-    <put name="search" value="/search.jsp" />
     <put name="body" value="/home.jsp" />
   </definition>
   <definition name="map" extends="admin">
