@@ -44,7 +44,10 @@ public enum DealDAO {
             EntityManager em = EMFService.get().createEntityManager();
             Query q = em.createQuery("select from " + Deal.class.getName() + " where status="
                     + Status.SELLING.ordinal());
-            this.listActiveDeals = q.getResultList();
+            List<Deal> deals = q.getResultList();
+            for (Deal deal : deals) {
+                this.listActiveDeals.add(deal);
+            }
         }
         return this.listActiveDeals;
     }
@@ -60,7 +63,10 @@ public enum DealDAO {
             EntityManager em = EMFService.get().createEntityManager();
             Query q = em.createQuery("select from " + Deal.class.getName() + "where status!="
                     + Status.SELLING.ordinal());
-            this.listInActiveDeals = q.getResultList();
+            List<Deal> deals = q.getResultList();
+            for (Deal deal : deals) {
+                this.listInActiveDeals.add(deal);
+            }
         }
         return this.listInActiveDeals;
     }
@@ -94,6 +100,14 @@ public enum DealDAO {
         }
         // Insert to List all deals
         this.listAllDeals.add(deal);
+        synchronized (this) {
+            EntityManager em = EMFService.get().createEntityManager();
+            try {
+                    em.persist(deal);
+            } finally {
+                em.close();
+            }
+        }
     }
     /**
      * Insert list insert deals into data store.

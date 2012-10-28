@@ -100,7 +100,7 @@ public enum DealBLO {
         if (listDealsSortById.size() == 0) {
             return (long) 0;
         } else {
-            return listDealsSortById.get(0).getId();
+            return listDealsSortById.get(listDealsSortById.size() - 1).getId();
         }
     }
     /**
@@ -169,12 +169,12 @@ public enum DealBLO {
         if (deal.getNumberBuyer() < 0) {
             throw new Exception("Number buyer can not less than zero");
         }
-        if ((deal.getStatus() < Status.WAITTOCHECK.ordinal()) || (deal.getStatus() > Status.OUTOFTIME.ordinal())) {
-            throw new Exception("Status is invalid");
-        }
         deal.setId(getMaxId() + 1);
         if (DealDAO.INSTANCE.isExist(deal)) {
             return (long) 0;
+        }
+        if (this.isExist(deal)) {
+            throw new Exception("Deal was exist!");
         }
         DealDAO.INSTANCE.insert(deal);
         return deal.getId();

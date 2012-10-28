@@ -46,7 +46,7 @@ public enum AddressBLO {
         if (listAddressesSortById.size() == 0) {
             return (long) 0;
         } else {
-            return listAddressesSortById.get(0).getId();
+            return listAddressesSortById.get(listAddressesSortById.size() - 1).getId();
         }
     }
     /**
