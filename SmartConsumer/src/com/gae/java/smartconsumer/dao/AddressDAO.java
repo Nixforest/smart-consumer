@@ -51,6 +51,14 @@ public enum AddressDAO {
         this.listInsertAddresses.add(address);
         // Insert to list all addresses
         this.listAllAddresses.add(address);
+        synchronized (this) {
+            EntityManager em = EMFService.get().createEntityManager();
+            try {
+                em.persist(address);
+            } finally {
+                em.close();
+            }
+        }
     }
     /**
      * Insert list insert addresses into data store.

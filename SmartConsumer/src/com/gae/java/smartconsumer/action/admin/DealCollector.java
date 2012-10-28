@@ -17,6 +17,7 @@ import com.gae.java.smartconsumer.blo.AddressBLO;
 import com.gae.java.smartconsumer.blo.AddressDetailBLO;
 import com.gae.java.smartconsumer.blo.DealBLO;
 import com.gae.java.smartconsumer.util.GetDealFunction;
+import com.gae.java.smartconsumer.util.UtilHtmlToXML;
 
 /**
  * Deal collector.
@@ -28,27 +29,25 @@ public class DealCollector extends Action {
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
             HttpServletResponse response) throws Exception {
         try {
-            if (request.getParameter("123do") == "") {
-                GetDealFunction.getFrom123doVn("http://123do.vn/", 0);
-                GetDealFunction.getFrom123doVn("http://123do.vn/dealhot.php", 1);
-            }
             if (request.getParameter("hotdeal") == "") {
                 GetDealFunction.getFromHotDealVn("http://www.hotdeal.vn/ho-chi-minh/");
-                GetDealFunction.getFromHotDealVn("http://www.hotdeal.vn/ho-chi-minh/page-2/");
+                /*GetDealFunction.getFromHotDealVn("http://www.hotdeal.vn/ho-chi-minh/page-2/");
                 GetDealFunction.getFromHotDealVn("http://www.hotdeal.vn/ho-chi-minh/page-3/");
                 GetDealFunction.getFromHotDealVn("http://www.hotdeal.vn/ho-chi-minh/page-4/");
                 GetDealFunction.getFromHotDealVn("http://www.hotdeal.vn/ha-noi/");
                 GetDealFunction.getFromHotDealVn("http://www.hotdeal.vn/ha-noi/page-2/");
-                GetDealFunction.getFromHotDealVn("http://www.hotdeal.vn/ha-noi/page-3/");
+                GetDealFunction.getFromHotDealVn("http://www.hotdeal.vn/ha-noi/page-3/");*/
             }
             if (request.getParameter("muachung") == "") {
-                GetDealFunction.getFromMuaChungVn();
+                GetDealFunction.getFromMuaChungVnNew();
             }
-            DealBLO.INSTANCE.insertIntoDataStore();
-            AddressBLO.INSTANCE.insertIntoDataStore();
-            AddressDetailBLO.INSTANCE.insertIntoDataStore();
+            if (request.getParameter("url") == "") {
+                System.out.println(new UtilHtmlToXML().readHtmlToBuffer(request.getParameter("link")).toString());
+            }
         } catch (Exception ex) {
             String error = ex.getMessage();
+            System.out.println(ex.getMessage());
+            ex.printStackTrace();
             request.setAttribute("error", error);
         }
         return mapping.findForward("success");

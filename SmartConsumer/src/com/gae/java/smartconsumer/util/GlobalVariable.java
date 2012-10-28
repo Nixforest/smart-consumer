@@ -18,4 +18,6 @@ public final class GlobalVariable {
     public static final int CITY_HAIPHONG = 26;
     public static final int CITY_VUNGTAU = 67;
     public static final int CITY_CANTHO = 14;
+    public static final String VND = "VNĐ";
+    public static final String NON_BREAKING_SPACE = "&nbsp;";
 }

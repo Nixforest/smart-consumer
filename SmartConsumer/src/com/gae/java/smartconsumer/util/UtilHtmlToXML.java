@@ -9,10 +9,12 @@ package com.gae.java.smartconsumer.util;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
@@ -1789,19 +1791,41 @@ public class UtilHtmlToXML {
    /**
     * Read Html to buffer.
     * @param address address of html
-    * @param id of city
+    * @param cityId of city
     * @return String Buffer
+ * @throws IOException 
     * @throws Exception Exception maybe happen when connect to Internet
     */
-   public StringBuffer readHtmlToBuffer_Cookie(String address, int cityId) throws Exception {
-       URL url = new URL(address);
+   public StringBuffer readHtmlToBufferCookie(String address, int cityId) throws IOException {
+       URL url = null;
+        try {
+            url = new URL(address);
+        } catch (MalformedURLException ex) {
+            // TODO Auto-generated catch block
+            ex.printStackTrace();
+        }
        String cookie = "mc_cityMC=" + String.valueOf(cityId);
-       URLConnection connection = url.openConnection();
+       URLConnection connection = null;
+        try {
+            connection = url.openConnection();
+        } catch (IOException ex) {
+            // TODO Auto-generated catch block
+            ex.printStackTrace();
+        }
        connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded; charset=ISO-8859-1");
        connection.setRequestProperty("Content-Encoding", "ISO-8859-1");
        connection.setRequestProperty("Cookie", cookie);
 
-       BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
+       BufferedReader br = null;
+        try {
+            br = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
+        } catch (UnsupportedEncodingException ex) {
+            // TODO Auto-generated catch block
+            ex.printStackTrace();
+        } catch (IOException ex) {
+            // TODO Auto-generated catch block
+            ex.printStackTrace();
+        }
        String temp = "";
        StringBuffer stringHtml = new StringBuffer();
        while ((temp = br.readLine()) != null) {
