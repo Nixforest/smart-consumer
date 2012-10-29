@@ -1,11 +1,18 @@
+Ext.Loader.setPath({
+    'SmartConsumer' : 'app',
+    'Deft' : 'app/lib/deft'
+});
+Ext.require(['Deft.*']);
 Ext.application({
-    name: 'SmartConsumer_mobile',
+    name: 'SmartConsumer',
 
     requires: [
         'Ext.MessageBox'
     ],
 
     views: ['Main'],
+    stores: ['SmartConsumer.base.Store', 'Dashboard', 'Deals'],
+    controllers: ['Main', 'About', 'ListDeal'],
 
     icon: {
         '57': 'resources/icons/Icon.png',
@@ -30,7 +37,7 @@ Ext.application({
         Ext.fly('appLoadingIndicator').destroy();
 
         // Initialize the main view
-        Ext.Viewport.add(Ext.create('SmartConsumer_mobile.view.Main'));
+        Ext.Viewport.add(Ext.create('SmartConsumer.view.Main'));
     },
 
     onUpdated: function() {

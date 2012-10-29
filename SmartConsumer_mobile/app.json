@@ -2,7 +2,7 @@
     /**
      * The application's namespace, used by Sencha Command to generate classes
      */
-    "name": "SmartConsumer_mobile",
+    "name": "SmartConsumer",
 
     /**
      * The file path to this application's front HTML document, relative to this app.json file
@@ -70,7 +70,12 @@
          * List of items in the CACHE MANIFEST section
          */
         "cache": [
-            "index.html"
+            "index.html",
+            "lib/jquery.js",
+            "lib/cordova-1.7.0.js",
+            "resources/icons/home.png",
+            "resources/icons/list.png",
+            "resources/icons/about.png",
         ],
         /**
          * List of items in the NETWORK section
@@ -90,7 +95,9 @@
     "resources": [
         "resources/images",
         "resources/icons",
-        "resources/startup"
+        "resources/startup",
+        "lib/cordova-1.7.0.js",
+        "lib/jquery.js"
     ],
 
     /**
