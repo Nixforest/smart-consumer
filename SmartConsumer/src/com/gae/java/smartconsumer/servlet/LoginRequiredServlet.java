@@ -1,8 +1,6 @@
 /**
  * LoginRequiredServlet.java
- * 
- * 28/5/2012
- * 
+ * 28/05/2012
  * Smart Consumer project
  */
 package com.gae.java.smartconsumer.servlet;
@@ -12,7 +10,6 @@ import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -24,35 +21,37 @@ import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 
 /**
- * Controller login
- * 
+ * Controller login.
  * @version 1.0 28/5/2012
- * @author Nixforest
+ * @author NguyenPT
  */
 public class LoginRequiredServlet extends HttpServlet {
     /**  . */
     private static final long serialVersionUID = 1L;
-    private static final Logger log = Logger.getLogger(LoginRequiredServlet.class.getName());
-    private static final Map<ProviderOpenID, String> authDomainMap = new HashMap<ProviderOpenID, String>();
+    /**
+     * Map authentication domain.
+     */
+    private static final Map<ProviderOpenID, String> AUTHDOMAINMAP = new HashMap<ProviderOpenID, String>();
     static {
-        authDomainMap.put(ProviderOpenID.GOOGLE, "google.com");
-        authDomainMap.put(ProviderOpenID.YAHOO, "yahoo.com");
+        AUTHDOMAINMAP.put(ProviderOpenID.GOOGLE, "google.com");
+        AUTHDOMAINMAP.put(ProviderOpenID.YAHOO, "yahoo.com");
     }
-    private static final Map<ProviderOpenID, String> federatedIdentityMap;
+    /**
+     * Map federate identity.
+     */
+    private static final Map<ProviderOpenID, String> FEDERATEDIDENTITYMAP;
     static {
-        federatedIdentityMap = new HashMap<ProviderOpenID, String>();
-        federatedIdentityMap.put(ProviderOpenID.GOOGLE, "https://www.google.com/accounts/o8/id");
-        federatedIdentityMap.put(ProviderOpenID.YAHOO, "yahoo.com");
+        FEDERATEDIDENTITYMAP = new HashMap<ProviderOpenID, String>();
+        FEDERATEDIDENTITYMAP.put(ProviderOpenID.GOOGLE, "https://www.google.com/accounts/o8/id");
+        FEDERATEDIDENTITYMAP.put(ProviderOpenID.YAHOO, "yahoo.com");
     }
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse resp)
-        throws IOException {        
+        throws IOException {
         UserService userService = UserServiceFactory.getUserService();
         User user = userService.getCurrentUser();
-        
         resp.setContentType("text/html");
         PrintWriter out = resp.getWriter();
-        
         if (user != null) {
             out.println("Hello <i>" + user.getNickname() + "</i>!");
             out.println("[<a href=\""
@@ -60,15 +59,13 @@ public class LoginRequiredServlet extends HttpServlet {
                     + "\">sign out</a>]");
         } else {
             out.println("Hello world! Sign in at: ");
-            for (ProviderOpenID providerName : federatedIdentityMap.keySet()) {
-                String providerUrl = federatedIdentityMap.get(providerName);
-                log.info(providerUrl);
+            for (ProviderOpenID providerName : FEDERATEDIDENTITYMAP.keySet()) {
+                String providerUrl = FEDERATEDIDENTITYMAP.get(providerName);
                 //String loginUrl = userService.createLoginURL(req.getRequestURI(), null,
                   //          "gmail.com",  new HashSet<String>());
                 String loginUrl = userService.createLoginURL(
-                        req.getRequestURI(), authDomainMap.get(providerName),
+                        req.getRequestURI(), AUTHDOMAINMAP.get(providerName),
                         providerUrl, new HashSet<String>());
-                log.info(loginUrl);
                 out.println("[<a href=\"" + loginUrl + "\">" + providerName + "</a>] ");
             }
         }

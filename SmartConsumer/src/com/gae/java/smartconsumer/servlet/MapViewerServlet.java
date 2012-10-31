@@ -1,8 +1,6 @@
 /**
  * MapViewerServlet.java
- * 
- * 28/5/2012
- * 
+ * 28/05/2012
  * Smart Consumer project
  */
 package com.gae.java.smartconsumer.servlet;
@@ -29,49 +27,39 @@ import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 
 /**
- * Controller mapviewer
- * 
- * @version 1.0 28/5/2012
- * @author Nixforest
+ * Controller mapviewer.
+ * @version 1.0 28/05/2012
+ * @author NguyenPT
  */
 public class MapViewerServlet extends Action {
     @Override
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
             HttpServletResponse response) throws Exception {
-        
         UserService userService = UserServiceFactory.getUserService();
         User user = userService.getCurrentUser();
-        
         if (user != null) {
             request.setAttribute("urlLinktext", "Logout");
             request.setAttribute("url", userService.createLogoutURL(request.getRequestURI()));
             request.setAttribute("nickName", user.getNickname());
-                          
         } else {
             request.setAttribute("url", "/_ah/login_required?url=map");
             request.setAttribute("urlLinktext", "Login");
         }
         try {
-            List<Deal> listDeals = new ArrayList<Deal>();
             List<Address> listAddresses = new ArrayList<Address>();
             for (Deal deal : DealBLO.INSTANCE.getListAllDealsSelling()) {
-                List<AddressDetail> listAddressDetails = AddressDetailBLO.INSTANCE.getAddressDetailsByDealId(deal.getId());
+                List<AddressDetail> listAddressDetails =
+                        AddressDetailBLO.INSTANCE.getAddressDetailsByDealId(deal.getId());
                 for (AddressDetail addressDetail : listAddressDetails) {
                     listAddresses.add(AddressBLO.INSTANCE.getAddressById(addressDetail.getAddressId()));
                 }
             }
-            /*for (Deal deal : DealBLO.INSTANCE.getListAllDeals()) {                
-                if (!checkIfAddressExist(listDeals, deal.getAddress())) {
-                    listDeals.add(deal);
-                }
-            }*/
             request.setAttribute("listDeals", DealBLO.INSTANCE.getListAllDealsSelling());
         } catch (Exception ex) {
             request.setAttribute("error", ex.getMessage());
         }
         return mapping.findForward("success");
     }
-    
     /**
      * Check if an address is exist.
      * @param deals List deals
@@ -79,11 +67,6 @@ public class MapViewerServlet extends Action {
      * @return True if address is exist, false otherwise
      */
     public boolean checkIfAddressExist(List<Deal> deals, String address) {
-        for (Deal deal : deals) {
-            /*if (deal.getAddress().contains(address)) {
-                return true;
-            }*/
-        }
         return false;
     }
 }
