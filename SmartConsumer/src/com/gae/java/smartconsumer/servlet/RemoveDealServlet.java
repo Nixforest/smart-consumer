@@ -1,8 +1,6 @@
 /**
  * RemoveDealServlet.java
- * 
- * 28/5/2012
- * 
+ * 28/05/2012
  * Smart Consumer project
  */
 package com.gae.java.smartconsumer.servlet;
@@ -16,21 +14,19 @@ import javax.servlet.http.HttpServletResponse;
 import com.gae.java.smartconsumer.blo.DealBLO;
 
 /**
- * Controller removedeal
- * 
- * @version 1.0 28/5/2012
- * @author Nixforest
+ * Controller removedeal.
+ * @version 1.0 28/05/2012
+ * @author NguyenPT
  */
 public class RemoveDealServlet extends HttpServlet {
     /**  . */
     private static final long serialVersionUID = 5303631542336734271L;
-
+    @Override
     public void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws IOException {
-        try {            
+        try {
             Long id = Long.parseLong(req.getParameter("id"));
             String opt = req.getParameter("opt");
-            
             if (opt.equals("Remove")) {
                 DealBLO.INSTANCE.delete(id);
             } else {
@@ -38,7 +34,7 @@ public class RemoveDealServlet extends HttpServlet {
             }
 
         } catch (Exception ex) {
-            // TODO: handle exception
+            ex.printStackTrace();
         }
         resp.sendRedirect("/dealmanager");
     }
