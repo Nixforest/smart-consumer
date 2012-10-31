@@ -73,18 +73,25 @@ public final class GeneralUtil {
      * Get price value (double) from string.
      * @param price string price
      * @return value of price string in double
-     * @throws Exception Exception threw when parse t double
      */
-    public static double getPriceFromString(String price) throws Exception {
+    public static double getPriceFromString(String price) {
         double result = 0;
         try {
-            price = price.substring(0, price.lastIndexOf("0") + 1);
-            price = price.replace(",", "");
-            price = price.replace(".", "").trim();
-            // price = price.replace(" VNĐ", "");
+            if (price.contains(",")) {
+                price = price.replace(",", "");
+            }
+            if (price.contains(".")) {
+                price = price.replace(".", "");
+            }
+            if (price.contains(GlobalVariable.VND)) {
+                price = price.replace(GlobalVariable.VND, "");
+            }
+            if (price.contains(GlobalVariable.NON_BREAKING_SPACE)) {
+                price = price.replace(GlobalVariable.NON_BREAKING_SPACE, "");
+            }
             result = Double.parseDouble(price.trim());
         } catch (Exception e) {
-            throw e;
+            return result;
         }
         return result;
     }
