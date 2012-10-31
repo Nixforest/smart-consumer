@@ -12,10 +12,6 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-
-import com.gae.java.smartconsumer.blo.AddressBLO;
-import com.gae.java.smartconsumer.blo.AddressDetailBLO;
-import com.gae.java.smartconsumer.blo.DealBLO;
 import com.gae.java.smartconsumer.util.GetDealFunction;
 import com.gae.java.smartconsumer.util.UtilHtmlToXML;
 
@@ -46,8 +42,6 @@ public class DealCollector extends Action {
             }
         } catch (Exception ex) {
             String error = ex.getMessage();
-            System.out.println(ex.getMessage());
-            ex.printStackTrace();
             request.setAttribute("error", error);
         }
         return mapping.findForward("success");
