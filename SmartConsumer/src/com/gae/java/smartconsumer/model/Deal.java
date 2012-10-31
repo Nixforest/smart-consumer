@@ -15,8 +15,9 @@ import javax.persistence.Id;
 import com.gae.java.smartconsumer.util.Status;
 /**
  * Class describe "Deal" object, contain data about Deal.
- * @version 2.0 2/6/2012
- * @author Nixforest
+ * @version 2.0 02/06/2012
+ * @version 2.0 16/09/2012 - Update - NguyenPT
+ * @author NguyenPT
  */
 @Entity(name = "Deal")
 public class Deal {
@@ -50,6 +51,8 @@ public class Deal {
     private java.util.Date updateDate;
     /** Status of record. */
     private Integer status;
+    /** Category of deal. */
+    private Integer categoryId;
     /**
      * Empty constructor.
      */
@@ -85,6 +88,7 @@ public class Deal {
         this.isVoucher = isVoucher;
         this.setUpdateDate(java.util.Calendar.getInstance().getTime());
         this.status = Status.SELLING.ordinal();
+        this.categoryId = 1;
     }
     /**
      * Constructor of Deal class.
@@ -100,10 +104,11 @@ public class Deal {
      * @param endTime End time
      * @param isVoucher Is voucher
      * @param status Status of Deal
+     * @param categoryId Category of deal
      */
     public Deal(String title, String description, String link, String imageLink, double price,
             double basicPrice, String unitPrice, float save, int numberBuyer, Date endTime, boolean isVoucher,
-            int status) {
+            int status, Integer categoryId) {
         this.title = title;
         this.description = description;
         this.link = link;
@@ -341,5 +346,21 @@ public class Deal {
      */
     public void setId(Long id) {
         this.id = id;
+    }
+
+    /**
+    * Get value of categoryId.
+    * @return the categoryId
+    */
+    public Integer getCategoryId() {
+        return categoryId;
+    }
+
+    /**
+     * Set the value for categoryId.
+     * @param categoryId the categoryId to set
+     */
+    public void setCategoryId(Integer categoryId) {
+        this.categoryId = categoryId;
     }
 }
