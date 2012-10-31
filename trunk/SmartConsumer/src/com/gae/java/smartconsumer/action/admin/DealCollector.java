@@ -1,7 +1,7 @@
 /**
  * DealCollector.java
- * 14 Sep 2012
- * SmartConsumer.
+ * 14/09/2012
+ * Smart Consumer project
  */
 package com.gae.java.smartconsumer.action.admin;
 
