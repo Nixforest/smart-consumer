@@ -1793,8 +1793,7 @@ public class UtilHtmlToXML {
     * @param address address of html
     * @param cityId of city
     * @return String Buffer
- * @throws IOException 
-    * @throws Exception Exception maybe happen when connect to Internet
+    * @throws IOException Exception
     */
    public StringBuffer readHtmlToBufferCookie(String address, int cityId) throws IOException {
        URL url = null;
@@ -1820,10 +1819,8 @@ public class UtilHtmlToXML {
         try {
             br = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
         } catch (UnsupportedEncodingException ex) {
-            // TODO Auto-generated catch block
             ex.printStackTrace();
         } catch (IOException ex) {
-            // TODO Auto-generated catch block
             ex.printStackTrace();
         }
        String temp = "";
