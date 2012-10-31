@@ -69,11 +69,11 @@ public enum AddressDetailBLO {
      * @return Max Id if it is exist, 0 otherwise
      */
     public Long getMaxId() {
-        List<AddressDetail> listAllAddressDetails = AddressDetailDAO.INSTANCE.getListAllAddressDetails();
+        List<AddressDetail> listAllAddressDetails = this.getAllAddressDetailsSortById();
         if (listAllAddressDetails.size() == 0) {
             return (long) 0;
         } else {
-            return listAllAddressDetails.get(0).getId();
+            return listAllAddressDetails.get(listAllAddressDetails.size() - 1).getId();
         }
     }
     /**
