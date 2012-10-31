@@ -280,9 +280,9 @@ public enum DealBLO {
         DealDAO.INSTANCE.update(deal);
     }
     /**
-     * Search Deal by Price
-     * @param priceFrom
-     * @param priceTo
+     * Search Deal by Price.
+     * @param priceFrom Price from
+     * @param priceTo Price to
      * @return list Deal
      */
     public List<Deal> searchByPrice(double priceFrom, double priceTo) {
