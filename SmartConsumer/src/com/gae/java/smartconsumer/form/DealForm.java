@@ -1,3 +1,8 @@
+/**
+ * DealForm.java
+ * 28/5/2012
+ * Smart Consumer project
+ */
 package com.gae.java.smartconsumer.form;
 
 import java.io.Serializable;
@@ -6,23 +11,38 @@ import java.util.List;
 import org.apache.struts.action.ActionForm;
 
 import com.gae.java.smartconsumer.model.Deal;
-
+/**
+ * DealForm action form.
+ * @version 2.0 03/06/2012 - Create - NguyenPT
+ * @author NguyenPT
+ */
 public class DealForm extends ActionForm implements Serializable {
-    
+    /**  . */
     private static final long serialVersionUID = 1L;
-    
-    private String title;                       // Title of deal    
-    private String description;                 // Description of deal
-    private String address;                     // Address of deal
-    private String link;                        // Url of deal
-    private String imageLink;                   // Url of deal's image
-    private double price;                       // Price of deal
-    private double basicPrice;                  // Basic price of deal
-    private String unitPrice;                   // Unit price of deal
-    private float save;                         // Save of deal
-    private String endTime;             // End time of deal
-    private boolean isVoucher;                  // Method of delivery
-    private List<Deal> listDeal; 
+    /** Title of deal. */
+    private String title;
+    /** Description of deal. */
+    private String description;
+    /** Address of deal. */
+    private String address;
+    /** Url of deal. */
+    private String link;
+    /** Url of deal's image. */
+    private String imageLink;
+    /** Price of deal. */
+    private double price;
+    /** Basic price of deal. */
+    private double basicPrice;
+    /** Unit price of deal. */
+    private String unitPrice;
+    /** Save of deal. */
+    private float save;
+    /** End time of deal. */
+    private String endTime;
+    /** Method of delivery. */
+    private boolean isVoucher;
+    /** List of deal. */
+    private List<Deal> listDeal;
     /**
      * Get value of listDeal.
      * @return the listDeal
@@ -198,5 +218,4 @@ public class DealForm extends ActionForm implements Serializable {
     public void setVoucher(boolean isVoucher) {
         this.isVoucher = isVoucher;
     }
-    
 }
