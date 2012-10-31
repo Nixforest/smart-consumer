@@ -1,12 +1,28 @@
+/**
+ * StatusForm.java
+ * 28/5/2012
+ * Smart Consumer project
+ */
 package com.gae.java.smartconsumer.form;
 
 import java.io.Serializable;
 
 import org.apache.struts.action.ActionForm;
-
+/**
+ * StatusForm action form.
+ * @version 2.0 03/06/2012 - Create - NguyenPT
+ * @author NguyenPT
+ */
 public class StatusForm extends ActionForm implements Serializable {
+    /** . */
     private static final long serialVersionUID = 1L;
+    /**
+     * Status.
+     */
     private Integer status;
+    /**
+     * Id.
+     */
     private Long id;
     /**
      * Get value of id.
