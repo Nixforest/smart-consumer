@@ -1,3 +1,8 @@
+/**
+ * GetListDeal.java
+ * 28/05/2012
+ * Smart Consumer project
+ */
 package com.gae.java.smartconsumer.mobile.action;
 
 import java.io.IOException;
@@ -12,31 +17,24 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.gae.java.smartconsumer.mobile.blo.DealMobileBLO;
-import com.google.appengine.repackaged.org.json.JSONException;
-import com.google.appengine.repackaged.org.json.JSONObject;
-
+/**
+ * Get list deals class.
+ * @version 1.0 28/05/2012
+ * @author KhoaCD
+ */
 public class GetListDeal extends Action {
-    /**
-     * 
-     * [Explain the description for this method here].
-     * @param mapping
-     * @param form
-     * @param request
-     * @param response
-     * @return ActionForward
-     * @throws Exception
-     * @see org.apache.struts.action.Action#execute(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
-     */
-    @Override
+   @Override
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
             HttpServletResponse response) throws Exception {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter write;
         List<JSONObject> listJson = new ArrayList<JSONObject>();
         try {
-            if (request.getParameter("limit")!=null) {
+            if (request.getParameter("limit") != null) {
                 int limit = Integer.valueOf(request.getParameter("limit"));
                 listJson = DealMobileBLO.getDealLimit(limit);
                 write = response.getWriter();
@@ -48,9 +46,9 @@ public class GetListDeal extends Action {
                 write.println(listJson);
                 write.flush();
             }
-        } catch(JSONException ex) {
+        } catch (JSONException ex) {
             ex.printStackTrace();
-        } catch(IOException ex) {
+        } catch (IOException ex) {
             ex.printStackTrace();
         }
         return null;
