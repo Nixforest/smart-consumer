@@ -1,3 +1,8 @@
+/**
+ * GetListAddress.java
+ * 28/05/2012
+ * Smart Consumer project
+ */
 package com.gae.java.smartconsumer.mobile.action;
 
 import java.io.IOException;
@@ -12,10 +17,14 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.json.JSONObject;
 
 import com.gae.java.smartconsumer.mobile.blo.AddressMobileBLO;
-import com.google.appengine.repackaged.org.json.JSONObject;
-
+/**
+ * Get list address class.
+ * @version 1.0 28/5/2012
+ * @author KhoaCD
+ */
 public class GetListAddress extends Action {
     @Override
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
@@ -24,17 +33,17 @@ public class GetListAddress extends Action {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter write;
         List<JSONObject> object = new ArrayList<JSONObject>();
-        try{
+        try {
             int limit = Integer.parseInt(request.getParameter("limit"));
             object = AddressMobileBLO.getListAddressLimit(limit);
             write = response.getWriter();
             if (object != null) {
                 write.println(object);
-            }            
+            }
             write.flush();
-        }catch(IOException ex){
+        } catch (IOException ex) {
             ex.printStackTrace();
-        }catch(Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
         return null;
