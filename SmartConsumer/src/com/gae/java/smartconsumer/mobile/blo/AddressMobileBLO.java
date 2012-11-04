@@ -1,5 +1,5 @@
 /**
- * DealBLO.java
+ * AddressMobileBLO.java
  * 21/10/2012
  * Smart Consumer project
  */
@@ -11,12 +11,11 @@ import java.util.List;
 import com.gae.java.smartconsumer.blo.AddressBLO;
 import com.gae.java.smartconsumer.blo.AddressDetailBLO;
 import com.gae.java.smartconsumer.blo.DealBLO;
-import com.gae.java.smartconsumer.dao.DealDAO;
 import com.gae.java.smartconsumer.model.Address;
 import com.gae.java.smartconsumer.model.Deal;
 import com.gae.java.smartconsumer.util.GeneralUtil;
-import com.google.appengine.repackaged.org.json.JSONException;
-import com.google.appengine.repackaged.org.json.JSONObject;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Business logic mobile class for Address object.
@@ -25,8 +24,14 @@ import com.google.appengine.repackaged.org.json.JSONObject;
  */
 public class AddressMobileBLO {
     /**
+     * Constructor.
+     */
+    protected AddressMobileBLO() {
+        // Do nothing
+    }
+    /**
      * Get a address by Deal Id.
-     * @param id
+     * @param id Id
      * @return JSONObject
      */
     public static List<JSONObject> getAddressByDealId(Long id) {
@@ -35,8 +40,9 @@ public class AddressMobileBLO {
         Deal deal = DealBLO.INSTANCE.getDealById(id);
         try {
             Address address = new Address();
-            for(int i = 0; i < AddressDetailBLO.INSTANCE.getAddressDetailsByDealId(id).size(); i++) {
-                address = AddressBLO.INSTANCE.getAddressById(AddressDetailBLO.INSTANCE.getAddressDetailsByDealId(id).get(i).getAddressId());
+            for (int i = 0; i < AddressDetailBLO.INSTANCE.getAddressDetailsByDealId(id).size(); i++) {
+                address = AddressBLO.INSTANCE.getAddressById(
+                        AddressDetailBLO.INSTANCE.getAddressDetailsByDealId(id).get(i).getAddressId());
                 jsonObject.put("id", deal.getId());
                 jsonObject.put("title", deal.getTitle());
                 jsonObject.put("link", deal.getLink());
@@ -50,17 +56,15 @@ public class AddressMobileBLO {
                 listJson.add(jsonObject);
             }
         } catch (JSONException ex) {
-            // TODO Auto-generated catch block
             ex.printStackTrace();
         } catch (Exception ex1) {
-            // TODO Auto-generated catch block
             ex1.printStackTrace();
-        }        
+        }
         return listJson;
     }
     /**
-     * get list address and deal info
-     * @param limit
+     * Get list address and deal info.
+     * @param limit Limit
      * @return List<JSONObject>
      */
     public static List<JSONObject> getListAddressLimit(int limit) {
@@ -71,8 +75,11 @@ public class AddressMobileBLO {
             try {
                 Address address = new Address();
                 for (int i = 0; i < listDeal.size(); i++) {
-                    for (int j = 0; j < AddressDetailBLO.INSTANCE.getAddressDetailsByDealId(listDeal.get(i).getId()).size();j++){
-                        address = AddressBLO.INSTANCE.getAddressById(AddressDetailBLO.INSTANCE.getAddressDetailsByDealId(listDeal.get(i).getId()).get(j).getAddressId());
+                    for (int j = 0; j < AddressDetailBLO.INSTANCE.getAddressDetailsByDealId(
+                            listDeal.get(i).getId()).size(); j++) {
+                        address = AddressBLO.INSTANCE.getAddressById(
+                                AddressDetailBLO.INSTANCE.getAddressDetailsByDealId(
+                                        listDeal.get(i).getId()).get(j).getAddressId());
                         if (address != null) {
                             JSONObject json = new JSONObject();
                             Deal deal = listDeal.get(i);
@@ -91,10 +98,8 @@ public class AddressMobileBLO {
                     }
                 }
             } catch (JSONException ex) {
-                // TODO Auto-generated catch block
                 ex.printStackTrace();
             } catch (Exception ex1) {
-                // TODO Auto-generated catch block
                 ex1.printStackTrace();
             }
         }

@@ -1,5 +1,5 @@
 /**
- * DealBLO.java
+ * DealMobileBLO.java
  * 21/10/2012
  * Smart Consumer project
  */
@@ -8,10 +8,11 @@ package com.gae.java.smartconsumer.mobile.blo;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import com.gae.java.smartconsumer.blo.DealBLO;
 import com.gae.java.smartconsumer.model.Deal;
-import com.google.appengine.repackaged.org.json.JSONException;
-import com.google.appengine.repackaged.org.json.JSONObject;
 
 /**
  * Business logic mobile class for Deal object.
@@ -20,9 +21,16 @@ import com.google.appengine.repackaged.org.json.JSONObject;
  */
 public class DealMobileBLO {
     /**
+     * Constructor.
+     */
+    protected DealMobileBLO() {
+        // Do nothing
+    }
+    /**
      * Get a deal by Id.
      * @param id id of Deal
-     * @return JSONObject
+     * @return JSONObject Object json
+     * @throws JSONException Exception
      */
     public static JSONObject getDealById(Long id) throws JSONException {
         Deal deal = DealBLO.INSTANCE.getDealById(id);
@@ -41,12 +49,10 @@ public class DealMobileBLO {
         jsonObject.put("isVoucher", deal.getisVoucher());
         return jsonObject;
     }
-    
     /**
-     * 
-     * get list all selling deal
+     * Get list all selling deal.
      * @return List<JSONObject>
-     * @throws JSONException
+     * @throws JSONException Exception
      */
     public static List<JSONObject> getDealListAll() throws JSONException {
         List<JSONObject> listJson = new ArrayList<JSONObject>();
@@ -69,20 +75,20 @@ public class DealMobileBLO {
                 json.put("isVoucher", listDeal.get(i).getisVoucher());
                 listJson.add(json);
             }
-        }        
+        }
         return listJson;
     }
     /**
-     * limit get deal
-     * @param limit
+     * Limit get deal.
+     * @param limit Limit
      * @return List<JSONObject>
-     * @throws JSONException
+     * @throws JSONException Exception
      */
     public static List<JSONObject> getDealLimit(int limit) throws JSONException {
         List<JSONObject> listJson = new ArrayList<JSONObject>();
         List<Deal> listDeal = new ArrayList<Deal>();
         listDeal = DealBLO.INSTANCE.listDealsLimit(limit);
-        if( !listDeal.isEmpty()) {
+        if (!listDeal.isEmpty()) {
             for (int i = 0; i < listDeal.size(); i++) {
                 JSONObject json = new JSONObject();
                 json.put("id", listDeal.get(i).getId());
