@@ -1,3 +1,4 @@
+<!-- Footer of all page -->
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <b><br />Ho Chi Minh City National University<br />

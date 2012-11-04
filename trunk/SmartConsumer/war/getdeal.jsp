@@ -1,16 +1,17 @@
+<!-- Get deal from hotdeal/muachung... -->
 <%@page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8" %>
-
 <%@page import="com.google.appengine.api.users.UserServiceFactory"%>
 <%@page import="com.google.appengine.api.users.User"%>
 <%@page import="com.google.appengine.api.users.UserService"%>
 <%@page import="com.gae.java.smartconsumer.dao.DealDAO" %>
-<%@  page import="com.gae.java.smartconsumer.model.Deal" %>
+<%@page import="com.gae.java.smartconsumer.model.Deal" %>
+<%@page import="com.gae.java.smartconsumer.util.GlobalVariable" %>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-<title>Get Deal from websites</title>
+<title><%=GlobalVariable.DEAL_COLLECTOR %></title>
 <link rel="stylesheet"
         type="text/css"
         href="css/main.css"/>
@@ -22,12 +23,12 @@
             User user = userService.getCurrentUser();
         
             String url = userService.createLoginURL(request.getRequestURI());
-            String urlLinktext = "Login";
+            String urlLinktext = GlobalVariable.LOGIN;
             List<Deal> deals = new ArrayList<Deal>();
             
             if (user != null) {
               url = userService.createLogoutURL(request.getRequestURI());
-              urlLinktext = "Logout";
+              urlLinktext = GlobalVariable.LOGOUT;
             }
             deals = dao.getListAllDeals();
             String error = (String)request.getAttribute("error");
@@ -57,19 +58,19 @@
         <form action="/getdeal.app" method="post" accept-charset="utf-8">
           <table>
               <tr>
-                  <td><input type="checkbox" id="123do" name="123do" value=""/>http://123do.vn/</td>
+                  <td><input type="checkbox" id="123do" name="123do" value="" disabled="disabled"/><%=GlobalVariable.LINK_123DO %></td>
               </tr>
               <tr>
-                  <td><input type="checkbox" id="hotdeal" name="hotdeal" value=""/>http://www.hotdeal.vn</td>
+                  <td><input type="checkbox" id="hotdeal" name="hotdeal" value=""/><%=GlobalVariable.LINK_HOTDEAL %></td>
               </tr>
               <tr>
-                  <td><input type="checkbox" id="muachung" name="muachung" value=""/>http://muachung.vn/</td>
+                  <td><input type="checkbox" id="muachung" name="muachung" value=""/><%=GlobalVariable.LINK_MUACHUNG %></td>
               </tr>
               <tr>
-                  <td><input type="checkbox" id="nhommua" name="nhommua" value=""/>http://www.nhommua.com</td>
+                  <td><input type="checkbox" id="nhommua" name="nhommua" value="" disabled="disabled"/><%=GlobalVariable.LINK_NHOMMUA %></td>
               </tr>
               <tr>
-                  <td><input type="checkbox" id="cungmua" name="cungmua" value=""/>http://www.cungmua.com/</td>
+                  <td><input type="checkbox" id="cungmua" name="cungmua" value="" disabled="disabled"/><%=GlobalVariable.LINK_CUNGMUA %></td>
               </tr>
               <tr>
                   <td>
