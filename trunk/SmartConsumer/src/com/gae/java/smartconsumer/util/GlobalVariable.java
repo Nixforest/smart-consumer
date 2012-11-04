@@ -17,6 +17,10 @@ public final class GlobalVariable {
     private GlobalVariable() {
     }
     /**
+     * Project name string.
+     */
+    public static final String PROJECT_NAME = "Smart Consumer";
+    /**
      * Hanoi city Id.
      */
     public static final int CITY_HANOI = 22;
@@ -139,6 +143,14 @@ public final class GlobalVariable {
      */
     public static final String DEAL_METHOD = "Phương thức giao hàng";
     /**
+     * Deal method Voucher string.
+     */
+    public static final String DEAL_METHOD_VOUCHER = "(Giao Voucher)";
+    /**
+     * Deal method Product string.
+     */
+    public static final String DEAL_METHOD_PRODUCT = "(Giao Sản phẩm)";
+    /**
      * Deal collector string.
      */
     public static final String DEAL_COLLECTOR = "Lọc thông tin Deal từ các website";
@@ -150,6 +162,10 @@ public final class GlobalVariable {
      * Logout string.
      */
     public static final String LOGOUT = "Đăng xuất";
+    /**
+     * Websites string.
+     */
+    public static final String WEBSITES = "Danh sách website";
 
     // ----- Website -----
     /**
@@ -172,4 +188,16 @@ public final class GlobalVariable {
      * Link Cungmua string.
      */
     public static final String LINK_CUNGMUA = "http://www.cungmua.com/";
+    /**
+     * Home page string.
+     */
+    public static final String HOME_PAGE = "Trang chủ";
+    /**
+     * View map string.
+     */
+    public static final String MAP_VIEW = "Xem bản đồ";
+    /**
+     * Deal manager string.
+     */
+    public static final String DEAL_MANAGER = "Quản lý Deal";
 }

@@ -22,6 +22,7 @@ import com.gae.java.smartconsumer.blo.DealBLO;
 import com.gae.java.smartconsumer.model.Address;
 import com.gae.java.smartconsumer.model.AddressDetail;
 import com.gae.java.smartconsumer.model.Deal;
+import com.gae.java.smartconsumer.util.GlobalVariable;
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
@@ -38,12 +39,12 @@ public class MapViewerServlet extends Action {
         UserService userService = UserServiceFactory.getUserService();
         User user = userService.getCurrentUser();
         if (user != null) {
-            request.setAttribute("urlLinktext", "Logout");
+            request.setAttribute("urlLinktext", GlobalVariable.LOGOUT);
             request.setAttribute("url", userService.createLogoutURL(request.getRequestURI()));
             request.setAttribute("nickName", user.getNickname());
         } else {
             request.setAttribute("url", "/_ah/login_required?url=map");
-            request.setAttribute("urlLinktext", "Login");
+            request.setAttribute("urlLinktext", GlobalVariable.LOGIN);
         }
         try {
             List<Address> listAddresses = new ArrayList<Address>();

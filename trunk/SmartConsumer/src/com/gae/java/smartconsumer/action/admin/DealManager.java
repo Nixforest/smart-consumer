@@ -14,6 +14,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import com.gae.java.smartconsumer.blo.DealBLO;
+import com.gae.java.smartconsumer.util.GlobalVariable;
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
@@ -35,12 +36,12 @@ public class DealManager extends Action {
                 response.sendRedirect("/smartconsumer.app");
                 return mapping.findForward("failed");
             }
-            request.setAttribute("urlLinktext", "Logout");
+            request.setAttribute("urlLinktext", GlobalVariable.LOGOUT);
             request.setAttribute("url", userService.createLogoutURL(request.getRequestURI()));
             request.setAttribute("nickName", user.getNickname());
         } else {
             request.setAttribute("url", "/_ah/login_required?url=dealmanager");
-            request.setAttribute("urlLinktext", "Login");
+            request.setAttribute("urlLinktext", GlobalVariable.LOGIN);
 
             response.sendRedirect("/smartconsumer.app");
             return mapping.findForward("failed");

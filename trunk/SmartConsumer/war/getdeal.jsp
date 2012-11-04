@@ -48,7 +48,7 @@
         <div style="float: left;">
           <img src="images/smartconsumer.png" />
         </div>
-        <div style="float: left;" class="headline">Deals Information</div>
+        <div style="float: left;" class="headline"><%=GlobalVariable.DEAL_INFO %></div>
         <div style="float: right;">
           <a href="<%=url%>"><%=urlLinktext%></a>
           <%=(user == null ? "" : user.getNickname())%></div>
