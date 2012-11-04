@@ -1,0 +1,50 @@
+@mixin dashboard {
+    .dashboards-list {
+        text-align: center;
+        padding: 15px;
+    
+        .dashboards-list-container {
+            margin: 0 auto;
+        }
+    
+        .dashboards-list-item {
+            body.x-phone & {
+                display: inline-block;
+            }
+            
+            body:not(.x-phone) & {
+                display: inline-block;
+                padding: 10px;
+            }
+    
+            .image {            
+                background-position: center;
+                background-repeat: no-repeat;
+                height: 40px;
+                width: 55px;
+    
+                body.x-phone & {
+                    margin: 5px;
+                }
+    
+            }
+    
+            .name {
+                padding-top: 5px;
+                font-size: 13px;
+                font-weight: bold;
+                color: #646464;            
+            }
+    
+    
+            .x-portrait & {
+                margin: 10px;
+            }
+        }
+    
+        .x-item-pressed {
+            background: rgba(0, 53, 41, .7);
+            border-color: rgba(0, 53, 41, .8);
+        }
+    }
+}

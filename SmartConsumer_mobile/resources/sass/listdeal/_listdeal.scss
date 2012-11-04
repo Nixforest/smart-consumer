@@ -1,0 +1,96 @@
+@mixin listdeal {
+    .listDeal {
+        text-align: center;
+        padding: 15px;
+        margin: 5px;
+        float: left;
+        width: 320px;
+        height: 480px;
+        background: white;
+    }
+    
+    .dealTitle {
+        float: left;
+        width: 100%;
+        height: 30px;
+        color: #399;
+        text-align: left;
+        font-size: 16px;
+    }
+    
+    .dealVourcherSave {
+        float: left;
+        width: 100%;
+        height: 30px;
+    }
+    
+    .dealIsVoucher {
+        float: left;
+        width: 50%;
+        height: 100%;
+        color: #399;
+        font-style: italic;
+        font-size: 11px;
+    }
+    .dealSave {
+        float: left;
+        width: 50%;
+        height: 100%;
+        color: black;
+        font-weight: bold;
+        font-size: 11px;
+    }
+    
+    .dealImage {
+        float: left;
+        width: 100%;
+        height: 40%;
+    }
+    
+    .dealDescription {
+        float: left;
+        text-align: center;
+        color: black;
+        width: 100%;
+        height: 20%;
+        font-size: 14px;
+    }
+    
+    .dealPrice {
+        float: left;
+        width: 100%;
+        height: 15%;
+    }
+    .dealSavePrice {
+        float: left;
+        width: 50%;
+        height: 100%;
+        font-size: 16px;
+        color: red;
+    }
+    .dealBasicPrice {
+        float: left;
+        width: 50%;
+        height: 100%;
+        font-size: 14px;
+        text-decoration: line-through;
+        color: #666;
+    }
+    
+    .dealTimeBuyer {
+        float: left;
+        width: 100%;
+    }
+    .dealNumberBuyer {
+        font-size: 15px;
+        font-weight: bold;
+        float: left;
+        width: 50%;
+    }
+    .dealTime {
+        float: left;
+        width: 50%;
+        font-size: 15px;
+        font-weight: bold;
+    }
+}

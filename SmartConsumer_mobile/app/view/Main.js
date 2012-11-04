@@ -14,7 +14,7 @@ Ext.define("SmartConsumer.view.Main", {
     	items: [
     	    {
     	    	xtype: 'toolbar',
-        		cls: ['banner-toolbar', 'panel-shadow'],
+	    		cls: ['banner-toolbar', 'panel-shadow'],
         		id: 'banner-toolbar',
         		docked: 'top',
         		layout: {

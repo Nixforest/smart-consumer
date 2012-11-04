@@ -35,9 +35,15 @@ Ext.application({
     launch: function() {
         // Destroy the #appLoadingIndicator element
         Ext.fly('appLoadingIndicator').destroy();
-
+        
+        Ext.Viewport.setWidth(320);
+        Ext.Viewport.setHeight(480);
+        
         // Initialize the main view
         Ext.Viewport.add(Ext.create('SmartConsumer.view.Main'));
+        var store = Ext.getStore('Deals');
+        store.load();
+        console.log('store', store);
     },
 
     onUpdated: function() {

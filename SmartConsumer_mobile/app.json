@@ -72,7 +72,6 @@
         "cache": [
             "index.html",
             "lib/jquery.js",
-            "lib/cordova-1.7.0.js",
             "resources/icons/home.png",
             "resources/icons/list.png",
             "resources/icons/about.png",
@@ -97,7 +96,8 @@
         "resources/icons",
         "resources/startup",
         "lib/cordova-1.7.0.js",
-        "lib/jquery.js"
+        "lib/jquery.js",
+        "lib/ChildBrowser.js"
     ],
 
     /**
