@@ -1,4 +1,8 @@
+<!-- File view use to change status of Deal -->
+
+<%@page import="com.gae.java.smartconsumer.util.GlobalVariable"%>
 <%@page import="com.gae.java.smartconsumer.util.Status"%>
+<%@page import="con.gae.jave.smartconsumer.util.GlobalVariable" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="/WEB-INF/c.tld" prefix="c"%>
@@ -9,7 +13,7 @@
 <html:form action="/changestatusdone.app" method="POST">
     <table>
       <tr>
-        <td>Trạng thái</td>
+        <td><%=GlobalVariable.STATUS %></td>
         <td>
             <input type="hidden" name="id" value="<bean:write name="deal" property="id" />"  />
           <select name="status">

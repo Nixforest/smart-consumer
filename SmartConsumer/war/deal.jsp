@@ -14,10 +14,11 @@
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="com.gae.java.smartconsumer.util.GeneralUtil" %>
+<%@page import="com.gae.java.smartconsumer.util.GlobalVariable" %>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-<title>Deal Information</title>
+<title><%=GlobalVariable.DEAL_INFO %></title>
 <link rel="stylesheet"
         type="text/css"
         href="css/main.css"/>
@@ -95,8 +96,6 @@ function IsNumberInt(str) {
             alert("Bạn sử dụng dấu . nếu muốn nhập số lẻ!");
             return str.substring(0, i);
         }
-        //                  if(temp == " " || temp == ",")
-        //                      return str.substring(0, i);
     }
     return str;
 }
@@ -126,10 +125,11 @@ function setLinkUpdate(id) {
     if (request.getAttribute("nickName") != null) {
         nickName = (String)request.getAttribute("nickName");
     }
-        List<Deal> deals = (List<Deal>) (request.getAttribute("listDeals"));
-        
-        
-        String error = (String)request.getAttribute("error");
+    List<Deal> deals = null;
+    if (request.getAttribute("listDeals") != null) {
+        deals = (List<Deal>) request.getAttribute("listDeals");    
+    }
+    String error = (String)request.getAttribute("error");
     %>
     <div class="errorview">
         <%
@@ -146,36 +146,36 @@ function setLinkUpdate(id) {
         <div style="float: left;">
           <img src="images/smartconsumer.png" />
         </div>
-        <div style="float: left;" class="headline">Deals Information</div>
+        <div style="float: left;" class="headline"><%=GlobalVariable.DEAL_INFO %></div>
         <div style="float: right;">
           <a href="<%=url%>"><%=urlLinktext%></a>
           <%=(urlLinktext.equals("Login") ? "" : nickName)%></div>
       </div>
     </div>
     <div style="clear: both;"></div>
-    Number of Deals: <%=deals.size() %>
-    [<a href="/getdeal.app">Cập nhật</a>]
+    <!-- List deal in data store -->
+    <%=GlobalVariable.DEAL_NUMBER %>: <%=deals.size() %>
+    [<a href="/getdeal.app"><%=GlobalVariable.UPDATE %></a>]
     <!-- [<a href="/manage.app">Quản lý Deal tự tạo</a>] -->
     [<%=DealBLO.INSTANCE.getMaxId() %>]
     <table>
         <tr>
-            <th>Id</th>
-            <th>Tiêu đề</th>
-            <th>Mô tả</th>
-            <th>Địa chỉ</th>
-            <th>Link</th>
-            <th>Giá</th>
-            <th>Giá gốc</th>
-            <th>Tiết kiệm</th>
-            <th>Người mua</th>
-            <th>Thời gian</th>
-            <th>Cập nhật</th>
-            <th>Status</th>
-            <th>Remove</th>
+            <th><%=GlobalVariable.DEAL_ID %></th>
+            <th><%=GlobalVariable.DEAL_TITLE %></th>
+            <th><%=GlobalVariable.DEAL_DESCRIPTION %></th>
+            <th><%=GlobalVariable.DEAL_ADDRESS %></th>
+            <th><%=GlobalVariable.DEAL_LINK %></th>
+            <th><%=GlobalVariable.DEAL_PRICE %></th>
+            <th><%=GlobalVariable.DEAL_BASIC_PRICE %></th>
+            <th><%=GlobalVariable.DEAL_SAVE %></th>
+            <th><%=GlobalVariable.DEAL_NUMBER_BUYER %></th>
+            <th><%=GlobalVariable.DEAL_REMAIN_TIME %></th>
+            <th><%=GlobalVariable.DEAL_UPDATE_TIME %></th>
+            <th><%=GlobalVariable.STATUS %></th>
+            <th><%=GlobalVariable.DEAL_REMOVE %></th>
         </tr>
         <%
             for (Deal deal : deals) {
-                //deal = GeneralUtil.decodeDeal(deal);
         %>
         <tr>
             <td><%=deal.getId() %></td>
@@ -206,12 +206,12 @@ function setLinkUpdate(id) {
                     }
                     %>
                 </select>
-                <a class="done" id="updateLink<%=deal.getId() %>" name="updateLink<%=deal.getId() %>" href="" style="display: none;">Update</a>
+                <a class="done" id="updateLink<%=deal.getId() %>" name="updateLink<%=deal.getId() %>" href="" style="display: none;"><%=GlobalVariable.UPDATE %></a>
             </td>
             <td><%=Status.values()[deal.getStatus()] %></td>
             <%
             String statusRemove = "";
-            statusRemove = (deal.getStatus() != Status.DELETED.ordinal())?("Remove"):("Restore");
+            statusRemove = (deal.getStatus() != Status.DELETED.ordinal())?(GlobalVariable.DEAL_REMOVE):(GlobalVariable.DEAL_RESTORE);
             %>
             <td>
               <a class="done" href="/remove?id=<%=deal.getId() %>&opt=<%=statusRemove %>"><%=statusRemove %></a>
@@ -223,29 +223,29 @@ function setLinkUpdate(id) {
     </table>
   
     <hr/>
-    
+    <!-- Inser new Deal -->
     <div class="main" style="display: ;">
-        <div class="headline">New deal</div>
+        <div class="headline"><%=GlobalVariable.DEAL_NEW %></div>
         <form action="/dealmanager" method="post" accept-charset="utf-8">
             <table>
                 <tr>
-                    <td><label for="title">Tiêu đề</label></td>
+                    <td><label for="title"><%=GlobalVariable.DEAL_TITLE %></label></td>
                     <td><input type="text" name="title" id="title" size="65"/></td>
                 </tr>
                 <tr>
-                    <td><label for="description">Mô tả</label></td>
+                    <td><label for="description"><%=GlobalVariable.DEAL_DESCRIPTION %></label></td>
                     <td><textarea rows="4" cols="50" name="description" id="description"></textarea></td>
                 </tr>
                 <tr>
-                    <td><label for="address">Địa chỉ</label></td>
+                    <td><label for="address"><%=GlobalVariable.DEAL_ADDRESS %></label></td>
                     <td><input type="text" name="address" id="address" size="65"/></td>
                 </tr>
                 <tr>
-                    <td><label for="link">URL</label></td>
+                    <td><label for="link"><%=GlobalVariable.DEAL_LINK %></label></td>
                     <td><input type="url" name="link" id="link" size="65"/></td>
                 </tr>
                 <tr>
-                    <td><label for="imageLink">Ảnh</label></td>
+                    <td><label for="imageLink"><%=GlobalVariable.DEAL_IMAGE %></label></td>
                     <td>
                         <input type="url" name="imageLink" id="imageLink" size="65"/>
                         <input type="button" name="btnUpload" id="btnUpload" value="Upload" onclick="validateField()" />
@@ -253,25 +253,25 @@ function setLinkUpdate(id) {
                     </td>
                 </tr>
                 <tr>
-                    <td><label for="price">Giá</label></td>
+                    <td><label for="price"><%=GlobalVariable.DEAL_PRICE %></label></td>
                     <td>
                         <input name="price" id="price" type="text" autocomplete="off"
                                 onkeyup="this.value=FormatNumber(this.value);" />
                     </td>
                 </tr>
                 <tr>
-                    <td><label for="basicPrice">Giá gốc</label></td>
+                    <td><label for="basicPrice"><%=GlobalVariable.DEAL_BASIC_PRICE %></label></td>
                     <td>
                         <input name="basicPrice" id="basicPrice" type="text" autocomplete="off"
                                 onkeyup="this.value=FormatNumber(this.value);" />
                     </td>
                 </tr>
                 <tr>
-                    <td><label for="unitPrice">Đơn vị</label></td>
+                    <td><label for="unitPrice"><%=GlobalVariable.DEAL_UNIT_PRICE %>vị</label></td>
                     <td><input type="text" name="unitPrice" id="unitPrice" size="65"/></td>
                 </tr>
                 <tr>
-                    <td><label for="save">Tiết kiệm</label></td>
+                    <td><label for="save"><%=GlobalVariable.DEAL_SAVE %></label></td>
                     <td>
                         <input name="save" id="save" type="text" autocomplete="off"
                                 onfocusout="ConvertPriceText(this.value)" 
@@ -280,15 +280,15 @@ function setLinkUpdate(id) {
                     </td>
                 </tr>
                 <tr>
-                    <td><label for="numberBuyer">Người mua</label></td>
+                    <td><label for="numberBuyer"><%=GlobalVariable.DEAL_NUMBER_BUYER %></label></td>
                     <td><input type="number" name="numberBuyer" id="numberBuyer" size="65"/></td>
                 </tr>
                 <tr>
-                    <td><label for="remainTime">Thời gian khuyến mãi</label></td>
+                    <td><label for="remainTime"><%=GlobalVariable.DEAL_REMAIN_TIME %></label></td>
                     <td><input type="text" name="remainTime" id="remainTime" size="65" value="00:00:00"/></td>
                 </tr>
                 <tr>
-                    <td><label for="isVoucher">Phương thức</label></td>
+                    <td><label for="isVoucher"><%=GlobalVariable.DEAL_METHOD %></label></td>
                     <td><input type="checkbox" name="isVoucher" id="isVoucher" size="65"/>Giao voucher</td>
                 </tr>
             </table>

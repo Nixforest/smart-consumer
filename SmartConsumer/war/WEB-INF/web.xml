@@ -29,10 +29,6 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
         <servlet-name>LoginRequired</servlet-name>
         <servlet-class>com.gae.java.smartconsumer.servlet.LoginRequiredServlet</servlet-class>
     </servlet>
-    <servlet>
-        <servlet-name>Test</servlet-name>
-        <servlet-class>com.gae.java.smartconsumer.servlet.TestServlet</servlet-class>
-    </servlet>
     
     <servlet-mapping>
         <servlet-name>RemoveDeal</servlet-name>
@@ -41,10 +37,6 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
     <servlet-mapping>
         <servlet-name>RemoveAllDeal</servlet-name>
         <url-pattern>/removeall</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>Test</servlet-name>
-        <url-pattern>/test</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>AutoCollector</servlet-name>
