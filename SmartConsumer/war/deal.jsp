@@ -149,7 +149,7 @@ function setLinkUpdate(id) {
         <div style="float: left;" class="headline"><%=GlobalVariable.DEAL_INFO %></div>
         <div style="float: right;">
           <a href="<%=url%>"><%=urlLinktext%></a>
-          <%=(urlLinktext.equals("Login") ? "" : nickName)%></div>
+          <%=(urlLinktext.equals(GlobalVariable.LOGIN) ? "" : nickName)%></div>
       </div>
     </div>
     <div style="clear: both;"></div>
@@ -224,7 +224,7 @@ function setLinkUpdate(id) {
   
     <hr/>
     <!-- Inser new Deal -->
-    <div class="main" style="display: ;">
+    <div class="main" style="display: none;">
         <div class="headline"><%=GlobalVariable.DEAL_NEW %></div>
         <form action="/dealmanager" method="post" accept-charset="utf-8">
             <table>

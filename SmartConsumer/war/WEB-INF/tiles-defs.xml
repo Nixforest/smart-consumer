@@ -66,11 +66,11 @@
     <put name="body" value="viewdeal.jsp" />
   </definition>
   <definition name="getdeal" extends="admin">
-    <put name="title" value="Get Deal" />
+    <put name="title" value="Lọc thông tin Deal từ các website" />
     <put name="body" value="getdeal.jsp" />
   </definition>
   <definition name="dealmanager" extends="admin">
-    <put name="title" value="Deal Manager" />
-    <put name="body" value="manage_deal.jsp" />
+    <put name="title" value="Quản lý danh sách Deal" />
+    <put name="body" value="deal.jsp" />
   </definition>
 </tiles-definitions>

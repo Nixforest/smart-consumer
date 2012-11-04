@@ -14,6 +14,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import com.gae.java.smartconsumer.blo.DealBLO;
+import com.gae.java.smartconsumer.util.GlobalVariable;
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
@@ -31,7 +32,7 @@ public class SmartConsumerServlet extends Action {
         User user = userService.getCurrentUser();
 
         if (user != null) {
-            request.setAttribute("urlLinktext", "Logout");
+            request.setAttribute("urlLinktext", GlobalVariable.LOGOUT);
             request.setAttribute("url", userService.createLogoutURL(request.getRequestURI()));
             request.setAttribute("nickName", user.getNickname());
             if (user.getNickname().toLowerCase().contains("nixforest21991920")
@@ -40,7 +41,7 @@ public class SmartConsumerServlet extends Action {
             }
         } else {
             request.setAttribute("url", "/_ah/login_required?url=smartconsumer");
-            request.setAttribute("urlLinktext", "Login");
+            request.setAttribute("urlLinktext", GlobalVariable.LOGIN);
         }
         try {
             request.setAttribute("listDeals", DealBLO.INSTANCE.listDealsSellingSortByUpdateDate());

@@ -1,2 +1,3 @@
 <%@page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8" %>
-<a href="/smartconsumer.app">SmartConsumer</a>
+<%@page import="com.gae.java.smartconsumer.util.GlobalVariable" %>
+<a href="/smartconsumer.app"><%=GlobalVariable.PROJECT_NAME %></a>
