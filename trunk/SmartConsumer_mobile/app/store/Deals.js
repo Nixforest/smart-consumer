@@ -3,22 +3,25 @@ Ext.define('SmartConsumer.store.Deals', {
 	requires: ['SmartConsumer.model.Deal'],
 	
 	config: {
+		autoLoad: true,
 		model: 'SmartConsumer.model.Deal',
-		/*url: 'http://query.yahooapis.com/v1/public/yql',
+		
 		proxy: {
-			type: 'jsonp',
-			rootProperty: ''
+			type: 'rest',
+			//url: 'http://query.yahooapis.com/v1/public/yql',
+			url: 'http://e-smartconsumer.appspot.com/getListDeal.app?limit=10'
+			//rootProperty: ''
 		},
-		extraParams: {
+		/*extraParams: {
 			format: 'json',
-			q: ''
+			q: 'e-smartconsumer.appspot.com/getListDeal.app?limit=10'
 		},*/
-		data: [
+		/*data: [
 		    {
 		    	'id': '1',
 		    	'title': 'title1',
 		    	'description': 'description1',
-		    	'link': 'link1',
+		    	'link': 'http://muachung.vn/khoa-hoc-di-choi/phieu-tap-belly-dance-16102.html',
 		    	'imageLink': 'http://images.hotdeals.vn/images/detailed/72/Thumbnail135104427750874cb52860a.jpg',
 		    	'price': 'price1',
 		    	'basicPrice': 'basicPrice1',
@@ -32,7 +35,7 @@ Ext.define('SmartConsumer.store.Deals', {
 		    	'id': '2',
 		    	'title': 'title2',
 		    	'description': 'description2',
-		    	'link': 'link2',
+		    	'link': 'http://muachung.vn/khoa-hoc-di-choi/phieu-tap-belly-dance-16102.html',
 		    	'imageLink': 'http://images.hotdeals.vn/images/detailed/72/Thumbnail135104427750874cb52860a.jpg',
 		    	'price': 'price2',
 		    	'basicPrice': 'basicPrice2',
@@ -46,7 +49,7 @@ Ext.define('SmartConsumer.store.Deals', {
 		    	'id': '3',
 		    	'title': 'title3',
 		    	'description': 'description3',
-		    	'link': 'link3',
+		    	'link': 'http://muachung.vn/khoa-hoc-di-choi/phieu-tap-belly-dance-16102.html',
 		    	'imageLink': 'http://images.hotdeals.vn/images/detailed/72/Thumbnail135104427750874cb52860a.jpg',
 		    	'price': 'price3',
 		    	'basicPrice': 'basicPrice3',
@@ -98,6 +101,6 @@ Ext.define('SmartConsumer.store.Deals', {
 		    	'endTime': 'endTime6',
 		    	'isVoucher': 'isVoucher6'
 		    },
-	    ]
+	    ]*/
 	}
 });

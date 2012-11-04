@@ -29,11 +29,23 @@ Ext.define('SmartConsumer.view.ListDeal', {
     	    },
     	    {
     	    	xtype: 'panel',
-    	    	centered: true,
+    	    	//centered: true,
     	    	//scrollable: true,
     	    	items: [
     	    	    {
-    	    	    	xtype: 'dealItem'
+    	    	    	xtype: 'dealItem',
+    	    	    	store: 'Deals'
+    	    	    	/*listeners : {
+    						element : 'element',
+    						touchstart : function() {
+    							//if(window.plugins.childBrowser == null) {
+    								//ChildBrowser.install();
+    					        //}
+    							//window.plugins.childBrowser.showWebPage('http://muachung.vn/khoa-hoc-di-choi/phieu-tap-belly-dance-16102.html')
+    							//console.log(window.plugins);
+    							console.log('child', ChildBrowser);
+    						}
+    					}*/
     	    	    }
     	    	]
     	    }

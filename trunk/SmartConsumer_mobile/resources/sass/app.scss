@@ -1,4 +1,6 @@
 @import 'sencha-touch/default/all';
+@import 'dashboard/dashboard';
+@import 'listdeal/listdeal';
 
 // You may remove any of the following modules that you
 // do not use in order to create a smaller css file.
@@ -15,150 +17,10 @@
 @include sencha-carousel;
 @include sencha-form;
 @include sencha-msgbox;
+@include listdeal;
+@include dashboard;
 
 // Your custom code goes here...
-.dashboards-list {
-    text-align: center;
-    padding: 15px;
-
-    .dashboards-list-container {
-        margin: 0 auto;
-    }
-
-    .dashboards-list-item {
-        body.x-phone & {
-            display: inline-block;
-        }
-        
-        body:not(.x-phone) & {
-            display: inline-block;
-            padding: 10px;
-        }
-
-        .image {            
-            background-position: center;
-            background-repeat: no-repeat;
-            height: 40px;
-            width: 55px;
-
-            body.x-phone & {
-                margin: 5px;
-            }
-
-        }
-
-        .name {
-            padding-top: 5px;
-            font-size: 13px;
-            font-weight: bold;
-            color: #646464;            
-        }
-
-
-        .x-portrait & {
-            margin: 10px;
-        }
-    }
-
-    .x-item-pressed {
-        background: rgba(0, 53, 41, .7);
-        border-color: rgba(0, 53, 41, .8);
-    }
-}
-
-.listDeal {
-    text-align: center;
-    padding: 15px;
-    float: left;
-    width: 320px;
-    height: 480px;
-    background: white;
-}
-
-.dealTitle {
-    float: left;
-    width: 100%;
-    height: 30px;
-    color: #399;
-    text-align: left;
-    font-size: 16px;
-}
-
-.dealVourcherSave {
-    float: left;
-    width: 100%;
-    height: 30px;
-}
-
-.dealIsVoucher {
-    float: left;
-    width: 50%;
-    height: 100%;
-    color: #399;
-    font-style: italic;
-    font-size: 11px;
-}
-.dealSave {
-    float: left;
-    width: 50%;
-    height: 100%;
-    color: black;
-    font-weight: bold;
-    font-size: 11px;
-}
-
-.dealImage {
-    float: left;
-    width: 100%;
-    height: 40%;
-}
-
-.dealDescription {
-    float: left;
-    text-align: center;
-    color: black;
-    width: 100%;
-    height: 20%;
-    font-size: 14px;
-}
-
-.dealPrice {
-    float: left;
-    width: 100%;
-    height: 15%;
-}
-.dealSavePrice {
-    float: left;
-    width: 50%;
-    height: 100%;
-    font-size: 16px;
-    color: red;
-}
-.dealBasicPrice {
-    float: left;
-    width: 50%;
-    height: 100%;
-    font-size: 14px;
-    text-decoration: line-through;
-    color: #666;
-}
-
-.dealTimeBuyer {
-    float: left;
-    width: 100%;
-}
-.dealNumberBuyer {
-    font-size: 15px;
-    font-weight: bold;
-    float: left;
-    width: 50%;
-}
-.dealTime {
-    float: left;
-    width: 50%;
-    font-size: 15px;
-    font-weight: bold;
-}
 
 
 .back-button{

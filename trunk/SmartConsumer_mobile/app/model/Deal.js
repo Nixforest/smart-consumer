@@ -5,7 +5,7 @@ Ext.define('SmartConsumer.model.Deal', {
 		fields: [
 		     {
 		    	 name: 'id',
-		    	 type: ''
+		    	 type: 'string'
 		     },
 		     {
 		    	 name: 'title',
@@ -25,15 +25,15 @@ Ext.define('SmartConsumer.model.Deal', {
 		     },
 		     {
 		    	 name: 'price',
-		    	 type: ''
+		    	 type: 'string'
 		     },
 		     {
 		    	 name: 'unitPrice',
-		    	 type: ''
+		    	 type: 'string'
 		     },
 		     {
 		    	 name: 'basicPrice',
-		    	 type: ''
+		    	 type: 'string'
 		     },
 		     {
 		    	 name: 'save',
