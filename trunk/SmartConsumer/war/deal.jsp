@@ -208,7 +208,7 @@ function setLinkUpdate(id) {
                 </select>
                 <a class="done" id="updateLink<%=deal.getId() %>" name="updateLink<%=deal.getId() %>" href="" style="display: none;"><%=GlobalVariable.UPDATE %></a>
             </td>
-            <td><%=Status.values()[deal.getStatus()] %></td>
+            <%-- <td><%=Status.values()[deal.getStatus()] %></td> --%>
             <%
             String statusRemove = "";
             statusRemove = (deal.getStatus() != Status.DELETED.ordinal())?(GlobalVariable.DEAL_REMOVE):(GlobalVariable.DEAL_RESTORE);

@@ -2,7 +2,7 @@
 
 <%@page import="com.gae.java.smartconsumer.util.GlobalVariable"%>
 <%@page import="com.gae.java.smartconsumer.util.Status"%>
-<%@page import="con.gae.jave.smartconsumer.util.GlobalVariable" %>
+<%@page import="com.gae.java.smartconsumer.util.GlobalVariable" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="/WEB-INF/c.tld" prefix="c"%>

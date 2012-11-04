@@ -200,4 +200,16 @@ public final class GlobalVariable {
      * Deal manager string.
      */
     public static final String DEAL_MANAGER = "Quản lý Deal";
+    /**
+     * Search string.
+     */
+    public static final String SEARCH = "Tìm kiếm";
+    /**
+     * Price from string.
+     */
+    public static final String PRICE_FROM = "Giá từ";
+    /**
+     * Price to string.
+     */
+    public static final String PRICE_TO = "đến";
 }

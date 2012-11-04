@@ -267,7 +267,7 @@ public class GetDealFunction {
                 itemContent += "\nTime: " + remainTime;
                 itemContent += "\nIs voucher: " + isVoucher;
                 itemContent += "\nSold: " + numberBuyer;
-                itemContent += "\nAddress: " + getAddressFromHotDealVn(link);
+                //itemContent += "\nAddress: " + getAddressFromHotDealVn(link);
                 count++;
                 System.out.println(itemContent);
                 Deal deal = new Deal(title, description, link, imageLink, price, basicPrice, unitPrice, 0.0f,
