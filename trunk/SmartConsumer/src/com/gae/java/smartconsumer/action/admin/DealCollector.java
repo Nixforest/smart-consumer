@@ -37,6 +37,9 @@ public class DealCollector extends Action {
             if (request.getParameter("muachung") == "") {
                 GetDealFunction.getFromMuaChungVnNew();
             }
+            if (request.getParameter("nhommua") == "") {
+                System.out.println(GetDealFunction.getFromNhomMuaCom());
+            }
             if (request.getParameter("url") == "") {
                 System.out.println(new UtilHtmlToXML().readHtmlToBuffer(request.getParameter("link")).toString());
             }

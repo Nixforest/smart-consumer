@@ -5,6 +5,10 @@
  */
 package com.gae.java.smartconsumer.action.admin;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -14,6 +18,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import com.gae.java.smartconsumer.blo.DealBLO;
+import com.gae.java.smartconsumer.model.Deal;
 import com.gae.java.smartconsumer.util.GlobalVariable;
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
@@ -47,7 +52,14 @@ public class DealManager extends Action {
             return mapping.findForward("failed");
         }
         try {
-            request.setAttribute("listDeals", DealBLO.INSTANCE.listDealsSortById());
+            // Get List Deal sort by Update Day
+            List<Deal> listDeal = new ArrayList<Deal>();
+            for (Deal item : DealBLO.INSTANCE.listDealsSortByUpdateDate()) {
+                listDeal.add(item);
+            }
+            // Reverse this list
+            Collections.reverse(listDeal);
+            request.setAttribute("listDeals", listDeal);
         } catch (Exception ex) {
             request.setAttribute("error", ex.getMessage());
         }

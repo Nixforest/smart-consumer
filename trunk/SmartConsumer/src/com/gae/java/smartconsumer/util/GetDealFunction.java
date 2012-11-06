@@ -144,7 +144,6 @@ public class GetDealFunction {
         }
         return result;
     }
-
     /**
      * Get deal information from http://www.hotdeal.vn.
      * @param url link from http://www.hotdeal.vn
@@ -299,7 +298,7 @@ public class GetDealFunction {
         java.util.Date endTime = cal.getTime();
         boolean isVoucher = true;
         String[] linkList = {
-                "http://www.nhommua.com/tp-ho-chi-minh/mua-hang-gia-re.html",
+                "http://old.nhommua.com/tp-ho-chi-minh/mua-hang-gia-re.html",
         };
         String regexItem1 =  "<span\\s+class=\'amo\'>.*?"
                                + "<i\\s+class=\'text\'>(.*?)</i>"
