@@ -61,7 +61,7 @@ public enum DealDAO {
     public List<Deal> getListInActiveDeals() {
         if (this.listInActiveDeals.isEmpty()) {
             EntityManager em = EMFService.get().createEntityManager();
-            Query q = em.createQuery("select from " + Deal.class.getName() + "where status!="
+            Query q = em.createQuery("select from " + Deal.class.getName() + " where status<>"
                     + Status.SELLING.ordinal());
             List<Deal> deals = q.getResultList();
             for (Deal deal : deals) {
@@ -76,10 +76,10 @@ public enum DealDAO {
      */
     public List<Deal> getListAllDeals() {
         if (this.listAllDeals.isEmpty()) {
-            for (Deal deal : this.listActiveDeals) {
+            for (Deal deal : this.getListActiveDeals()) {
                 this.listAllDeals.add(deal);
             }
-            for (Deal deal : this.listInActiveDeals) {
+            for (Deal deal : this.getListInActiveDeals()) {
                 this.listAllDeals.add(deal);
             }
         }

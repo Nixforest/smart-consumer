@@ -67,7 +67,7 @@
                   <td><input type="checkbox" id="muachung" name="muachung" value=""/><%=GlobalVariable.LINK_MUACHUNG %></td>
               </tr>
               <tr>
-                  <td><input type="checkbox" id="nhommua" name="nhommua" value="" disabled="disabled"/><%=GlobalVariable.LINK_NHOMMUA %></td>
+                  <td><input type="checkbox" id="nhommua" name="nhommua" value=""/><%=GlobalVariable.LINK_NHOMMUA %></td>
               </tr>
               <tr>
                   <td><input type="checkbox" id="cungmua" name="cungmua" value="" disabled="disabled"/><%=GlobalVariable.LINK_CUNGMUA %></td>

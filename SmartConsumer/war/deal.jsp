@@ -125,7 +125,7 @@ function setLinkUpdate(id) {
     if (request.getAttribute("nickName") != null) {
         nickName = (String)request.getAttribute("nickName");
     }
-    List<Deal> deals = null;
+    List<Deal> deals = new ArrayList<Deal>();
     if (request.getAttribute("listDeals") != null) {
         deals = (List<Deal>) request.getAttribute("listDeals");    
     }
@@ -156,8 +156,6 @@ function setLinkUpdate(id) {
     <!-- List deal in data store -->
     <%=GlobalVariable.DEAL_NUMBER %>: <%=deals.size() %>
     [<a href="/getdeal.app"><%=GlobalVariable.UPDATE %></a>]
-    <!-- [<a href="/manage.app">Quản lý Deal tự tạo</a>] -->
-    [<%=DealBLO.INSTANCE.getMaxId() %>]
     <table>
         <tr>
             <th><%=GlobalVariable.DEAL_ID %></th>
