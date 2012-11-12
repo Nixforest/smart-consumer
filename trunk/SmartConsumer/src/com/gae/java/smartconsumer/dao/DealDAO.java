@@ -140,6 +140,30 @@ public enum DealDAO {
         }
     }
     /**
+     * Method change status of deal.
+     * @param deal Deal to change status
+     * @param changeToStatus status that change to
+     */
+    public void changeStatus(Deal deal, int changeToStatus) {
+        if (changeToStatus != deal.getStatus()) {
+            Deal dealToChange = deal;
+            // Change status
+            dealToChange.setStatus(changeToStatus);
+            // If change to SELLING -> Add to list active and remove from inactive list
+            if (changeToStatus == Status.SELLING.ordinal()) {
+                this.listActiveDeals.add(dealToChange);
+                this.listInActiveDeals.remove(deal);
+            } else if (deal.getStatus() == Status.SELLING.ordinal()) {
+                // If change from SELLING -> Add to inactive list and remove from active list
+                this.listActiveDeals.remove(deal);
+                this.listInActiveDeals.add(dealToChange);
+            }
+            // Remove old deal from List all deals and add new deal to this list
+            this.listAllDeals.remove(deal);
+            this.listAllDeals.add(dealToChange);
+        }
+    }
+    /**
      * Check if a deal exist.
      * @param deal object need to check
      * @return True if deal has a link exist in data store and

@@ -89,7 +89,9 @@ public final class GeneralUtil {
             if (price.contains(GlobalVariable.NON_BREAKING_SPACE)) {
                 price = price.replace(GlobalVariable.NON_BREAKING_SPACE, "");
             }
-            result = Double.parseDouble(price.trim());
+            price = price.trim();
+            price = price.substring(0, price.length() - 2);
+            result = Double.parseDouble(price);
         } catch (Exception e) {
             return result;
         }
@@ -374,7 +376,7 @@ public final class GeneralUtil {
         String result = "";
         // Using google map web service API
         String geocoderUri = String.format("http://maps.googleapis.com/maps/api/geocode/xml?address="
-                + address.replace(" ", "+") + "&sensor=false");
+                + address.replace(" ", "+").replace(GlobalVariable.NON_BREAKING_SPACE, "") + "&sensor=false");
         // Convert to XML response return
         String html = new UtilHtmlToXML().htmlToXML(geocoderUri);
         UtilReadXML reader = new UtilReadXML();

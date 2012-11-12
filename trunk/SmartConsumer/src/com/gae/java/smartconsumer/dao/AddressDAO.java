@@ -38,7 +38,10 @@ public enum AddressDAO {
             EntityManager em = EMFService.get().createEntityManager();
             // Read the existing entries
             Query q = em.createQuery("select m from Address m");
-            this.listAllAddresses = q.getResultList();
+            List<Address> addresses = q.getResultList();
+            for (Address address : addresses) {
+                this.listAllAddresses.add(address);
+            }
         }
         return this.listAllAddresses;
     }
