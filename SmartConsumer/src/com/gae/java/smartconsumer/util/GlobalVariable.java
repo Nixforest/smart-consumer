@@ -49,6 +49,10 @@ public final class GlobalVariable {
      */
     public static final int CITY_CANTHO = 14;
     /**
+     * Maximum try.
+     */
+    public static final int MAX_TRY = 5;
+    /**
      * VND.
      */
     public static final String VND = "VNĐ";
@@ -212,4 +216,198 @@ public final class GlobalVariable {
      * Price to string.
      */
     public static final String PRICE_TO = "đến";
+    // ------ Regular Expression string -----
+    /**
+     * HotDeal regular expression string.
+     */
+    public static final String HOTDEAL_REGEX = "<div\\s+class=\"product\".*?>"
+                + ".*?<div\\s+class=\"product_image\".*?>"
+                + ".*?<a\\s+href=(\"([^\"]*\")|'[^']*'|([^'\">\\s]+)).*?>"   // Link 1
+                    + ".*?<img.*?"
+                    + "data-original=(\"([^\"]*\")|'[^']*'|([^'\">\\s]+)).*?/>" // Image link 4
+                + ".*?</a>"
+            + ".*?</div>"
+            + ".*?<div\\s+class=\"product_title\".*?>"
+                + ".*?<a.*?>"
+                    + "(.*?)"                                               // Title 7
+                + "</a>"
+                + ".*?<div\\s+class=\"product_type.*?\".*?>"
+                    + "(.*?)"                                               // Is voucher 8
+                + "</div>"
+            + ".*?</div>"
+            + ".*?<div\\s+class=\"product_desc\".*?>"
+                + "(.*?)"                                                   // Description 9
+            + "</div>"
+            + ".*?<div\\s+class=\"product_price\".*?>"
+                + ".*?<span\\s+class=\"product_sprice\".*?>"
+                    + "(.*?)"                                               // Price 10
+                + "</span>"
+                + ".*?<br.*?/>"
+                + ".*?<span\\s+class=\"product_oprice\".*?>"
+                    + "(.*?)"                                               // Basic price 11
+                + "</span>"
+            + "</div>"
+            + ".*?<div\\s+class=\"product_box\".*?>"
+                + ".*?<div\\s+class=\"product_save_percent\".*?>"
+                    + ".*?<span\\s+class=\"title\".*?>"
+                    + ".*?</span>"
+                    + ".*?<br.*?/>"
+                    + ".*?<span\\s+class=\"key\".*?>"
+                        + "(.*?)"                                           // Save 12
+                    + "</span>"
+                + ".*?</div>"
+                + ".*?<div\\s+class=\"product_bought\".*?>"
+                    + ".*?<span\\s+class=\"title\".*?>"
+                    + ".*?</span>"
+                    + ".*?<br.*?/>"
+                    + ".*?<span\\s+class=\"key\".*?>"
+                        + "(.*?)"                                           // Number buyer 13
+                    + "</span>"
+                + ".*?</div>"
+                + ".*?<div\\s+class=\"product_timeout\".*?>"
+                    + ".*?<span\\s+class=\"title\".*?>"
+                    + ".*?</span>"
+                    + ".*?<br.*?/>"
+                    + ".*?<span\\s+class=\"key\".*?>"
+                        + "(.*?)"                                           // Time out 14
+                    + "</span>"
+                + ".*?</div>"
+            + ".*?</div>"
+        + ".*?</div>";                                                      // End div
+    /**
+     * Regular expression get address type A from HotDeal.vn.
+     */
+    public static final String HOTDEAL_REGEX_ADDRESS_TYPE_A = "<div\\s+class=\"cr\".*?>"
+            + ".*?<p\\s+class=\"font14 text_bo text_up bob\".*?>"
+            + "(.*?)"   // 1 Title
+        + "</p>"
+        + ".*?<p>"
+            + "(.*?)"   // 2 Address
+            + "<br.*?/>"
+            + "(.*?)"   // 3 Phone
+            + "<br.*?/>"
+            + "(.*?)"   // Email
+        + "</p>"
+        + ".*?<p>"
+            + ".*?<a.*?href=(\"([^\"]*\")|'[^']*'|([^'\">\\s]+)).*?target=\"_blank\".*?>"
+                + "(.*?)" // Website
+            + "</a>"
+        + ".*?</p>"
+    + ".*?</div>";
+    /**
+     * Regular expression get address type A1 from HotDeal.vn.
+     */
+    public static final String HOTDEAL_REGEX_ADDRESS_TYPE_A1 = "<div\\s+class=\"cr\".*?>"
+            + ".*?<p\\s+class=\"font14 text_bo text_up bob\".*?>"
+                + "(.*?)"   // 1 Title
+            + "</p>"
+            + ".*?<p>"
+                + "(.*?)"   // 2 Address
+            + "</p>"
+            + ".*?<p>"
+                + "(.*?)"   // 3 Phone
+            + "</p>"
+            + ".*?<p>"
+                + ".*?<a.*?href=(\"([^\"]*\")|'[^']*'|([^'\">\\s]+)).*?target=\"_blank\".*?>"
+                    + "(.*?)" // Website
+                + "</a>"
+            + ".*?</p>"
+            + "</div>";
+    /**
+     * Regular expression get address type B from HotDeal.vn.
+     */
+    public static final String HOTDEAL_REGEX_ADDRESS_TYPE_B = "<div\\s+class=\"product-location\".*?>"
+                + ".*?<h2\\s+style=\"line-height:22px;padding-bottom:10px\".*?>"
+                    + "(.*?)"   // 1 Title
+                + "</h2>"
+                + "<br.*?/>"
+                + ".*?<br.*?/>"
+                + "<p>"
+                    + "(.*?)"   // 2 Location
+                + "</p>"
+                + "<p>"
+                    + "(.*?)"   // 3 Address
+                + "</p>"
+                + "<p>"
+                    + "(.*?)"   // 4 Hot line
+                + "</p>"
+            + "</div>";
+    /**
+     * Regular expression get address type B1 from HotDeal.vn.
+     */
+    public static final String HOTDEAL_REGEX_ADDRESS_TYPE_B1 = "<div\\s+class=\"product-location\".*?>"
+            + ".*?<h2\\s+style=\"line-height:22px;padding-bottom:10px\".*?>"
+                + "(.*?)"   // 1 Title
+            + "</h2>"
+            + ".*?<img.*?src=(\"([^\"]*\")|'[^']*').*?/>"
+            + ".*?<br.*?/>"
+            + ".*?<br.*?/>"
+            + ".*?<p>"
+                + "(.*?)"   // 4 Location
+                + "<br.*?/>"
+                + "(.*?)"   // 5 Address
+                + ".*?<br.*?/>"
+                + "(.*?)"   // 6 Phone
+                + "<br.*?/>"
+                + ".*?<br.*?/>"
+            + ".*?</p>"
+        + ".*?</div>";
+    /**
+     * Regular expression get address type B2 from HotDeal.vn.
+     */
+    public static final String HOTDEAL_REGEX_ADDRESS_TYPE_B2 = "<div\\s+class=\"product-location\".*?>"
+            + "<h2\\s+style=\"line-height:22px;padding-bottom:10px\".*?>"
+                + "(.*?)"   // 1 Title
+            + "</h2>"
+            + "<br.*?/>"
+            + ".*?<br.*?/>"
+            + "<p>"
+                + "(.*?)"   // 2 Address
+                + "<br.*?/>"
+                + "(.*?)"   // 3 Phone
+                + "<br.*?/>"
+                + "(.*?)"   // 4 Phone
+            + "</p>"
+            + "<p>"
+                + ".*?<a\\s+href=(\"([^\"]*\")|'[^']*'|([^'\">\\s]+)).*?target=\"_blank\".*?>"
+                    + "<span.*?>"
+                        + "(.*?)"   // 5 Website
+                    + "</span>"
+                + "</a>"
+            + "</p>"
+        + ".*?</div>";
+    /**
+     * Regular expression get address type B3 from HotDeal.vn.
+     */
+    public static final String HOTDEAL_REGEX_ADDRESS_TYPE_B3 = "<div\\s+class=\"product-location\".*?>"
+            + ".*?<h2\\s+style=\"line-height:22px;padding-bottom:10px\".*?>"
+                + "(.*?)"   // 1 Title
+            + "</h2>"
+            + "<br.*?/>"
+            + ".*?<br.*?/>"
+            + "<p>"
+                + "(.*?)"   // 2 Address
+            + "</p>"
+        + "</div>";
+    /**
+     * Regular expression get address type B4 from HotDeal.vn.
+     */
+    public static final String HOTDEAL_REGEX_ADDRESS_TYPE_B4 = "<div\\s+class=\"product-location\".*?>"
+            + ".*?<h2\\s+style=\"line-height:22px;padding-bottom:10px\".*?>"
+                + "(.*?)"   // 1 Title
+            + "</h2>"
+            + ".*?<img.*?src=(\"([^\"]*\")|'[^']*').*?/>"
+            + ".*?<br.*?/>"
+            + ".*?<br.*?/>"
+            + ".*?<p>"
+                + "(.*?)"   // 4 Location
+            + "</p>"
+            + ".*?<p>"
+                + "(.*?)"   // 5 Phone
+            + "</p>"
+            + ".*?<p>"
+                + ".*?<strong>"
+                + ".*?</strong>"
+            + ".*?</p>"
+        + ".*?</div>";
 }

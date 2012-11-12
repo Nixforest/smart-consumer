@@ -16,7 +16,6 @@ import java.util.regex.Pattern;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
-
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.NodeList;
@@ -41,59 +40,6 @@ public class GetDealFunction {
      * Constructor.
      */
     protected GetDealFunction() {
-    }
-    /**
-     * Get address from http://www.hotdeal.vn/ link.
-     * @param url link a deal from http://www.hotdeal.vn/
-     * @return a string represent address get from url
-     * @throws Exception Exception threw
-     */
-    public static String getAddressFromHotDealVn(String url) throws Exception {
-        String result = new String();
-        String data = new String();
-        while (data.isEmpty()) {
-            try {
-                data = new UtilHtmlToXML().readHtmlToBuffer(url).toString();
-            } catch (java.net.SocketTimeoutException e) {
-                continue;
-            }
-        }
-        if (!data.isEmpty()) {
-            // Type 1
-            String regex1 = "<div\\s+class=\"cr\".*?>" + ".*?<p\\s+class=\"font14 text_bo text_up bob\".*?>" + "(.*?)"
-                    + "</p>" + ".*?<p>" + "(.*?)" + "<br.*?/>" + "(.*?)" + "<br.*?/>" + "(.*?)" + "<br.*?/>" + "(.*?)"
-                    + "<br.*?/>" + ".*?<a.*?href=(\"([^\"]*\")|'[^']*'|([^'\">\\s]+)).*?target=\"_blank\".*?>"
-                    + "(.*?)" + "</a>" + "<br.*?/>"
-                    + ".*?<a.*?href=(\"([^\"]*\")|'[^']*'|([^'\">\\s]+)).*?target=\"_blank\".*?>" + "(.*?)" + "</a>"
-                    + ".*?</p>" + "</div>";
-
-            Pattern patt1 = Pattern.compile(regex1);
-            Matcher match1 = patt1.matcher(data);
-            // Type 2
-            String regex2 = "<div\\s+class=\"product-location\".*?>"
-                    + ".*?<h2\\s+style=\"line-height:22px;padding-bottom:10px\".*?>" + "(.*?)" + "</h2>"
-                    + ".*?<br.*?/>" + ".*?<br.*?/>" + ".*?<p>" + ".*?<strong>" + ".*?</strong>" + "(.*?)" + "</p>"
-                    + ".*?<p>" + "(.*?)" + "</p>" + ".*?</div>";
-
-            Pattern patt2 = Pattern.compile(regex2);
-            Matcher match2 = patt2.matcher(data);
-            // Type 3
-            String regex3 = "<div\\s+class=\"product-location\".*?>" + ".*?<h2.*?>" + "(.*?)" // 1 Title
-                    + "</h2>" + ".*?<br.*?/>" + ".*?<br.*?/>" + "(.*?)" // 2 Address
-                    + "<br.*?/>" + "(.*?)" // 3 Phone
-                    + "<br.*?/>" + ".*?</div>";
-
-            Pattern patt3 = Pattern.compile(regex3);
-            Matcher match3 = patt3.matcher(data);
-            if (match1.find()) {
-                result = match1.group(2).trim();
-            } else if (match2.find()) {
-                result = match2.group(2).trim();
-            } else if (match3.find()) {
-                result = match2.group(2).trim();
-            }
-        }
-        return result;
     }
     /**
      * Get address from http://muachung.vn/ link.
@@ -164,6 +110,8 @@ public class GetDealFunction {
         String remainTime = "";
         java.util.Date endTime = Calendar.getInstance().getTime();
         boolean isVoucher = true;
+        String addressString = "";
+        String addressDescription = "";
         String data = new String();
         while (data.isEmpty()) {
             try {
@@ -172,67 +120,15 @@ public class GetDealFunction {
                 continue;
             }
         }
+        // Convert "Html Entities" character to Unicode
+        data = org.apache.commons.lang3.StringEscapeUtils.unescapeHtml3(data);
         if (!data.isEmpty()) {
-            String regex = "<div\\s+class=\"product\".*?>"
-                        + ".*?<div\\s+class=\"product_image\".*?>"
-                            + ".*?<a\\s+href=(\"([^\"]*\")|'[^']*'|([^'\">\\s]+)).*?>"   // Link 1
-                                + ".*?<img.*?"
-                                + "data-original=(\"([^\"]*\")|'[^']*'|([^'\">\\s]+)).*?/>" // Image link 4
-                            + ".*?</a>"
-                        + ".*?</div>"
-                        + ".*?<div\\s+class=\"product_title\".*?>"
-                            + ".*?<a.*?>"
-                                + "(.*?)"                                               // Title 7
-                            + "</a>"
-                            + ".*?<div\\s+class=\"product_type.*?\".*?>"
-                                + "(.*?)"                                               // Is voucher 8
-                            + "</div>"
-                        + ".*?</div>"
-                        + ".*?<div\\s+class=\"product_desc\".*?>"
-                            + "(.*?)"                                                   // Description 9
-                        + "</div>"
-                        + ".*?<div\\s+class=\"product_price\".*?>"
-                            + ".*?<span\\s+class=\"product_sprice\".*?>"
-                                + "(.*?)"                                               // Price 10
-                            + "</span>"
-                            + ".*?<br.*?/>"
-                            + ".*?<span\\s+class=\"product_oprice\".*?>"
-                                + "(.*?)"                                               // Basic price 11
-                            + "</span>"
-                        + "</div>"
-                        + ".*?<div\\s+class=\"product_box\".*?>"
-                            + ".*?<div\\s+class=\"product_save_percent\".*?>"
-                                + ".*?<span\\s+class=\"title\".*?>"
-                                + ".*?</span>"
-                                + ".*?<br.*?/>"
-                                + ".*?<span\\s+class=\"key\".*?>"
-                                    + "(.*?)"                                           // Save 12
-                                + "</span>"
-                            + ".*?</div>"
-                            + ".*?<div\\s+class=\"product_bought\".*?>"
-                                + ".*?<span\\s+class=\"title\".*?>"
-                                + ".*?</span>"
-                                + ".*?<br.*?/>"
-                                + ".*?<span\\s+class=\"key\".*?>"
-                                    + "(.*?)"                                           // Number buyer 13
-                                + "</span>"
-                            + ".*?</div>"
-                            + ".*?<div\\s+class=\"product_timeout\".*?>"
-                                + ".*?<span\\s+class=\"title\".*?>"
-                                + ".*?</span>"
-                                + ".*?<br.*?/>"
-                                + ".*?<span\\s+class=\"key\".*?>"
-                                    + "(.*?)"                                           // Time out 14
-                                + "</span>"
-                            + ".*?</div>"
-                        + ".*?</div>"
-                    + ".*?</div>";                                                      // End div
-            Pattern patt = Pattern.compile(regex);
+            Pattern patt = Pattern.compile(GlobalVariable.HOTDEAL_REGEX);
             Matcher match = patt.matcher(data);
             int count = 0;
             // Find matcher
             while (match.find()) {
-                itemContent = "Deal thứ: " + String.valueOf(count + 1);
+                // ----- Get Deal's info -----
                 // Link
                 link = "http://www.hotdeal.vn" + match.group(1).trim().replace("\"", "");
                 // Image link
@@ -256,27 +152,173 @@ public class GetDealFunction {
                 // EndTime
                 remainTime = match.group(14).trim();
                 endTime = GeneralUtil.getEndTime(remainTime);
-                itemContent += "\nTitle: " + title;
-                itemContent += "\nDescription: " + description;
-                itemContent += "\nURl: " + link;
-                itemContent += "\nLink image: " + imageLink;
-                itemContent += "\nPrice: " + match.group(10).trim();
-                itemContent += "\nBasic price: " + basicPriceString;
-                itemContent += "\nUnit: " + unitPrice;
-                itemContent += "\nTime: " + remainTime;
-                itemContent += "\nIs voucher: " + isVoucher;
-                itemContent += "\nSold: " + numberBuyer;
-                //itemContent += "\nAddress: " + getAddressFromHotDealVn(link);
+                // Address
+                addressString = getAddressFromHotDealVn(link);
+                // ----- Write log Deal's info -----
+                itemContent = "+ Deal thứ: " + String.valueOf(count + 1);
+                itemContent += "\n Title: " + title;
+                itemContent += "\n Description: " + description;
+                itemContent += "\n URl: " + link;
+                itemContent += "\n Link image: " + imageLink;
+                itemContent += "\n Price: " + price;
+                itemContent += "\n Basic price: " + basicPriceString;
+                itemContent += "\n Unit: " + unitPrice;
+                itemContent += "\n Time: " + remainTime;
+                itemContent += "\n Is voucher: " + isVoucher;
+                itemContent += "\n Sold: " + numberBuyer;
+                itemContent += "\nAddress: " + addressString;
                 count++;
                 System.out.println(itemContent);
                 Deal deal = new Deal(title, description, link, imageLink, price, basicPrice, unitPrice, 0.0f,
                         numberBuyer, endTime, isVoucher);
-                DealBLO.INSTANCE.insert(deal);
+                Long dealId = DealBLO.INSTANCE.insert(deal);
+                // Convert to latitude and longitude
+                String latlng = GeneralUtil.convertAddressToLatitudeLongitude(addressString);
+                if (!latlng.equals("")) {   // Convert success
+                    double lat = Double.parseDouble(latlng.substring(0, latlng.indexOf(",")));
+                    double lng = Double
+                            .parseDouble(latlng.substring(latlng.indexOf(",") + 1, latlng.length()));
+                    Address address = new Address(addressString, lng, lat, addressDescription);
+                    // Insert address to data store
+                    Long addressId = AddressBLO.INSTANCE.insert(address);
+                    if (addressId != 0) {
+                        AddressDetail addressDetail = new AddressDetail(dealId, addressId);
+                        // Insert address detail to data store
+                        AddressDetailBLO.INSTANCE.insert(addressDetail);
+                    }
+                }
             }
             content += "\n" + itemContent;
         }
-        System.out.println(content);
         return content;
+    }
+    /**
+     * Get address from http://www.hotdeal.vn/ link.
+     * @param url link a deal from http://www.hotdeal.vn/
+     * @return a string represent address get from url
+     * @throws Exception Exception threw
+     */
+    public static String getAddressFromHotDealVn(String url) throws Exception {
+        String address = "";
+        String data = "";
+        Pattern patt = null;
+        Matcher match = null;
+        int tryNumber = 0;
+        // Loop for get html content (try 5 times)
+        while (data.isEmpty()
+                && (tryNumber < GlobalVariable.MAX_TRY)) {
+            try {
+                tryNumber++;
+                data = new UtilHtmlToXML().readHtmlToBuffer(url).toString();
+            } catch (SocketTimeoutException ex) {
+                continue;
+            }
+        }
+        if (!data.isEmpty()) {
+            int type = 0;
+            String regexAddress = "";
+            int location = 0;
+            // Address in bottom
+            if (data.contains("box_stand_star")) {
+                type = 0;
+            } else {
+                // Address has no image
+                regexAddress = GlobalVariable.HOTDEAL_REGEX_ADDRESS_TYPE_B;
+                patt = Pattern.compile(regexAddress);
+                match = patt.matcher(data);
+                if (match.find()) {
+                    type = 1;
+                    // Address has Website info
+                    if (match.group(0).trim().contains("Website")) {
+                        type = 3;
+                    }
+                } else {
+                    // Address has image
+                    type = 2;
+                }
+            }
+            switch (type) {
+                case 0 :
+                    regexAddress = GlobalVariable.HOTDEAL_REGEX_ADDRESS_TYPE_A;
+                    location = 2;
+                    patt = Pattern.compile(regexAddress);
+                    match = patt.matcher(data);
+                    if (match.find()) {
+                        address = match.group(location).trim();
+                        // Address so greater
+                        if (address.length() > 500) {
+                            regexAddress = GlobalVariable.HOTDEAL_REGEX_ADDRESS_TYPE_A1;
+                            location = 2;
+                            patt = Pattern.compile(regexAddress);
+                            match = patt.matcher(data);
+                            if (match.find()) {
+                                address = match.group(location).trim();
+                            } else {
+                                address = "NO_ADDRESS";
+                            }
+                        }
+                    } else {
+                        address = "NO_ADDRESS";
+                    }
+                    break;
+                case 1:
+                    regexAddress = GlobalVariable.HOTDEAL_REGEX_ADDRESS_TYPE_B;
+                    location = 3;
+                    patt = Pattern.compile(regexAddress);
+                    match = patt.matcher(data);
+                    if (match.find()) {
+                        address = match.group(location).trim();
+                        if (address.contains("ĐT")) {
+                            address = match.group(location - 1).trim();
+                        } else if (address.length() > 200) {
+                            regexAddress = GlobalVariable.HOTDEAL_REGEX_ADDRESS_TYPE_B3;
+                            location = 2;
+                            patt = Pattern.compile(regexAddress);
+                            match = patt.matcher(data);
+                            if (match.find()) {
+                                address = match.group(2).trim();
+                            }
+                        }
+                    } else {
+                        address = "NO_ADDRESS";
+                    }
+                    break;
+                case 2:
+                    regexAddress = GlobalVariable.HOTDEAL_REGEX_ADDRESS_TYPE_B1;
+                    patt = Pattern.compile(regexAddress);
+                    match = patt.matcher(data);
+                    if (match.find()) {
+                        address = match.group(4).trim() + match.group(5).trim();
+                        if (address.length() > 100) {
+                            regexAddress = GlobalVariable.HOTDEAL_REGEX_ADDRESS_TYPE_B4;
+                            patt = Pattern.compile(regexAddress);
+                            match = patt.matcher(data);
+                            if (match.find()) {
+                                address = match.group(4).trim();
+                            }
+                        }
+                    } else {
+                        address = "294 Hòa Bình - Hiệp Tân - Tân Phú - TPHCM";
+                    }
+                    break;
+                case 3:
+                    regexAddress = GlobalVariable.HOTDEAL_REGEX_ADDRESS_TYPE_B2;
+                    patt = Pattern.compile(regexAddress);
+                    match = patt.matcher(data);
+                    if (match.find()) {
+                        address = match.group(2).trim();
+                    } else {
+                        address = "NO_ADDRESS";
+                    }
+                    break;
+                default :
+                    break;
+            }
+        }
+        // Convert "Html Entities" character to Unicode
+        address = org.apache.commons.lang3.StringEscapeUtils.unescapeHtml3(
+                address.replace(GlobalVariable.NON_BREAKING_SPACE, ""));
+        return address.trim();
     }
     /**
      * Get deal information from http://www.nhommua.com.
