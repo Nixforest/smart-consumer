@@ -2,7 +2,7 @@ Ext.Loader.setPath({
     'SmartConsumer' : 'app',
     'Deft' : 'app/lib/deft'
 });
-Ext.require(['Deft.*']);
+Ext.require(['Deft.*', 'SmartConsumer.utils.PhoneGapHelper']);
 Ext.application({
     name: 'SmartConsumer',
 
@@ -11,8 +11,8 @@ Ext.application({
     ],
 
     views: ['Main'],
-    stores: ['SmartConsumer.base.Store', 'Dashboard', 'Deals'],
-    controllers: ['Main', 'About', 'ListDeal'],
+    stores: ['SmartConsumer.base.Store', 'Dashboard', 'Maps'],
+    controllers: ['Main', 'About', 'Maps'],
 
     icon: {
         '57': 'resources/icons/Icon.png',
@@ -36,14 +36,11 @@ Ext.application({
         // Destroy the #appLoadingIndicator element
         Ext.fly('appLoadingIndicator').destroy();
         
-        Ext.Viewport.setWidth(320);
-        Ext.Viewport.setHeight(480);
+        //Ext.Viewport.setWidth(320);
+        //Ext.Viewport.setHeight(480);
         
         // Initialize the main view
         Ext.Viewport.add(Ext.create('SmartConsumer.view.Main'));
-        var store = Ext.getStore('Deals');
-        store.load();
-        console.log('store', store);
     },
 
     onUpdated: function() {

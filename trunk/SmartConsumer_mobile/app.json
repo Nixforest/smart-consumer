@@ -95,7 +95,7 @@
         "resources/images",
         "resources/icons",
         "resources/startup",
-        "lib/cordova-1.7.0.js",
+        "lib/cordova-2.2.0.js",
         "lib/jquery.js",
         "lib/ChildBrowser.js"
     ],

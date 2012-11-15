@@ -10,11 +10,16 @@ Ext.define('SmartConsumer.store.Dashboard', {
         },
 		data:[
 		  {
-			 "label":"List",
-			 "urlId":"list"         
-		  }, {
-			 "label":"About",
-			 "urlId":"about"         
+			 "label": "List",
+			 "urlId": "list"         
+		  }, 
+		  {
+			 "label": "About",
+			 "urlId": "about"         
+		  },
+		  {
+			"label": "Maps",
+			"urlId": "map"
 		  }
 	   ]
     }		
