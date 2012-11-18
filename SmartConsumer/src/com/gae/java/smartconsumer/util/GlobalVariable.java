@@ -410,4 +410,20 @@ public final class GlobalVariable {
                 + ".*?</strong>"
             + ".*?</p>"
         + ".*?</div>";
+    /**
+     * Timeout to get an address.
+     */
+    public static final int GET_ADDRESS_TIMEOUT = 5000;
+    /**
+     * Timeout to get a page.
+     */
+    public static final int GET_DEAL_PAGE_TIMEOUT = 300000;
+    /**
+     * HotDeal default address.
+     */
+    public static final String HOTDEAL_DEFAULT_ADDRESS = "294 Hòa Bình - Hiệp Tân - Tân Phú - TPHCM";
+    /**
+     * No address string.
+     */
+    public static final String NO_ADDRESS = "NO_ADDRESS";
 }
