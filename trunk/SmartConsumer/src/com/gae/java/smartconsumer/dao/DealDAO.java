@@ -146,6 +146,7 @@ public enum DealDAO {
      */
     public void changeStatus(Deal deal, int changeToStatus) {
         if (changeToStatus != deal.getStatus()) {
+            // Deal to change
             Deal dealToChange = deal;
             // Change status
             dealToChange.setStatus(changeToStatus);
@@ -161,6 +162,14 @@ public enum DealDAO {
             // Remove old deal from List all deals and add new deal to this list
             this.listAllDeals.remove(deal);
             this.listAllDeals.add(dealToChange);
+            // Change into data store
+            EntityManager em = EMFService.get().createEntityManager();
+            try {
+                Deal innerDeal = em.find(Deal.class, deal.getId());
+                innerDeal.setStatus(changeToStatus);
+            } finally {
+                em.close();
+            }
         }
     }
     /**

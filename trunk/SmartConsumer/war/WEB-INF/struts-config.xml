@@ -86,6 +86,10 @@
     <action path="/autoupdate" type="com.gae.java.smartconsumer.action.admin.AutoUpdate" scope="request">
         <forward name="success" redirect="true" path="autoupdate"></forward>
     </action>
+    <!-- Auto collect deal -->
+    <action path="/autocollector" type="com.gae.java.smartconsumer.action.admin.AutoCollector" scope="request">
+        <forward name="success" redirect="true" path="autocollector"></forward>
+    </action>
     
   </action-mappings>
   <controller processorClass="org.apache.struts.tiles.TilesRequestProcessor"/>

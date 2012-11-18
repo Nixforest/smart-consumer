@@ -13,6 +13,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -438,5 +440,32 @@ public final class GeneralUtil {
         } catch (Exception ex) {
             throw ex;
         }
+    }
+    /**
+     * Create matcher.
+     * @param stringToMatch Data string to match
+     * @param regularExpression Regular expression string
+     * @param timeoutMillis Timeout by millisecond
+     * @return Matcher object
+     */
+    public static Matcher createMatcherWithTimeout(String stringToMatch,
+            String regularExpression,
+            int timeoutMillis) {
+        Pattern pattern = Pattern.compile(regularExpression);
+        return createMatcherWithTimeout(stringToMatch, pattern, timeoutMillis);
+    }
+    /**
+     * Create matcher..
+     * @param stringToMatch Data string to match
+     * @param regularExpressionPattern Pattern
+     * @param timeoutMillis Timeout by millisecond
+     * @return Matcher object
+     */
+    public static Matcher createMatcherWithTimeout(String stringToMatch,
+            Pattern regularExpressionPattern,
+            int timeoutMillis) {
+        CharSequence charSequence = new TimeoutRegexCharSequence(stringToMatch, timeoutMillis, stringToMatch,
+                regularExpressionPattern.pattern());
+        return regularExpressionPattern.matcher(charSequence);
     }
 }

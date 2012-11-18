@@ -113,8 +113,12 @@ public class GetDealFunction {
         String addressString = "";
         String addressDescription = "";
         String data = new String();
-        while (data.isEmpty()) {
+        int tryNumber = 0;
+        // Loop for get html content (try 5 times)
+        while (data.isEmpty()
+                && (tryNumber < GlobalVariable.MAX_TRY)) {
             try {
+                tryNumber++;
                 data = new UtilHtmlToXML().readHtmlToBuffer(url).toString();
             } catch (java.net.SocketTimeoutException e) {
                 continue;
@@ -124,70 +128,80 @@ public class GetDealFunction {
         data = org.apache.commons.lang3.StringEscapeUtils.unescapeHtml3(data);
         if (!data.isEmpty()) {
             Pattern patt = Pattern.compile(GlobalVariable.HOTDEAL_REGEX);
-            Matcher match = patt.matcher(data);
+            //Matcher match = patt.matcher(data);
+            Matcher match = GeneralUtil.createMatcherWithTimeout(data, patt, GlobalVariable.GET_DEAL_PAGE_TIMEOUT);
             int count = 0;
             // Find matcher
-            while (match.find()) {
-                // ----- Get Deal's info -----
-                // Link
-                link = "http://www.hotdeal.vn" + match.group(1).trim().replace("\"", "");
-                // Image link
-                imageLink = match.group(4).replace("\"", "").replace("'", "").trim();
-                // Title
-                title = match.group(7).trim();
-                // Isvoucher
-                String isVoucherString = match.group(8).trim();
-                isVoucher = (isVoucherString.compareToIgnoreCase(VOUCHER) == 0);
-                // Description
-                description = match.group(9).trim();
-                // Price
-                price = GeneralUtil.getPriceFromString(match.group(10).trim());
-                // Basic price
-                String basicPriceString = match.group(11);
-                basicPrice = GeneralUtil.getPriceFromString(basicPriceString.trim());
-                // Unit price
-                unitPrice = GlobalVariable.VND;
-                // Number buyer
-                numberBuyer = Integer.parseInt(match.group(13).trim());
-                // EndTime
-                remainTime = match.group(14).trim();
-                endTime = GeneralUtil.getEndTime(remainTime);
-                // Address
-                addressString = getAddressFromHotDealVn(link);
-                // ----- Write log Deal's info -----
-                itemContent = "+ Deal thứ: " + String.valueOf(count + 1);
-                itemContent += "\n Title: " + title;
-                itemContent += "\n Description: " + description;
-                itemContent += "\n URl: " + link;
-                itemContent += "\n Link image: " + imageLink;
-                itemContent += "\n Price: " + price;
-                itemContent += "\n Basic price: " + basicPriceString;
-                itemContent += "\n Unit: " + unitPrice;
-                itemContent += "\n Time: " + remainTime;
-                itemContent += "\n Is voucher: " + isVoucher;
-                itemContent += "\n Sold: " + numberBuyer;
-                itemContent += "\nAddress: " + addressString;
-                count++;
-                System.out.println(itemContent);
-                Deal deal = new Deal(title, description, link, imageLink, price, basicPrice, unitPrice, 0.0f,
-                        numberBuyer, endTime, isVoucher);
-                Long dealId = DealBLO.INSTANCE.insert(deal);
-                // Convert to latitude and longitude
-                String latlng = GeneralUtil.convertAddressToLatitudeLongitude(addressString);
-                if (!latlng.equals("")) {   // Convert success
-                    double lat = Double.parseDouble(latlng.substring(0, latlng.indexOf(",")));
-                    double lng = Double
-                            .parseDouble(latlng.substring(latlng.indexOf(",") + 1, latlng.length()));
-                    Address address = new Address(addressString, lng, lat, addressDescription);
-                    // Insert address to data store
-                    Long addressId = AddressBLO.INSTANCE.insert(address);
-                    if (addressId != 0) {
-                        AddressDetail addressDetail = new AddressDetail(dealId, addressId);
-                        // Insert address detail to data store
-                        AddressDetailBLO.INSTANCE.insert(addressDetail);
+            try {
+                while (match.find()) {
+                    // ----- Get Deal's info -----
+                    // Link
+                    link = "http://www.hotdeal.vn" + match.group(1).trim().replace("\"", "");
+                    // Image link
+                    imageLink = match.group(4).replace("\"", "").replace("'", "").trim();
+                    // Title
+                    title = match.group(7).trim();
+                    // Isvoucher
+                    String isVoucherString = match.group(8).trim();
+                    isVoucher = (isVoucherString.compareToIgnoreCase(VOUCHER) == 0);
+                    // Description
+                    description = match.group(9).trim();
+                    // Price
+                    price = GeneralUtil.getPriceFromString(match.group(10).trim());
+                    // Basic price
+                    String basicPriceString = match.group(11);
+                    basicPrice = GeneralUtil.getPriceFromString(basicPriceString.trim());
+                    // Unit price
+                    unitPrice = GlobalVariable.VND;
+                    // Number buyer
+                    numberBuyer = Integer.parseInt(match.group(13).trim());
+                    // EndTime
+                    remainTime = match.group(14).trim();
+                    endTime = GeneralUtil.getEndTime(remainTime);
+                    // Address
+                    try {
+                        addressString = getAddressFromHotDealVn(link);
+                    } catch (RuntimeException ex) {
+                        continue;
+                    }
+                    // ----- Write log Deal's info -----
+                    itemContent = "+ Deal thứ: " + String.valueOf(count + 1);
+                    itemContent += "\n Title: " + title;
+                    itemContent += "\n Description: " + description;
+                    itemContent += "\n URl: " + link;
+                    itemContent += "\n Link image: " + imageLink;
+                    itemContent += "\n Price: " + price;
+                    itemContent += "\n Basic price: " + basicPriceString;
+                    itemContent += "\n Unit: " + unitPrice;
+                    itemContent += "\n Time: " + remainTime;
+                    itemContent += "\n Is voucher: " + isVoucher;
+                    itemContent += "\n Sold: " + numberBuyer;
+                    itemContent += "\nAddress: " + addressString;
+                    count++;
+                    System.out.println(itemContent);
+                    Deal deal = new Deal(title, description, link, imageLink, price, basicPrice, unitPrice, 0.0f,
+                            numberBuyer, endTime, isVoucher);
+                    Long dealId = DealBLO.INSTANCE.insert(deal);
+                    // Convert to latitude and longitude
+                    String latlng = GeneralUtil.convertAddressToLatitudeLongitude(addressString);
+                    if (!latlng.equals("")) {   // Convert success
+                        double lat = Double.parseDouble(latlng.substring(0, latlng.indexOf(",")));
+                        double lng = Double
+                                .parseDouble(latlng.substring(latlng.indexOf(",") + 1, latlng.length()));
+                        Address address = new Address(addressString, lng, lat, addressDescription);
+                        // Insert address to data store
+                        Long addressId = AddressBLO.INSTANCE.insert(address);
+                        if (addressId != 0) {
+                            AddressDetail addressDetail = new AddressDetail(dealId, addressId);
+                            // Insert address detail to data store
+                            AddressDetailBLO.INSTANCE.insert(addressDetail);
+                        }
                     }
                 }
+            } catch (RuntimeException ex) {
+                
             }
+            
             content += "\n" + itemContent;
         }
         return content;
@@ -204,6 +218,7 @@ public class GetDealFunction {
         Pattern patt = null;
         Matcher match = null;
         int tryNumber = 0;
+        int timeoutMillis = GlobalVariable.GET_ADDRESS_TIMEOUT;
         // Loop for get html content (try 5 times)
         while (data.isEmpty()
                 && (tryNumber < GlobalVariable.MAX_TRY)) {
@@ -225,7 +240,8 @@ public class GetDealFunction {
                 // Address has no image
                 regexAddress = GlobalVariable.HOTDEAL_REGEX_ADDRESS_TYPE_B;
                 patt = Pattern.compile(regexAddress);
-                match = patt.matcher(data);
+                //match = patt.matcher(data);
+                match = GeneralUtil.createMatcherWithTimeout(data, patt, timeoutMillis);
                 if (match.find()) {
                     type = 1;
                     // Address has Website info
@@ -242,7 +258,8 @@ public class GetDealFunction {
                     regexAddress = GlobalVariable.HOTDEAL_REGEX_ADDRESS_TYPE_A;
                     location = 2;
                     patt = Pattern.compile(regexAddress);
-                    match = patt.matcher(data);
+                    //match = patt.matcher(data);
+                    match = GeneralUtil.createMatcherWithTimeout(data, patt, timeoutMillis);
                     if (match.find()) {
                         address = match.group(location).trim();
                         // Address so greater
@@ -250,22 +267,24 @@ public class GetDealFunction {
                             regexAddress = GlobalVariable.HOTDEAL_REGEX_ADDRESS_TYPE_A1;
                             location = 2;
                             patt = Pattern.compile(regexAddress);
-                            match = patt.matcher(data);
+                            //match = patt.matcher(data);
+                            match = GeneralUtil.createMatcherWithTimeout(data, patt, timeoutMillis);
                             if (match.find()) {
                                 address = match.group(location).trim();
                             } else {
-                                address = "NO_ADDRESS";
+                                address = GlobalVariable.NO_ADDRESS;
                             }
                         }
                     } else {
-                        address = "NO_ADDRESS";
+                        address = GlobalVariable.NO_ADDRESS;
                     }
                     break;
                 case 1:
                     regexAddress = GlobalVariable.HOTDEAL_REGEX_ADDRESS_TYPE_B;
                     location = 3;
                     patt = Pattern.compile(regexAddress);
-                    match = patt.matcher(data);
+                    //match = patt.matcher(data);
+                    match = GeneralUtil.createMatcherWithTimeout(data, patt, timeoutMillis);
                     if (match.find()) {
                         address = match.group(location).trim();
                         if (address.contains("ĐT")) {
@@ -274,41 +293,45 @@ public class GetDealFunction {
                             regexAddress = GlobalVariable.HOTDEAL_REGEX_ADDRESS_TYPE_B3;
                             location = 2;
                             patt = Pattern.compile(regexAddress);
-                            match = patt.matcher(data);
+                            //match = patt.matcher(data);
+                            match = GeneralUtil.createMatcherWithTimeout(data, patt, timeoutMillis);
                             if (match.find()) {
                                 address = match.group(2).trim();
                             }
                         }
                     } else {
-                        address = "NO_ADDRESS";
+                        address = GlobalVariable.NO_ADDRESS;
                     }
                     break;
                 case 2:
                     regexAddress = GlobalVariable.HOTDEAL_REGEX_ADDRESS_TYPE_B1;
                     patt = Pattern.compile(regexAddress);
-                    match = patt.matcher(data);
+                    //match = patt.matcher(data);
+                    match = GeneralUtil.createMatcherWithTimeout(data, patt, timeoutMillis);
                     if (match.find()) {
                         address = match.group(4).trim() + match.group(5).trim();
                         if (address.length() > 100) {
                             regexAddress = GlobalVariable.HOTDEAL_REGEX_ADDRESS_TYPE_B4;
                             patt = Pattern.compile(regexAddress);
-                            match = patt.matcher(data);
+                            //match = patt.matcher(data);
+                            match = GeneralUtil.createMatcherWithTimeout(data, patt, timeoutMillis);
                             if (match.find()) {
                                 address = match.group(4).trim();
                             }
                         }
                     } else {
-                        address = "294 Hòa Bình - Hiệp Tân - Tân Phú - TPHCM";
+                        address = GlobalVariable.HOTDEAL_DEFAULT_ADDRESS;
                     }
                     break;
                 case 3:
                     regexAddress = GlobalVariable.HOTDEAL_REGEX_ADDRESS_TYPE_B2;
                     patt = Pattern.compile(regexAddress);
-                    match = patt.matcher(data);
+                    //match = patt.matcher(data);
+                    match = GeneralUtil.createMatcherWithTimeout(data, patt, timeoutMillis);
                     if (match.find()) {
                         address = match.group(2).trim();
                     } else {
-                        address = "NO_ADDRESS";
+                        address = GlobalVariable.NO_ADDRESS;
                     }
                     break;
                 default :
@@ -318,6 +341,10 @@ public class GetDealFunction {
         // Convert "Html Entities" character to Unicode
         address = org.apache.commons.lang3.StringEscapeUtils.unescapeHtml3(
                 address.replace(GlobalVariable.NON_BREAKING_SPACE, ""));
+        if (address.equals(GlobalVariable.NO_ADDRESS)) {
+            address = "";
+            // Write log
+        }
         return address.trim();
     }
     /**
