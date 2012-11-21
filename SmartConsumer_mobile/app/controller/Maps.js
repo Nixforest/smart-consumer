@@ -5,10 +5,18 @@ Ext.define('SmartConsumer.controller.Maps', {
     	routes: {
 			'map': 'onOpenMapDeal'
 		},
+		refs: {
+			selectRadius: 'selectfield[itemId="selectRadius"]'
+		},
+		control: {
+			selectRadius: {
+				'change': 'onSelectRadius'
+			}
+		},
     	mapDealView: null,
     },
     
-    initialize: function() {
+    launch: function() {
     },
     /*config: {
     	routes: {
@@ -97,11 +105,18 @@ Ext.define('SmartConsumer.controller.Maps', {
 		if (!this.getMapDealView()) {
 			this.setMapDealView(Ext.create('SmartConsumer.view.Maps'));
 		}
-
-		// Ext.Viewport.animateActiveItem(this.getDirectoryView(), {
-			// type : 'slide',
-			// direction : 'left'
-		// });
 		Ext.Viewport.setActiveItem(this.getMapDealView());
+		//set circle radius on map
+		Ext.ComponentQuery.query('#mapDeal')[0].setRadius(1000);
+	},
+	
+	onSelectRadius: function(textfield, newValue, oldValue, eOpts) {
+		if (this.getMapDealView()) {
+			this.getMapDealView().destroy();
+		}
+		this.setMapDealView(Ext.create('SmartConsumer.view.Maps'));
+		Ext.Viewport.setActiveItem(this.getMapDealView());
+		//set circle radius on map
+		Ext.ComponentQuery.query('#mapDeal')[0].setRadius(newValue);
 	}
 });

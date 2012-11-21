@@ -10,9 +10,9 @@ Ext.application({
         'Ext.MessageBox'
     ],
 
-    views: ['Main'],
-    stores: ['SmartConsumer.base.Store', 'Dashboard', 'Maps'],
-    controllers: ['Main', 'About', 'Maps'],
+    views: ['Main', 'Maps', 'ListDeal', 'SmartConsumer.view.map.MapDeal'],
+    stores: ['SmartConsumer.base.Store', 'Dashboard', 'Maps', 'Deals'],
+    controllers: ['Main', 'About', 'Maps', 'ListDeal'],
 
     icon: {
         '57': 'resources/icons/Icon.png',

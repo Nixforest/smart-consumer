@@ -6,7 +6,18 @@ Ext.define('SmartConsumer.controller.ListDeal', {
 			'list': 'onOpenListDeal'
 		},
 		
-		listDealView: null,
+		refs: {
+			searchDeal: 'searchfield[itemId="searchDeal"]',
+			listDeal: '#listDeal'
+		},
+		
+		control: {
+			searchDeal: {
+				'keyup': 'onSearchDeal'
+			}
+		},
+		
+		listDealView: null
 	},
 	
 	onOpenListDeal: function() {
@@ -19,5 +30,20 @@ Ext.define('SmartConsumer.controller.ListDeal', {
 			// direction : 'left'
 		// });
 		Ext.Viewport.setActiveItem(this.getListDealView());
+	},
+	
+	onSearchDeal: function(view, e, eOpts) {
+		var store = this.getListDeal().getStore();
+		store.clearFilter();
+		
+		if (view.getValue() != "") {
+			var temp = view.getValue().toLowerCase();
+			store.filterBy(function(record) {
+				if (record.getData().title.toLowerCase().indexOf(temp) > -1)
+					return record;
+				else if (record.getData().description.toLowerCase().indexOf(temp) > -1)
+					return record;
+			});
+		}
 	}
 });
