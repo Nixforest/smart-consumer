@@ -1,7 +1,12 @@
 Ext.define('SmartConsumer.view.ListDeal', {
 	extend: 'Ext.Container',
 	
-	requires: ['SmartConsumer.view.deal.DealItemTemplate'],
+	requires: [
+	    'SmartConsumer.view.deal.DealItemTemplate',
+	    'Ext.field.Search',
+	    'Ext.plugin.ListPaging'
+	],
+	
 	config: {
     	layout: {
     		type: 'vbox'
@@ -10,7 +15,6 @@ Ext.define('SmartConsumer.view.ListDeal', {
     	    {
     	    	xtype: 'toolbar',
         		cls: ['banner-toolbar', 'panel-shadow'],
-        		id: 'banner-toolbar',
         		docked: 'top',
         		layout: {
         			align: 'center',
@@ -28,21 +32,18 @@ Ext.define('SmartConsumer.view.ListDeal', {
         		]
     	    },
     	    {
-    	    	xtype: 'panel',
-    	    	//centered: true,
-    	    	//scrollable: true,
-    	    	items: [
-    	    	    {
-    	    	    	xtype: 'dealItem',
-    	    	    	store: 'Deals'
-    	    	    	/*listeners : {
-    						element : 'element',
-    						touchstart : function() {
-    							window.plugins.childBrowser.showWebPage('http://google.com.vn');
-							}
-						}*/
-    	    	    }
-    	    	]
+    	    	xtype: 'searchfield',
+    	    	itemId: 'searchDeal',
+    	    	placeHolder: 'Search Deal'
+    	    },
+    	    {
+    	    	xtype: 'dealItem',
+    	    	itemId: 'listDeal',
+    	    	store: 'Deals',
+    	    	plugins: [{
+    	    		xclass: 'Ext.plugin.ListPaging',
+    	    		autoPaging: true
+      	    	}]
     	    }
     	]
     }

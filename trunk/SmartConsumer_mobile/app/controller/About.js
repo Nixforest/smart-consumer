@@ -1,5 +1,8 @@
 Ext.define('SmartConsumer.controller.About', {
 	extend: 'Ext.app.Controller',
+	requires: [
+	     'SmartConsumer.view.About'
+	],
 	
 	config: {
 		routes: {
