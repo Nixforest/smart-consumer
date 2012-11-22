@@ -426,4 +426,12 @@ public final class GlobalVariable {
      * No address string.
      */
     public static final String NO_ADDRESS = "NO_ADDRESS";
+    /**
+     * Number of Deals on Home page.
+     */
+    public static final int DEAL_PER_PAGE_HOME = 30;
+    /**
+     * Number of Deals on Deal Manager page.
+     */
+    public static final int DEAL_PER_PAGE_DEALMANAGER = 80;
 }
