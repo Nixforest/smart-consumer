@@ -111,6 +111,7 @@ Ext.define('SmartConsumer.controller.Maps', {
 	},
 	
 	onSelectRadius: function(textfield, newValue, oldValue, eOpts) {
+		if (newValue != oldValue) {
 			if (this.getMapDealView()) {
 				this.getMapDealView().destroy();
 			}
@@ -120,5 +121,6 @@ Ext.define('SmartConsumer.controller.Maps', {
 			Ext.ComponentQuery.query('#mapDeal')[0].setRadius(parseInt(newValue));
 			console.log('aa', Ext.ComponentQuery.query('#selectRadius')[0]);
 			//Ext.ComponentQuery.query('#selectRadius')[0].setValue(newValue);
+		}
 	}
 });
