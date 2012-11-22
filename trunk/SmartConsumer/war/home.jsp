@@ -73,94 +73,130 @@
     <div id="doc">
       <div id="bdw" class="bdw">
         <div id="bd" class="cf">
-          <div id="listdeal" style="margin-top:-35px;">
-              <%
-                  String itemclass = "";
-                  for (int i = 0; i < deals.size(); i++) {
-                      Deal deal = deals.get(i);
-                      
-                      //deal = GeneralUtil.decodeDeal(deals.get(i));
-                      if (((i + 1) % 3) == 0) {
-                          itemclass = "deal_list deal_list_end";
-                      } else {
-                          itemclass = "deal_list";
-                      }
-                      %>
-                      <div class="<%=itemclass %>">
-                          <div class="deal_list_title">
-                              <a title="<%=deal.getDescription() %>"
-                                  href="<%=deal.getLink() %>">
-                                  <%=GeneralUtil.getSubString(deal.getTitle(), 25) %>    
-                              </a>
-                              <div style="font-size:11px; font-style:italic;">
-                                  <%
-                                      if (deal.getisVoucher()) {
-                                          %>
-                                          <img align="absmiddle" src="images/voucher-icon.png">
-                                          <%=GlobalVariable.DEAL_METHOD_VOUCHER %>
-                                          <%
-                                      } else {
-                                          %>
-                                          <img align="absmiddle" src="images/xe-icon.png">
-                                          <%=GlobalVariable.DEAL_METHOD_PRODUCT %>
-                                          <%
-                                      }
-                                  %>
-                              </div>
-                          </div>
-                          <div class="deal_list_img">
-                              <a href="<%=deal.getLink() %>">
-                                  <img src="<%=deal.getImageLink() %>"
-                                      width="267"
-                                      height="183">
-                              </a>
-                          </div>
-                          <div class="deal_list_desc">
-                              <%=GeneralUtil.getSubString(deal.getDescription(), 90) %>
-                          </div>
-                          <div style="width:150px; float:left;">
-                              <div class="deal_list_view_price">
-                                  <div class="number">
-                                      <%=deal.getPrice() %>
-                                      <span><%=deal.getUnitPrice() %></span>
-                                  </div>
-                              </div>
-                              <div style="margin-top:0px; float:left; font-style:normal">
-                                  <span style="font-size:13px;">
-                                      <%=GlobalVariable.DEAL_BASIC_PRICE %>:
-                                      <em style="text-decoration:line-through;font-size:13px; color:#666; font-style:normal; ">
-                                          <%=deal.getBasicPrice() + " " + deal.getUnitPrice() %>
-                                      </em> 
-                                  </span>
-                              </div>
-                          </div>
-                          <div class="deal_list_view">
-                              <div class="view_list_bt">
-                                  <div onclick="window.location='<%=deal.getLink() %>'" 
-                                      class="view_bt logo"></div>
-                              </div>
-                          </div>
-                          <div class="list_view_price">
-                              <div class="small-box-save">
-                                  <span><%=GlobalVariable.DEAL_SAVE %></span>
-                                  <span class="number"><%=deal.getSave() + "%" %></span>
-                              </div>
-                              <div class="small-box-buyer">
-                                  <span><%=GlobalVariable.DEAL_NUMBER_BUYER %></span>
-                                  <span class="number"><%=deal.getNumberBuyer()%></span>
-                              </div>
-                              <div class="small-box-timer">
-                                  <span><%=GlobalVariable.DEAL_REMAIN_TIME %></span>
-                                  <span class="number"><%=GeneralUtil.getRemainTime(deal.getEndTime()) %></span>
-                              </div>
-                          </div>
-                      </div>
-                      <%
-                  }
-              %>
-              <div style="clear:both">
+        <form name="frm" action="smartconsumer.app" method="post">
+            <%
+            int currentPage = 1;
+            int startRecord = 0;
+            if (request.getParameter("currentPage") != null) {
+                currentPage = Integer.parseInt(request.getParameter("currentPage"));
+                if (currentPage == 1) {
+                    startRecord = 0;
+                } else {
+                    startRecord = (currentPage - 1) * GlobalVariable.DEAL_PER_PAGE_HOME;
+                }
+            } else {
+                startRecord = 0;
+            }
+            List<Deal> listSubDeals = new ArrayList<Deal>();
+            for (int i = 0; i < deals.size(); i++) {
+                if ((i >= startRecord)
+                        && (i < startRecord + GlobalVariable.DEAL_PER_PAGE_HOME)) {
+                    listSubDeals.add(deals.get(i));
+                }
+            }
+            %>
+            <div id="listdeal" style="margin-top:-35px;">
+                <%
+                    String itemclass = "";
+                    for (int i = 0; i < listSubDeals.size(); i++) {
+                        Deal deal = listSubDeals.get(i);
+                        
+                        //deal = GeneralUtil.decodeDeal(deals.get(i));
+                        if (((i + 1) % 3) == 0) {
+                            itemclass = "deal_list deal_list_end";
+                        } else {
+                            itemclass = "deal_list";
+                        }
+                        %>
+                        <div class="<%=itemclass %>">
+                            <div class="deal_list_title">
+                                <a title="<%=deal.getDescription() %>"
+                                    href="<%=deal.getLink() %>">
+                                    <%=GeneralUtil.getSubString(deal.getTitle(), 25) %>    
+                                </a>
+                                <div style="font-size:11px; font-style:italic;">
+                                    <%
+                                        if (deal.getisVoucher()) {
+                                            %>
+                                            <img align="absmiddle" src="images/voucher-icon.png">
+                                            <%=GlobalVariable.DEAL_METHOD_VOUCHER %>
+                                            <%
+                                        } else {
+                                            %>
+                                            <img align="absmiddle" src="images/xe-icon.png">
+                                            <%=GlobalVariable.DEAL_METHOD_PRODUCT %>
+                                            <%
+                                        }
+                                    %>
+                                </div>
+                            </div>
+                            <div class="deal_list_img">
+                                <a href="<%=deal.getLink() %>">
+                                    <img src="<%=deal.getImageLink() %>"
+                                        width="267"
+                                        height="183">
+                                </a>
+                            </div>
+                            <div class="deal_list_desc">
+                                <%=GeneralUtil.getSubString(deal.getDescription(), 90) %>
+                            </div>
+                            <div style="width:150px; float:left;">
+                                <div class="deal_list_view_price">
+                                    <div class="number">
+                                        <%=deal.getPrice() %>
+                                        <span><%=deal.getUnitPrice() %></span>
+                                    </div>
+                                </div>
+                                <div style="margin-top:0px; float:left; font-style:normal">
+                                    <span style="font-size:13px;">
+                                        <%=GlobalVariable.DEAL_BASIC_PRICE %>:
+                                        <em style="text-decoration:line-through;font-size:13px; color:#666; font-style:normal; ">
+                                            <%=deal.getBasicPrice() + " " + deal.getUnitPrice() %>
+                                        </em> 
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="deal_list_view">
+                                <div class="view_list_bt">
+                                    <div onclick="window.location='<%=deal.getLink() %>'" 
+                                        class="view_bt logo"></div>
+                                </div>
+                            </div>
+                            <div class="list_view_price">
+                                <div class="small-box-save">
+                                    <span><%=GlobalVariable.DEAL_SAVE %></span>
+                                    <span class="number"><%=deal.getSave() + "%" %></span>
+                                </div>
+                                <div class="small-box-buyer">
+                                    <span><%=GlobalVariable.DEAL_NUMBER_BUYER %></span>
+                                    <span class="number"><%=deal.getNumberBuyer()%></span>
+                                </div>
+                                <div class="small-box-timer">
+                                    <span><%=GlobalVariable.DEAL_REMAIN_TIME %></span>
+                                    <span class="number"><%=GeneralUtil.getRemainTime(deal.getEndTime()) %></span>
+                                </div>
+                            </div>
+                        </div>
+                        <%
+                    }
+                %>
+                <div style="clear:both">
+            </div>
           </div>
-        </div>
+          <!-- Paginator -->
+          <div align="center">
+              <%
+              int count = deals.size();
+              int pageCount = (int)Math.ceil((double)count / GlobalVariable.DEAL_PER_PAGE_HOME);
+              for (int i = 0; i < pageCount; i++) {
+                  %>
+                  <a class="white" href="smartconsumer.app?currentPage=<%=i + 1 %>"><%=i + 1 %></a>
+                  <% 
+              }
+              %>
+          </div>
+        </form>
+        <!-- End of form -->
       </div>
     </div>
     </div>
