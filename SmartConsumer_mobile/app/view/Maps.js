@@ -22,9 +22,14 @@ Ext.define('SmartConsumer.view.Maps', {
         		    	xtype: 'selectfield',
         		    	itemId: 'selectRadius',
         		    	options: [
-	                        {text: '1 km',  value: '1000'},
+	                        {text: '1 km', value: '1000'},
 	                        {text: '2 km', value: '2000'},
-	                        {text: '3 km',  value: '3000'}
+	                        {text: '3 km', value: '3000'},
+	                        {text: '4 km', value: '4000'},
+	                        {text: '5 km', value: '5000'},
+	                        {text: '6 km', value: '6000'},
+	                        {text: '10 km', value: '10000'},
+	                        {text: '20 km', value: '20000'}
 	                    ]
         		    },
         		    {

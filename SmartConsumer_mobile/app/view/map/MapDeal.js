@@ -52,6 +52,15 @@ Ext.define('SmartConsumer.view.map.MapDeal', {
 		    }
 		});
 		var currentLocation = new google.maps.LatLng(this._geo.getLatitude(), this._geo.getLongitude());
+		var iconCurrentPosition = "resources/images/currentPosition.png";
+		var currentPositionMarker = new google.maps.Marker({
+							            position: currentLocation,
+							            map: gmap,
+							            draggable: false,
+							            animation: google.maps.Animation.DROP,
+							            shape: shape,
+							            icon: iconCurrentPosition
+							        });
 		//this.setRadius(100);
 		var radius = this.getRadius();
 		var myCity = new google.maps.Circle({
@@ -94,9 +103,13 @@ Ext.define('SmartConsumer.view.map.MapDeal', {
 			infowindow.setContent(content);
 			infowindow.open(map, marker);
 		});
-		google.maps.event.addListener(marker, 'closeclick', function() {alert('a');
+		google.maps.event.addListener(marker, 'closeclick', function() {
 			infowindow.close();
 		});
+	},
+	
+	setMarker: function(position) {
+		
 	},
     
     getLocation: function() {
