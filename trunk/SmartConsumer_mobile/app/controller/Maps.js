@@ -111,12 +111,14 @@ Ext.define('SmartConsumer.controller.Maps', {
 	},
 	
 	onSelectRadius: function(textfield, newValue, oldValue, eOpts) {
-		if (this.getMapDealView()) {
-			this.getMapDealView().destroy();
-		}
-		this.setMapDealView(Ext.create('SmartConsumer.view.Maps'));
-		Ext.Viewport.setActiveItem(this.getMapDealView());
-		//set circle radius on map
-		Ext.ComponentQuery.query('#mapDeal')[0].setRadius(newValue);
+			if (this.getMapDealView()) {
+				this.getMapDealView().destroy();
+			}
+			this.setMapDealView(Ext.create('SmartConsumer.view.Maps'));
+			Ext.Viewport.setActiveItem(this.getMapDealView());
+			//set circle radius on map
+			Ext.ComponentQuery.query('#mapDeal')[0].setRadius(parseInt(newValue));
+			console.log('aa', Ext.ComponentQuery.query('#selectRadius')[0]);
+			//Ext.ComponentQuery.query('#selectRadius')[0].setValue(newValue);
 	}
 });
