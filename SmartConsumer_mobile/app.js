@@ -2,7 +2,7 @@ Ext.Loader.setPath({
     'SmartConsumer' : 'app',
     'Deft' : 'app/lib/deft'
 });
-Ext.require(['Deft.*', 'SmartConsumer.utils.PhoneGapHelper']);
+Ext.require(['Deft.*', 'SmartConsumer.utils.PhoneGapHelper', 'SmartConsumer.utils.Service']);
 Ext.application({
     name: 'SmartConsumer',
 
@@ -10,9 +10,9 @@ Ext.application({
         'Ext.MessageBox'
     ],
 
-    views: ['Main', 'Maps', 'ListDeal', 'SmartConsumer.view.map.MapDeal'],
+    views: ['Main', 'Maps', 'ListDeal', 'SmartConsumer.view.map.MapDeal', 'Service'],
     stores: ['SmartConsumer.base.Store', 'Dashboard', 'Maps', 'Deals'],
-    controllers: ['Main', 'About', 'Maps', 'ListDeal'],
+    controllers: ['Main', 'About', 'Maps', 'ListDeal', 'Service'],
 
     icon: {
         '57': 'resources/icons/Icon.png',

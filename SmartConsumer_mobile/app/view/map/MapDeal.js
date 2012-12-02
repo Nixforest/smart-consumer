@@ -18,12 +18,18 @@ Ext.define('SmartConsumer.view.map.MapDeal', {
                 fn: 'onMapMaprender',
                 event: 'maprender'
             }
-        ]
+        ],
+        mapOptions : {
+            zoom : 12,
+            mapTypeId : google.maps.MapTypeId.ROADMAP,
+            navigationControl: true,
+            navigationControlOptions: {
+                style: google.maps.NavigationControlStyle.DEFAULT
+            }
+        }
     },
 
     onMapMaprender: function(map, gmap, options) {
-    	//set zoom
-    	gmap.zoom = 12;
         var shape = {
         		coord: [0, 0, 20, 0, 20, 20, 0, 20],
         		type: 'poly'
@@ -31,6 +37,7 @@ Ext.define('SmartConsumer.view.map.MapDeal', {
 		var infowindow = new google.maps.InfoWindow({
 			content: "holding..."
 		});
+		
 		var me = this;
 		var store = Ext.create('SmartConsumer.store.Maps');
 		store.load({
@@ -47,7 +54,7 @@ Ext.define('SmartConsumer.view.map.MapDeal', {
 		                shape: shape
 		            });
 		            markers.push(marker);
-		            me.openInfoWindow(markers[i], map, records[i].data);
+		            me.openInfoWindow(markers[i], gmap, records[i].data, i, me._geo);
 		        }
 		    }
 		});
@@ -76,124 +83,58 @@ Ext.define('SmartConsumer.view.map.MapDeal', {
 		myCity.setMap(gmap);
     },
     
-    openInfoWindow: function(marker, map, data) {
-		var infowindow = new google.maps.InfoWindow({
-			content: "holding..."
-		});
-		
-		var content = "<table>" +
-					        "<tr>" +
-					        "<td colspan=\"2\">" +
-					        "<span style='font-size: 12px;font-weight: normal;'><a href='" + data.link + "'>" + data.title + "</a></span>"
-					        + "</td>"
-					    + "</tr>" +
-					    "<tr>" +
-					        "<td>" +
-					            "<img src=\""+ data.linkImage + "\" width=\"100\" height=\"100\" style='border: 1px solid #333;padding: 1px;margin-right: 3px;' />"
-					        + "</td>" +
-					        "<td>" +
-					            "<span style='font-size: 12px;font-weight: normal;'>Giá: " + data.price + "</span> <br/>" +
-					            "<span style='font-size: 12px;font-weight: normal;'>Giá gốc: " + data.basicPrice + "</span> <br/>" +
-					            "<span style='font-size: 12px;font-weight: normal;'>Thời gian còn lại: " + data.remainTime
-					        + "</span> </td>"
-					+ "</tr>"
-					+ "</table>";
-		
+    openInfoWindow: function(marker, map, data, index, currentGeo) {
+		var me = this;
+		var content = ["<table>",
+					        "<tr>",
+					        "<td colspan=\"2\">",
+					        "<span style='font-size: 12px;font-weight: normal;'><a href='" + data.link + "'>" + data.title + "</a></span>",
+					        "</td>",
+					    "</tr>",
+					    "<tr>",
+					        "<td>",
+					            "<img src=\""+ data.linkImage + "\" width=\"100\" height=\"100\" style='border: 1px solid #333;padding: 1px;margin-right: 3px;' />",
+					        "</td>",
+					        "<td>",
+					            "<span style='font-size: 12px;font-weight: normal;'>Giá: " + data.price + "</span> <br/>",
+					            "<span style='font-size: 12px;font-weight: normal;'>Giá gốc: " + data.basicPrice + "</span> <br/>",
+					            "<span style='font-size: 12px;font-weight: normal;'>Thời gian còn lại: " + data.remainTime,
+					        "</span> </td>",
+					"</tr>",
+					"</table>",
+					"<input type='button' value='Chỉ đường tới đây' id='directionButton"+index+"' />"].join("");
+		var infowindow = new google.maps.InfoWindow();
 		google.maps.event.addListener(marker, 'click', function(event) {
 			infowindow.setContent(content);
 			infowindow.open(map, marker);
 		});
-		google.maps.event.addListener(marker, 'closeclick', function() {
-			infowindow.close();
+		google.maps.event.addListener(infowindow, 'domready', function() {
+			$('#directionButton'+index).click(function(){
+				me.showDirection(data.latitude, data.longitude, currentGeo, map)
+			});
 		});
 	},
 	
-	setMarker: function(position) {
+	showDirection: function(latitude, longitude, geo, map) {
+		var currentLatitude = geo.getLatitude();
+		var currentLongitude = geo.getLongitude();
 		
-	},
-    
-    getLocation: function() {
- 	   if(navigator.geolocation){
- 	      // timeout at 60000 milliseconds (60 seconds)
- 	      var options = {timeout:60000};
- 	      navigator.geolocation.getCurrentPosition(showLocation, 
- 	                                               errorHandler,
- 	                                               options);
- 	   }else{
- 	      alert("Sorry, browser does not support geolocation!");
- 	   }
- 	},
- 	
- 	doDrawCircle: function(map, circle){
- 		/*if (circle) {
- 			map.removeOverlay(circle);
- 		}*/
-
-
- 		if (centerMarker) {
- 			map.setCenter(centerMarker.getLatLng())
- 		}
- 		else {
- 			centerMarker = new GMarker(map.getCenter(),{draggable:true});
- 			GEvent.addListener(centerMarker,'dragend',drawCircle)
- 			map.addOverlay(centerMarker);
- 		}
-
- 		var center = map.getCenter();
-
- 		var bounds = new GLatLngBounds();
-
- 		
- 		var circlePoints = Array();
-
- 		with (Math) {
- 			if (circleUnits == 'KM') {
- 				var d = circleRadius/6378.8;	// radians
- 			}
- 			else { //miles
- 				var d = circleRadius/3963.189;	// radians
- 			}
-
- 			var lat1 = (PI/180)* center.lat(); // radians
- 			var lng1 = (PI/180)* center.lng(); // radians
-
- 			for (var a = 0 ; a < 361 ; a++ ) {
- 				var tc = (PI/180)*a;
- 				var y = asin(sin(lat1)*cos(d)+cos(lat1)*sin(d)*cos(tc));
- 				var dlng = atan2(sin(tc)*sin(d)*cos(lat1),cos(d)-sin(lat1)*sin(y));
- 				var x = ((lng1-dlng+PI) % (2*PI)) - PI ; // MOD function
- 				var point = new GLatLng(parseFloat(y*(180/PI)),parseFloat(x*(180/PI)));
- 				circlePoints.push(point);
- 				bounds.extend(point);
- 			}
-
- 			if (d < 1.5678565720686044) {
- 				circle = new GPolygon(circlePoints, '#000000', 2, 1, '#000000', 0.25);	
- 			}
- 			else {
- 				circle = new GPolygon(circlePoints, '#000000', 2, 1);	
- 			}
- 			map.addOverlay(circle); 
-
- 			map.setZoom(map.getBoundsZoomLevel(bounds));
- 		}
- 	},
- 	
- 	drawCircle: function(rad) {
- 		 
- 	    rad *= 1600; // convert to meters if in miles
- 	    /*if (draw_circle != null) {
- 	        draw_circle.setMap(null);
- 	    }
- 	    draw_circle =*/ new google.maps.Circle({
- 	        center: center,
- 	        radius: rad,
- 	        strokeColor: "#FF0000",
- 	        strokeOpacity: 0.8,
- 	        strokeWeight: 2,
- 	        fillColor: "#FF0000",
- 	        fillOpacity: 0.35,
- 	        map: map
- 	    });
- 	}
+		//direction
+		var directionsDisplay = new google.maps.DirectionsRenderer();
+        var directionsService = new google.maps.DirectionsService();
+        var start = new google.maps.LatLng(currentLatitude, currentLongitude);
+        var end = new google.maps.LatLng(latitude, longitude);
+        var request = {
+		  origin: start,
+		  destination: end,
+		  travelMode: google.maps.TravelMode.DRIVING
+		};
+        
+        directionsDisplay.setMap(map);
+        directionsService.route(request, function(response, status) {
+			if (status == google.maps.DirectionsStatus.OK) {
+				directionsDisplay.setDirections(response);
+			}
+		});
+	}
 });
