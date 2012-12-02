@@ -1,7 +1,8 @@
 Ext.define('SmartConsumer.store.Dashboard', {
     extend: 'SmartConsumer.base.Store',
     requires: [
-        'SmartConsumer.model.Dashboard'
+        'SmartConsumer.model.Dashboard',
+        'Ext.data.Store'
     ],
 
     config :{
@@ -22,6 +23,10 @@ Ext.define('SmartConsumer.store.Dashboard', {
 		  {
 			"label": "Maps",
 			"urlId": "map"
+		  },
+		  {
+			  "label": "Service",
+			  "urlId": "service"
 		  }
 	   ]
     }		

@@ -11,7 +11,9 @@ Ext.define('SmartConsumer.store.Deals', {
 		
 		proxy: {
 			type: 'rest',
-			url: 'http://e-smartconsumer.appspot.com/getListDeal.app?limit=10'
+			//url: 'http://e-smartconsumer.appspot.com/getListDeal.app?limit=10'
+			//url: SmartConsumer.utils.Service.getUrlMapDeal().toString()
+			url: 'http://ismartconsumer.appspot.com/getListDeal.app?limit=50'
 		}
 	}
 });

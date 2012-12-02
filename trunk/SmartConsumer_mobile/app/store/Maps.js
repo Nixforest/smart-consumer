@@ -12,7 +12,8 @@ Ext.define('SmartConsumer.store.Maps', {
         
         proxy: {
             type: 'rest',
-            url: 'http://i-smartconsumer.appspot.com/getListAddress.app?limit=20',
+            //url: 'http://i-smartconsumer.appspot.com/getListAddress.app?limit=20',
+            url: 'http://ismartconsumer.appspot.com/getListAddress.app?limit=50',
             //url: 'http://e-smartconsumer.appspot.com/getListAddress.app?limit=20',
             reader: {
                 type: 'json',
