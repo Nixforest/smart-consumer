@@ -433,5 +433,17 @@ public final class GlobalVariable {
     /**
      * Number of Deals on Deal Manager page.
      */
-    public static final int DEAL_PER_PAGE_DEALMANAGER = 80;
+    public static final int DEAL_PER_PAGE_DEALMANAGER = 30;
+    /**
+     * Previous string.
+     */
+    public static final String PREVIOUS = "Trang trước";
+    /**
+     * Next string.
+     */
+    public static final String NEXT = "Trang sau";
+    /**
+     * Max of page in paginator.
+     */
+    public static final int MAX_PAGE = 10;
 }

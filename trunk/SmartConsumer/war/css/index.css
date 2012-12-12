@@ -83,13 +83,10 @@ input.disabled{border:1px solid #ccc;background:#eee;color:#999;cursor:default;}
 button.formbutton{height:21px;padding:0 1.5em;border:1px solid;border-color:#82D0D4 #92D6D9 #54A3A7 #4D989B;background:#63C5C8;color:#fff;letter-spacing:.3em;cursor:pointer;line-height:21px;}
 dd.formbutton:focus{border-color:#000;}
 
-.paginator{padding:10px 0 10px;white-space:nowrap;text-align:right;font-size:12px;}
-.paginator li{display:inline;margin:0 1px;*vertical-align:middle;}
-.paginator li.current{*height:24px;margin:0 6px;font-weight:bold;*line-height:24px;}
-.paginator li a{*display:inline-block;*height:22px;padding:3px 6px 4px;*padding:0 6px;border:1px solid #bbb;text-decoration:none;*line-height:22px;*position:relative;}
-.paginator li a:hover{*height:24px;padding:4px 7px 5px;*padding:0 7px;border:none;*line-height:24px;background:#00ADB2;color:#fff;text-decoration:none;}
-.paginator li a.nolink{color:#ccc;cursor:default;}
-.paginator li a.nolink:hover{background:transparent;*height:22px;padding:3px 6px 4px;*padding:0 6px;border:1px solid #ccc;*line-height:22px;}
+.paginator { margin: 0 auto; text-align: center; }
+.paginator span { margin: 0px 10px 0px 0px; }
+.paginator a { text-decoration: underline; text-align: center; margin: 0px 5px 0px 0px; line-height: 20px; color: #0192ac; }
+.paginator span.t_a_ui_active { background-color: #d3d3d3; padding: 6px 8px; line-height: 9px; height: 9px; width: 7px; }
 
 /* sysmsg */
 .sysmsgw{clear:both;padding:8px 0 10px 37px;color:#000;font-size:14px;}

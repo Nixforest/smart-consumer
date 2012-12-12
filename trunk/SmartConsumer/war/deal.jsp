@@ -156,69 +156,139 @@ function setLinkUpdate(id) {
     <!-- List deal in data store -->
     <%=GlobalVariable.DEAL_NUMBER %>: <%=deals.size() %>
     [<a href="/getdeal.app"><%=GlobalVariable.UPDATE %></a>]
-    <table>
-        <tr>
-            <th><%=GlobalVariable.DEAL_ID %></th>
-            <th><%=GlobalVariable.DEAL_TITLE %></th>
-            <th><%=GlobalVariable.DEAL_DESCRIPTION %></th>
-            <th><%=GlobalVariable.DEAL_ADDRESS %></th>
-            <th><%=GlobalVariable.DEAL_LINK %></th>
-            <th><%=GlobalVariable.DEAL_PRICE %></th>
-            <th><%=GlobalVariable.DEAL_BASIC_PRICE %></th>
-            <th><%=GlobalVariable.DEAL_SAVE %></th>
-            <th><%=GlobalVariable.DEAL_NUMBER_BUYER %></th>
-            <th><%=GlobalVariable.DEAL_REMAIN_TIME %></th>
-            <th><%=GlobalVariable.DEAL_UPDATE_TIME %></th>
-            <th><%=GlobalVariable.STATUS %></th>
-            <th><%=GlobalVariable.DEAL_REMOVE %></th>
-        </tr>
-        <%
-            for (Deal deal : deals) {
-        %>
-        <tr>
-            <td><%=deal.getId() %></td>
-            <td><%=deal.getTitle() %></td>
-            <td><%=deal.getDescription() %></td>
-            <td>
-                <%
-                for (AddressDetail item : AddressDetailBLO.INSTANCE.getAddressDetailsByDealId(deal.getId())) {
-                    out.print(AddressBLO.INSTANCE.getAddressById(item.getAddressId()).getFullAddress());
-                }
-                %>
-            </td>
-            <td><%=deal.getLink() %></td>
-            <td><%=deal.getPrice() + " " + deal.getUnitPrice() %></td>
-            <td><%=deal.getBasicPrice() + " " + deal.getUnitPrice() %></td>
-            <td><%=deal.getSave() + "%" %></td>
-            <td><%=deal.getNumberBuyer() %></td>
-            <td><%=GeneralUtil.getRemainTime(deal.getEndTime()) %></td>
-            <%-- <td><%=deal.isVoucher() %></td> --%>
-            <td><%=deal.getUpdateDate()%></td>
-            <td>
-                <select id="status<%=deal.getId() %>" name="status<%=deal.getId() %>" onchange="setLinkUpdate(<%=deal.getId() %>)" >
-                    <%
-                    for (int i = 0; i < Status.values().length; i ++) {
-                        %>
-                        <option value="<%=i %>" <%if (deal.getStatus() == i) out.print("selected='seleted'");%>><%=Status.values()[i] %></option> 
-                        <%
-                    }
-                    %>
-                </select>
-                <a class="done" id="updateLink<%=deal.getId() %>" name="updateLink<%=deal.getId() %>" href="" style="display: none;"><%=GlobalVariable.UPDATE %></a>
-            </td>
-            <%-- <td><%=Status.values()[deal.getStatus()] %></td> --%>
+    <form name="frm" action="dealmanager.app" method="post">
             <%
-            String statusRemove = "";
-            statusRemove = (deal.getStatus() != Status.DELETED.ordinal())?(GlobalVariable.DEAL_REMOVE):(GlobalVariable.DEAL_RESTORE);
-            %>
-            <td>
-              <a class="done" href="/remove?id=<%=deal.getId() %>&opt=<%=statusRemove %>"><%=statusRemove %></a>
-            </td>
-        </tr>
-        <%
+            int currentPage = 1;
+            int startRecord = 0;
+            if (request.getParameter("currentPage") != null) {
+                currentPage = Integer.parseInt(request.getParameter("currentPage"));
+                if (currentPage == 1) {
+                    startRecord = 0;
+                } else {
+                    startRecord = (currentPage - 1) * GlobalVariable.DEAL_PER_PAGE_DEALMANAGER;
+                }
+            } else {
+                startRecord = 0;
             }
-        %>
-    </table>
+            List<Deal> listSubDeals = new ArrayList<Deal>();
+            for (int i = 0; i < deals.size(); i++) {
+                if ((i >= startRecord)
+                        && (i < startRecord + GlobalVariable.DEAL_PER_PAGE_DEALMANAGER)) {
+                    listSubDeals.add(deals.get(i));
+                }
+            }
+            %>
+      <table>
+          <tr>
+              <th><%=GlobalVariable.DEAL_ID %></th>
+              <th><%=GlobalVariable.DEAL_TITLE %></th>
+              <th><%=GlobalVariable.DEAL_DESCRIPTION %></th>
+              <th><%=GlobalVariable.DEAL_ADDRESS %></th>
+              <th><%=GlobalVariable.DEAL_LINK %></th>
+              <th><%=GlobalVariable.DEAL_PRICE %></th>
+              <th><%=GlobalVariable.DEAL_BASIC_PRICE %></th>
+              <th><%=GlobalVariable.DEAL_SAVE %></th>
+              <th><%=GlobalVariable.DEAL_NUMBER_BUYER %></th>
+              <th><%=GlobalVariable.DEAL_REMAIN_TIME %></th>
+              <th><%=GlobalVariable.DEAL_UPDATE_TIME %></th>
+              <th><%=GlobalVariable.STATUS %></th>
+              <th><%=GlobalVariable.DEAL_REMOVE %></th>
+          </tr>
+          <%
+              for (Deal deal : listSubDeals) {
+          %>
+          <tr>
+              <td><%=deal.getId() %></td>
+              <td><%=deal.getTitle() %></td>
+              <td><%=deal.getDescription() %></td>
+              <td>
+                  <%
+                  for (AddressDetail item : AddressDetailBLO.INSTANCE.getAddressDetailsByDealId(deal.getId())) {
+                      out.print(AddressBLO.INSTANCE.getAddressById(item.getAddressId()).getFullAddress());
+                  }
+                  %>
+              </td>
+              <td><%=deal.getLink() %></td>
+              <td><%=deal.getPrice() + " " + deal.getUnitPrice() %></td>
+              <td><%=deal.getBasicPrice() + " " + deal.getUnitPrice() %></td>
+              <td><%=deal.getSave() + "%" %></td>
+              <td><%=deal.getNumberBuyer() %></td>
+              <td><%=GeneralUtil.getRemainTime(deal.getEndTime()) %></td>
+              <%-- <td><%=deal.isVoucher() %></td> --%>
+              <td><%=deal.getUpdateDate()%></td>
+              <td>
+                  <select id="status<%=deal.getId() %>" name="status<%=deal.getId() %>" onchange="setLinkUpdate(<%=deal.getId() %>)" >
+                      <%
+                      for (int i = 0; i < Status.values().length; i ++) {
+                          %>
+                          <option value="<%=i %>" <%if (deal.getStatus() == i) out.print("selected='seleted'");%>><%=Status.values()[i] %></option> 
+                          <%
+                      }
+                      %>
+                  </select>
+                  <a class="done" id="updateLink<%=deal.getId() %>" name="updateLink<%=deal.getId() %>" href="" style="display: none;"><%=GlobalVariable.UPDATE %></a>
+              </td>
+              <%-- <td><%=Status.values()[deal.getStatus()] %></td> --%>
+              <%
+              String statusRemove = "";
+              statusRemove = (deal.getStatus() != Status.DELETED.ordinal())?(GlobalVariable.DEAL_REMOVE):(GlobalVariable.DEAL_RESTORE);
+              %>
+              <td>
+                <a class="done" href="/remove?id=<%=deal.getId() %>&opt=<%=statusRemove %>"><%=statusRemove %></a>
+              </td>
+          </tr>
+          <%
+              }
+          %>
+      </table>
+      <!-- Paginator -->
+      <div class="paginator" align="center">
+              <%
+              if (currentPage != 1) {
+                  %>
+                  <a href="dealmanager.app?currentPage=<%=currentPage - 1 %>">&lt;<%=GlobalVariable.PREVIOUS %></a> |
+                  <%
+              } else {
+                  %>
+                  <span class="disabled">&lt;<%=GlobalVariable.PREVIOUS %></span> |
+                  <%
+              }
+              int count = deals.size();
+              int pageCount = (int)Math.ceil((double)count / GlobalVariable.DEAL_PER_PAGE_DEALMANAGER);
+              if (pageCount <= GlobalVariable.MAX_PAGE) {
+                  for (int i = 0; i < pageCount; i++) {
+                      if (currentPage != i + 1) {
+                        %>
+                        <a href="dealmanager.app?currentPage=<%=i + 1 %>"><%=i + 1 %></a> |
+                        <% 
+                      } else {
+                        %><%=i + 1%> |<%
+                      }
+                  }
+              } else {
+                  %>
+                  <a href="dealmanager.app?currentPage=<%=1 %>"><%=1 %></a> |
+                  <a href="dealmanager.app?currentPage=<%=2 %>"><%=2 %></a> |
+                  <a href="dealmanager.app?currentPage=<%=3 %>"><%=3 %></a> |
+                  ...
+                  | <a href="dealmanager.app?currentPage=<%=pageCount - 2 %>"><%=pageCount - 2 %></a>
+                  | <a href="dealmanager.app?currentPage=<%=pageCount - 1 %>"><%=pageCount - 1 %></a>
+                  | <a href="dealmanager.app?currentPage=<%=pageCount %>"><%=pageCount %></a>
+                  <%
+              }
+              
+              if (currentPage != pageCount) {
+                  %>
+                  <a href="dealmanager.app?currentPage=<%=currentPage + 1 %>"><%=GlobalVariable.NEXT %>&gt;</a>
+                  <%
+              } else {
+                  %>
+                  <span class="disabled"><%=GlobalVariable.NEXT %>&gt;</span>
+                  <%
+              }
+              %>
+          </div>
+    </form>
   
     <hr/>
     <!-- Inser new Deal -->

@@ -170,7 +170,7 @@ public class GetDealFunction {
                     itemContent += "\n Description: " + description;
                     itemContent += "\n URl: " + link;
                     itemContent += "\n Link image: " + imageLink;
-                    itemContent += "\n Price: " + price;
+                    itemContent += "\n Price: " + match.group(10).trim();
                     itemContent += "\n Basic price: " + basicPriceString;
                     itemContent += "\n Unit: " + unitPrice;
                     itemContent += "\n Time: " + remainTime;

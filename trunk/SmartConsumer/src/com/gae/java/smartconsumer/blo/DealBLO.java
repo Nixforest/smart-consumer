@@ -46,10 +46,14 @@ public enum DealBLO {
      * @return List<Deal>
      */
     public List<Deal> listDealsLimit(int limit) {
-        List<Deal> listAllDeals = DealDAO.INSTANCE.getListActiveDeals();
-        System.out.println(listAllDeals);
-        Collections.sort(listAllDeals, new DealSortByEndTime());
-        return listAllDeals.subList(0, limit);
+        List<Deal> listDealsSellingSortByUpdateDate = this.listDealsSellingSortByUpdateDate();
+        List<Deal> listDeal = new ArrayList<Deal>();
+        for (Deal item : listDealsSellingSortByUpdateDate) {
+            listDeal.add(item);
+        }
+        // Reverse this list
+        Collections.reverse(listDeal);
+        return listDeal.subList(0, limit);
     }
     /**
      * Method get all deals sort by updateDate property.

@@ -79,9 +79,9 @@ public final class GeneralUtil {
     public static double getPriceFromString(String price) {
         double result = 0;
         try {
-            if (price.contains(",")) {
+            /*if (price.contains(",")) {
                 price = price.replace(",", "");
-            }
+            }*/
             if (price.contains(".")) {
                 price = price.replace(".", "");
             }
