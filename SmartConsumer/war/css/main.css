@@ -82,4 +82,8 @@ form td {
 .errorInput {
   border-color:red;
 }
-            
+
+.paginator { margin: 0 auto; text-align: center; }
+.paginator span { margin: 0px 10px 0px 0px; }
+.paginator a { text-decoration: underline; text-align: center; margin: 0px 5px 0px 0px; line-height: 20px; color: #0192ac; }
+.paginator span.t_a_ui_active { background-color: #d3d3d3; padding: 6px 8px; line-height: 9px; height: 9px; width: 7px; }
