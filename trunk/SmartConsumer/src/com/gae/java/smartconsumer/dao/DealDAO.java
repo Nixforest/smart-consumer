@@ -175,21 +175,28 @@ public enum DealDAO {
                 this.listAllDeals.add(deal);
             }
         }*/
-        // If quantity of deals in ListAllDeals not enough current page
-        if (this.listAllDeals.size() < (page * GlobalVariable.DEAL_PER_PAGE_DEALMANAGER)) {
+        List<Deal> result = new ArrayList<Deal>();
+        int offset = (page - 1) * GlobalVariable.DEAL_PER_PAGE_HOME;
+        int count = page * GlobalVariable.DEAL_PER_PAGE_HOME - offset;
+        try {
             EntityManager em = EMFService.get().createEntityManager();
-            int offset = this.listAllDeals.size();
-            int count = page * GlobalVariable.DEAL_PER_PAGE_HOME - offset;
             Query q = em.createQuery("select from " + Deal.class.getName() + " order by updateDate desc limit "
                     + offset + ", " + count);
             List<Deal> deals = q.getResultList();
             for (Deal deal : deals) {
                 if (!this.isDealExistInList(this.listAllDeals, deal)) {
                     this.listAllDeals.add(deal);
+                    result.add(deal);
                 }
             }
+        } catch (PersistenceException ex) {
+            try {
+                return this.listAllDeals.subList(offset, count);
+            } catch (IndexOutOfBoundsException em) {
+                return result;
+            }
         }
-        return this.listAllDeals;
+        return result;
     }
     /**
      * Insert a deal to template variable, not insert to data store yet.

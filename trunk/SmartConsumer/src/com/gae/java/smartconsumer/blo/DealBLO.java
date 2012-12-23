@@ -74,7 +74,7 @@ public enum DealBLO {
         List<Deal> result = DealDAO.INSTANCE.getListAllDeals(page);
         //Collections.sort(result, new DealSortByUpdateDate());
         // List count < number of deal need
-        if (result.size() < page * GlobalVariable.DEAL_PER_PAGE_DEALMANAGER) {
+        /*if (result.size() < page * GlobalVariable.DEAL_PER_PAGE_DEALMANAGER) {
             // List count < number of deal in a page
             if (result.size() < GlobalVariable.DEAL_PER_PAGE_DEALMANAGER) {
                 return result;
@@ -84,7 +84,8 @@ public enum DealBLO {
         } else {
             return result.subList((page - 1) * GlobalVariable.DEAL_PER_PAGE_DEALMANAGER,
                 page * GlobalVariable.DEAL_PER_PAGE_DEALMANAGER);
-        }
+        }*/
+        return result;
     }
     /**
      * Method get all deals sort by EndTime property.
