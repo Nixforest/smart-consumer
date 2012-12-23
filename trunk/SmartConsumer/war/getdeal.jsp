@@ -45,10 +45,7 @@
     <div style="width: 100%;">
       <div class="line"></div>
       <div class="topLine">
-        <div style="float: left;">
-          <img src="images/smartconsumer.png" />
-        </div>
-        <div style="float: left;" class="headline"><%=GlobalVariable.DEAL_INFO %></div>
+        <div style="float: left;" class="headline"><%=GlobalVariable.DEAL_COLLECTOR %></div>
         <div style="float: right;">
           <a href="<%=url%>"><%=urlLinktext%></a>
           <%=(user == null ? "" : user.getNickname())%></div>
@@ -64,10 +61,10 @@
                   <td><input type="checkbox" id="hotdeal" name="hotdeal" value=""/><%=GlobalVariable.LINK_HOTDEAL %></td>
               </tr>
               <tr>
-                  <td><input type="checkbox" id="muachung" name="muachung" value=""/><%=GlobalVariable.LINK_MUACHUNG %></td>
+                  <td><input type="checkbox" id="muachung" name="muachung" value="" disabled="disabled"/><%=GlobalVariable.LINK_MUACHUNG %></td>
               </tr>
               <tr>
-                  <td><input type="checkbox" id="nhommua" name="nhommua" value=""/><%=GlobalVariable.LINK_NHOMMUA %></td>
+                  <td><input type="checkbox" id="nhommua" name="nhommua" value="" disabled="disabled"/><%=GlobalVariable.LINK_NHOMMUA %></td>
               </tr>
               <tr>
                   <td><input type="checkbox" id="cungmua" name="cungmua" value="" disabled="disabled"/><%=GlobalVariable.LINK_CUNGMUA %></td>
@@ -79,7 +76,7 @@
                   </td>
               </tr>
               <tr>
-                <td align="right"><input type="submit" value="Lọc thông tin" /></td>
+                <td align="right"><input type="submit" value="<%=GlobalVariable.UPDATE %>" /></td>
               </tr>
           </table>
         </form>

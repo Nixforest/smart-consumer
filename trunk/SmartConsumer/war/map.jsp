@@ -245,9 +245,6 @@ body {
   <div style="width: 100%;">
     <div class="line"></div>
     <div class="topLine">
-      <div style="float: left;">
-        <img src="images/smartconsumer.png" />
-      </div>
       <div style="float: left;" class="headline"><%=GlobalVariable.MAP_VIEW %></div>
       <div style="float: right;">
         <a href="<%=url%>"><%=urlLinktext%></a>

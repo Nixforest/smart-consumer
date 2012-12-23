@@ -51,7 +51,7 @@ public final class GlobalVariable {
     /**
      * Maximum try.
      */
-    public static final int MAX_TRY = 5;
+    public static final int MAX_TRY = 20;
     /**
      * VND.
      */
@@ -433,7 +433,7 @@ public final class GlobalVariable {
     /**
      * Number of Deals on Deal Manager page.
      */
-    public static final int DEAL_PER_PAGE_DEALMANAGER = 30;
+    public static final int DEAL_PER_PAGE_DEALMANAGER = 80;
     /**
      * Previous string.
      */
@@ -446,4 +446,18 @@ public final class GlobalVariable {
      * Max of page in paginator.
      */
     public static final int MAX_PAGE = 10;
+    /**
+     * Date time format use in this system.
+     */
+    public static final String DATE_TIME_FORMAT = "yyyy.MM.dd.HH.mm.ss";
+
+    //----- Static string USER -------
+    /**
+     * Nixforest email.
+     */
+    public static final String NIXFOREST = "nixforest21991920";
+    /**
+     * Cu Duy Khoa email.
+     */
+    public static final String DUYKHOA = "dkhoa47";
 }

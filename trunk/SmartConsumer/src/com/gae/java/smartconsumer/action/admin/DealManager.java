@@ -36,8 +36,8 @@ public class DealManager extends Action {
         UserService userService = UserServiceFactory.getUserService();
         User user = userService.getCurrentUser();
         if (user != null) {
-            if (!user.getNickname().toLowerCase().contains("nixforest21991920")
-                    && !user.getNickname().toLowerCase().contains("dkhoa47")) {
+            if (!user.getNickname().toLowerCase().contains(GlobalVariable.NIXFOREST)
+                    && !user.getNickname().toLowerCase().contains(GlobalVariable.DUYKHOA)) {
                 response.sendRedirect("/smartconsumer.app");
                 return mapping.findForward("failed");
             }
@@ -52,14 +52,21 @@ public class DealManager extends Action {
             return mapping.findForward("failed");
         }
         try {
+            String strCurrentPage = request.getParameter("currentPage");
+            int currentPage = 1;
+            int countOfAllDeals = DealBLO.INSTANCE.getCountOfAllDeals();
+            if (strCurrentPage != null) {
+                currentPage = Integer.parseInt(strCurrentPage);
+            }
             // Get List Deal sort by Update Day
             List<Deal> listDeal = new ArrayList<Deal>();
-            for (Deal item : DealBLO.INSTANCE.listDealsSortByUpdateDate()) {
+            for (Deal item : DealBLO.INSTANCE.listDealsSortByUpdateDate(currentPage)) {
                 listDeal.add(item);
             }
             // Reverse this list
-            Collections.reverse(listDeal);
+            //Collections.reverse(listDeal);
             request.setAttribute("listDeals", listDeal);
+            request.setAttribute("countOfAllDeals", countOfAllDeals);
         } catch (Exception ex) {
             request.setAttribute("error", ex.getMessage());
         }
