@@ -9,8 +9,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceException;
 import javax.persistence.Query;
 import com.gae.java.smartconsumer.model.Deal;
+import com.gae.java.smartconsumer.util.GlobalVariable;
 import com.gae.java.smartconsumer.util.Status;
 
 /**
@@ -32,6 +34,10 @@ public enum DealDAO {
     private List<Deal> listUpdateDeals = new ArrayList<Deal>();
     /** List all deals in this session. */
     private List<Deal> listAllDeals = new ArrayList<Deal>();
+    /** Count of active deals. */
+    private int countOfActiveDeal = 0;
+    /** Count of all deals. */
+    private int countOfAllDeals = 0;
     /**
      * Get all deal selling from data store.
      * If listActiveDeals variable is null,
@@ -43,13 +49,84 @@ public enum DealDAO {
         if (this.listActiveDeals.isEmpty()) {
             EntityManager em = EMFService.get().createEntityManager();
             Query q = em.createQuery("select from " + Deal.class.getName() + " where status="
-                    + Status.SELLING.ordinal());
+                    + Status.SELLING.ordinal() + " order by updateDate asc");
             List<Deal> deals = q.getResultList();
             for (Deal deal : deals) {
                 this.listActiveDeals.add(deal);
             }
         }
         return this.listActiveDeals;
+    }
+    /**
+     * Get list active Deals in a page.
+     * @param page Page number
+     * @return List of Deal
+     */
+    @SuppressWarnings("unchecked")
+    public List<Deal> getListActiveDeals(int page) {
+        try {
+            if ((this.listActiveDeals.size() < (page * GlobalVariable.DEAL_PER_PAGE_DEALMANAGER))
+                    && (this.listActiveDeals.size() >= GlobalVariable.DEAL_PER_PAGE_DEALMANAGER)) {
+                // List active deals is not empty but not enough for this page
+                EntityManager em = EMFService.get().createEntityManager();
+                int offset = this.listActiveDeals.size();
+                int count = page * GlobalVariable.DEAL_PER_PAGE_HOME - offset;
+                String queryString = "select from " + Deal.class.getName()
+                        + " where status=" + Status.SELLING.ordinal()
+                        + " order by updateDate asc limit "
+                        + offset + ", " + count;
+                Query q = em.createQuery(queryString);
+                List<Deal> deals = q.getResultList();
+                for (Deal deal : deals) {
+                    if (!this.isDealExistInList(this.listActiveDeals, deal)) {
+                        this.listActiveDeals.add(deal);
+                    }
+                }
+            }
+        } catch (PersistenceException ex) {
+            // Exception happen when number of entity in data store
+            // less than count value in limit statement.
+            // -> Get all of entities
+            return this.getListActiveDeals();
+        }
+        /*// List count < number of deal need
+        if (this.listActiveDeals.size() < page * GlobalVariable.DEAL_PER_PAGE_HOME) {
+            // List count < number of deal in a page
+            if (this.listActiveDeals.size() < GlobalVariable.DEAL_PER_PAGE_HOME) {
+                return this.listActiveDeals;
+            } else {
+                return this.listActiveDeals.subList(0, GlobalVariable.DEAL_PER_PAGE_HOME - 1);
+            }
+        } else {
+            return this.listActiveDeals.subList((page - 1) * GlobalVariable.DEAL_PER_PAGE_HOME,
+                page * GlobalVariable.DEAL_PER_PAGE_HOME - 1);
+        }*/
+        return this.getListActiveDeals();
+    }
+    /**
+     * Get count of active deals.
+     * @return Count of active deals
+     */
+    public int getCountOfActiveDeal() {
+        if (countOfActiveDeal == 0) {
+            EntityManager em = EMFService.get().createEntityManager();
+            Query q = em.createQuery("select count(1) from " + Deal.class.getName() + " where status="
+                    + Status.SELLING.ordinal());
+            countOfActiveDeal = Integer.parseInt(q.getSingleResult().toString());
+        }
+        return countOfActiveDeal;
+    }
+    /**
+     * Get count of all deals in data store.
+     * @return Count of all deals in data store.
+     */
+    public int getCountOfAllDeals() {
+        if (countOfAllDeals == 0) {
+            EntityManager em = EMFService.get().createEntityManager();
+            Query q = em.createQuery("select count(1) from " + Deal.class.getName());
+            countOfAllDeals = Integer.parseInt(q.getSingleResult().toString());
+        }
+        return countOfAllDeals;
     }
     /**
      * Get all deal is not selling from data store.
@@ -62,7 +139,7 @@ public enum DealDAO {
         if (this.listInActiveDeals.isEmpty()) {
             EntityManager em = EMFService.get().createEntityManager();
             Query q = em.createQuery("select from " + Deal.class.getName() + " where status<>"
-                    + Status.SELLING.ordinal());
+                    + Status.SELLING.ordinal()); // + " order by updateDate desc"
             List<Deal> deals = q.getResultList();
             for (Deal deal : deals) {
                 this.listInActiveDeals.add(deal);
@@ -81,6 +158,35 @@ public enum DealDAO {
             }
             for (Deal deal : this.getListInActiveDeals()) {
                 this.listAllDeals.add(deal);
+            }
+        }
+        return this.listAllDeals;
+    }
+    /**
+     * Get all deals from data store in a page.
+     * @param page page number
+     * @return List of Deals
+     */
+    @SuppressWarnings("unchecked")
+    public List<Deal> getListAllDeals(int page) {
+        /*// Add all deals in ListActiveDeals to ListAllDeals
+        for (Deal deal : this.listActiveDeals) {
+            if (!this.isDealExistInList(this.listAllDeals, deal)) {
+                this.listAllDeals.add(deal);
+            }
+        }*/
+        // If quantity of deals in ListAllDeals not enough current page
+        if (this.listAllDeals.size() < (page * GlobalVariable.DEAL_PER_PAGE_DEALMANAGER)) {
+            EntityManager em = EMFService.get().createEntityManager();
+            int offset = this.listAllDeals.size();
+            int count = page * GlobalVariable.DEAL_PER_PAGE_HOME - offset;
+            Query q = em.createQuery("select from " + Deal.class.getName() + " order by updateDate desc limit "
+                    + offset + ", " + count);
+            List<Deal> deals = q.getResultList();
+            for (Deal deal : deals) {
+                if (!this.isDealExistInList(this.listAllDeals, deal)) {
+                    this.listAllDeals.add(deal);
+                }
             }
         }
         return this.listAllDeals;
@@ -178,10 +284,24 @@ public enum DealDAO {
      * @return True if deal has a link exist in data store and
      * deal has status not DELETED, false otherwise.
      */
-    public boolean isExist(Deal deal) {
+    public boolean isExistInListAllDeals(Deal deal) {
         for (Deal item : this.listAllDeals) {
             if (deal.getLink().equals(item.getLink())
                     && (deal.getStatus() != Status.DELETED.ordinal())) {
+                return true;
+            }
+        }
+        return false;
+    }
+    /**
+     * Check if a deal exist in a list of deals.
+     * @param listDeals List of deals
+     * @param deal object need to check
+     * @return True if deal has a link exist in list, false otherwise.
+     */
+    public boolean isDealExistInList(List<Deal> listDeals, Deal deal) {
+        for (Deal item : listDeals) {
+            if (deal.getLink().equals(item.getLink())) {
                 return true;
             }
         }

@@ -92,7 +92,7 @@ public final class GeneralUtil {
                 price = price.replace(GlobalVariable.NON_BREAKING_SPACE, "");
             }
             price = price.trim();
-            price = price.substring(0, price.length() - 2);
+            //price = price.substring(0, price.length() - 1);
             result = Double.parseDouble(price);
         } catch (Exception e) {
             return result;

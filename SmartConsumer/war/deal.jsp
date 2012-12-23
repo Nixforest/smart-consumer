@@ -15,6 +15,9 @@
 <%@page import="java.util.ArrayList"%>
 <%@page import="com.gae.java.smartconsumer.util.GeneralUtil" %>
 <%@page import="com.gae.java.smartconsumer.util.GlobalVariable" %>
+<%@page import="java.text.SimpleDateFormat" %>
+<%@page import="java.text.Format" %>
+
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -115,6 +118,7 @@ function setLinkUpdate(id) {
     String url = "";
     String urlLinktext = "";
     String nickName = "";
+    int countOfAllDeals = 0;
     
     if (request.getAttribute("url") != null) {
         url = (String)request.getAttribute("url");
@@ -128,6 +132,9 @@ function setLinkUpdate(id) {
     List<Deal> deals = new ArrayList<Deal>();
     if (request.getAttribute("listDeals") != null) {
         deals = (List<Deal>) request.getAttribute("listDeals");    
+    }
+    if (request.getAttribute("countOfAllDeals") != null) {
+        countOfAllDeals = Integer.parseInt(request.getAttribute("countOfAllDeals").toString());
     }
     String error = (String)request.getAttribute("error");
     %>
@@ -143,10 +150,7 @@ function setLinkUpdate(id) {
     <div style="width: 100%;">
       <div class="line"></div>
       <div class="topLine">
-        <div style="float: left;">
-          <img src="images/smartconsumer.png" />
-        </div>
-        <div style="float: left;" class="headline"><%=GlobalVariable.DEAL_INFO %></div>
+        <div style="float: left;" class="headline"><%=GlobalVariable.DEAL_INFO %> - <%="New Version" %></div>
         <div style="float: right;">
           <a href="<%=url%>"><%=urlLinktext%></a>
           <%=(urlLinktext.equals(GlobalVariable.LOGIN) ? "" : nickName)%></div>
@@ -154,7 +158,7 @@ function setLinkUpdate(id) {
     </div>
     <div style="clear: both;"></div>
     <!-- List deal in data store -->
-    <%=GlobalVariable.DEAL_NUMBER %>: <%=deals.size() %>
+    <%=GlobalVariable.DEAL_NUMBER %>: <%=countOfAllDeals %>
     [<a href="/getdeal.app"><%=GlobalVariable.UPDATE %></a>]
     <form name="frm" action="dealmanager.app" method="post">
             <%
@@ -170,19 +174,66 @@ function setLinkUpdate(id) {
             } else {
                 startRecord = 0;
             }
-            List<Deal> listSubDeals = new ArrayList<Deal>();
+            /*List<Deal> listSubDeals = new ArrayList<Deal>();
             for (int i = 0; i < deals.size(); i++) {
                 if ((i >= startRecord)
                         && (i < startRecord + GlobalVariable.DEAL_PER_PAGE_DEALMANAGER)) {
                     listSubDeals.add(deals.get(i));
                 }
-            }
+            }*/
             %>
+            <!-- Paginator -->
+      <div class="paginator" align="center">
+          <%
+          if (currentPage != 1) {
+              %>
+              <a href="dealmanager.app?currentPage=<%=currentPage - 1 %>">&lt;<%=GlobalVariable.PREVIOUS %></a> |
+              <%
+          } else {
+              %>
+              <span class="disabled">&lt;<%=GlobalVariable.PREVIOUS %></span> |
+              <%
+          }
+          int count = countOfAllDeals;
+          int pageCount = (int)Math.ceil((double)count / GlobalVariable.DEAL_PER_PAGE_DEALMANAGER);
+          if (pageCount <= GlobalVariable.MAX_PAGE) {
+              for (int i = 0; i < pageCount; i++) {
+                  if (currentPage != i + 1) {
+                    %>
+                    <a href="dealmanager.app?currentPage=<%=i + 1 %>"><%=i + 1 %></a> |
+                    <% 
+                  } else {
+                    %><%=i + 1%> |<%
+                  }
+              }
+          } else {
+              %>
+              <a href="dealmanager.app?currentPage=<%=1 %>"><%=1 %></a> |
+              <a href="dealmanager.app?currentPage=<%=2 %>"><%=2 %></a> |
+              <a href="dealmanager.app?currentPage=<%=3 %>"><%=3 %></a> |
+              ...
+              | <a href="dealmanager.app?currentPage=<%=pageCount - 2 %>"><%=pageCount - 2 %></a>
+              | <a href="dealmanager.app?currentPage=<%=pageCount - 1 %>"><%=pageCount - 1 %></a>
+              | <a href="dealmanager.app?currentPage=<%=pageCount %>"><%=pageCount %></a>
+              <%
+          }
+          
+          if (currentPage != pageCount) {
+              %>
+              <a href="dealmanager.app?currentPage=<%=currentPage + 1 %>"><%=GlobalVariable.NEXT %>&gt;</a>
+              <%
+          } else {
+              %>
+              <span class="disabled"><%=GlobalVariable.NEXT %>&gt;</span>
+              <%
+          }
+          %>
+      </div>
       <table>
           <tr>
               <th><%=GlobalVariable.DEAL_ID %></th>
               <th><%=GlobalVariable.DEAL_TITLE %></th>
-              <th><%=GlobalVariable.DEAL_DESCRIPTION %></th>
+              <%-- <th><%=GlobalVariable.DEAL_DESCRIPTION %></th> --%>
               <th><%=GlobalVariable.DEAL_ADDRESS %></th>
               <th><%=GlobalVariable.DEAL_LINK %></th>
               <th><%=GlobalVariable.DEAL_PRICE %></th>
@@ -195,12 +246,12 @@ function setLinkUpdate(id) {
               <th><%=GlobalVariable.DEAL_REMOVE %></th>
           </tr>
           <%
-              for (Deal deal : listSubDeals) {
+              for (Deal deal : deals) {
           %>
           <tr>
               <td><%=deal.getId() %></td>
               <td><%=deal.getTitle() %></td>
-              <td><%=deal.getDescription() %></td>
+              <%-- <td><%=deal.getDescription() %></td> --%>
               <td>
                   <%
                   for (AddressDetail item : AddressDetailBLO.INSTANCE.getAddressDetailsByDealId(deal.getId())) {
@@ -215,7 +266,13 @@ function setLinkUpdate(id) {
               <td><%=deal.getNumberBuyer() %></td>
               <td><%=GeneralUtil.getRemainTime(deal.getEndTime()) %></td>
               <%-- <td><%=deal.isVoucher() %></td> --%>
-              <td><%=deal.getUpdateDate()%></td>
+              <%
+                  String updateDateString = "";
+                  Format formatter = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss");
+                  updateDateString = formatter.format(deal.getUpdateDate());
+              %>
+              <td><%=updateDateString %>
+              </td>
               <td>
                   <select id="status<%=deal.getId() %>" name="status<%=deal.getId() %>" onchange="setLinkUpdate(<%=deal.getId() %>)" >
                       <%
@@ -253,8 +310,8 @@ function setLinkUpdate(id) {
                   <span class="disabled">&lt;<%=GlobalVariable.PREVIOUS %></span> |
                   <%
               }
-              int count = deals.size();
-              int pageCount = (int)Math.ceil((double)count / GlobalVariable.DEAL_PER_PAGE_DEALMANAGER);
+              /* int count = countOfAllDeals;
+              int pageCount = (int)Math.ceil((double)count / GlobalVariable.DEAL_PER_PAGE_DEALMANAGER); */
               if (pageCount <= GlobalVariable.MAX_PAGE) {
                   for (int i = 0; i < pageCount; i++) {
                       if (currentPage != i + 1) {

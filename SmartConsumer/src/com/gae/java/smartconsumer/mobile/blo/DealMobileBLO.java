@@ -11,7 +11,10 @@ import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.gae.java.smartconsumer.blo.AddressBLO;
+import com.gae.java.smartconsumer.blo.AddressDetailBLO;
 import com.gae.java.smartconsumer.blo.DealBLO;
+import com.gae.java.smartconsumer.model.Address;
 import com.gae.java.smartconsumer.model.Deal;
 
 /**
@@ -47,6 +50,24 @@ public class DealMobileBLO {
         jsonObject.put("numberBuyer", deal.getNumberBuyer());
         jsonObject.put("endTime", deal.getEndTime());
         jsonObject.put("isVoucher", deal.getisVoucher());
+        // NguyenPT - 2012/12/23 - Start
+        boolean isExistAddress = false;
+        double longitude = 0.0;
+        double latitude = 0.0;
+        String fullAddress = "";
+        if (AddressDetailBLO.INSTANCE.getAddressDetailsByDealId(deal.getId()).size() != 0) {
+            isExistAddress = true;
+            Address address = AddressBLO.INSTANCE.getAddressById(
+                    AddressDetailBLO.INSTANCE.getAddressDetailsByDealId(deal.getId()).get(0).getAddressId());
+            longitude = address.getLongitude();
+            latitude = address.getLatitude();
+            fullAddress = address.getFullAddress();
+        }
+        jsonObject.put("isExistAddress", isExistAddress);
+        jsonObject.put("longitude", longitude);
+        jsonObject.put("latitude", latitude);
+        jsonObject.put("fullAddress", fullAddress);
+        // NguyenPT - 2012/12/23 - End
         return jsonObject;
     }
     /**
@@ -73,6 +94,24 @@ public class DealMobileBLO {
                 json.put("numberBuyer", listDeal.get(i).getNumberBuyer());
                 json.put("endTime", listDeal.get(i).getEndTime());
                 json.put("isVoucher", listDeal.get(i).getisVoucher());
+                // NguyenPT - 2012/12/23 - Start
+                boolean isExistAddress = false;
+                double longitude = 0.0;
+                double latitude = 0.0;
+                String fullAddress = "";
+                if (AddressDetailBLO.INSTANCE.getAddressDetailsByDealId(listDeal.get(i).getId()).size() != 0) {
+                    isExistAddress = true;
+                    Address address = AddressBLO.INSTANCE.getAddressById(
+                            AddressDetailBLO.INSTANCE.getAddressDetailsByDealId(listDeal.get(i).getId()).get(0).getAddressId());
+                    longitude = address.getLongitude();
+                    latitude = address.getLatitude();
+                    fullAddress = address.getFullAddress();
+                }
+                json.put("isExistAddress", isExistAddress);
+                json.put("longitude", longitude);
+                json.put("latitude", latitude);
+                json.put("fullAddress", fullAddress);
+                // NguyenPT - 2012/12/23 - End
                 listJson.add(json);
             }
         }
@@ -103,6 +142,24 @@ public class DealMobileBLO {
                 json.put("numberBuyer", listDeal.get(i).getNumberBuyer());
                 json.put("endTime", listDeal.get(i).getEndTime());
                 json.put("isVoucher", listDeal.get(i).getisVoucher());
+                // NguyenPT - 2012/12/23 - Start
+                boolean isExistAddress = false;
+                double longitude = 0.0;
+                double latitude = 0.0;
+                String fullAddress = "";
+                if (AddressDetailBLO.INSTANCE.getAddressDetailsByDealId(listDeal.get(i).getId()).size() != 0) {
+                    isExistAddress = true;
+                    Address address = AddressBLO.INSTANCE.getAddressById(
+                            AddressDetailBLO.INSTANCE.getAddressDetailsByDealId(listDeal.get(i).getId()).get(0).getAddressId());
+                    longitude = address.getLongitude();
+                    latitude = address.getLatitude();
+                    fullAddress = address.getFullAddress();
+                }
+                json.put("isExistAddress", isExistAddress);
+                json.put("longitude", longitude);
+                json.put("latitude", latitude);
+                json.put("fullAddress", fullAddress);
+                // NguyenPT - 2012/12/23 - End
                 listJson.add(json);
             }
         }

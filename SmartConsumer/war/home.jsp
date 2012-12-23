@@ -30,6 +30,7 @@
     String urlLinktext = "";
     String nickName = "";
     String dealmanager = "";
+    int countOfActiveDeal = 0;
     
     if (request.getAttribute("url") != null) {
         url = (String)request.getAttribute("url");
@@ -44,12 +45,17 @@
         dealmanager = (String)request.getAttribute("dealmanager");
     }
     List<Deal> deals = new ArrayList<Deal>();
-    deals = (List<Deal>) request.getAttribute("listDeals");
+    if (request.getAttribute("listDeals") != null) {
+        deals = (List<Deal>) request.getAttribute("listDeals");
+    }
     
     List<Deal> dealsCreated = new ArrayList<Deal>();
     if (request.getAttribute("listDealsCreated") != null) {
         dealsCreated = (List<Deal>) request.getAttribute("listDealsCreated");
     } 
+    if (request.getAttribute("countOfActiveDeal") != null) {
+        countOfActiveDeal = Integer.parseInt(request.getAttribute("countOfActiveDeal").toString());
+    }
     String error = (String)request.getAttribute("error");
     %>
     <div class="errorview">
@@ -85,22 +91,69 @@
             } else {
                 startRecord = 0;
             }
-            List<Deal> listSubDeals = new ArrayList<Deal>();
+            /*List<Deal> listSubDeals = new ArrayList<Deal>();
             for (int i = 0; i < deals.size(); i++) {
                 if ((i >= startRecord)
                         && (i < startRecord + GlobalVariable.DEAL_PER_PAGE_HOME)) {
                     listSubDeals.add(deals.get(i));
                 }
-            }
+            }*/
             %>
     <div id="doc">
       <div id="bdw" class="bdw">
         <div id="bd" class="cf">
+            <!-- Paginator -->
+            <div class="paginator" align="center">
+                <%
+                if (currentPage != 1) {
+                    %>
+                    <a href="smartconsumer.app?currentPage=<%=currentPage - 1 %>">&lt;<%=GlobalVariable.PREVIOUS %></a> |
+                    <%
+                } else {
+                    %>
+                    <span class="disabled">&lt;<%=GlobalVariable.PREVIOUS %></span> |
+                    <%
+                }
+                int count = countOfActiveDeal;
+                int pageCount = (int)Math.ceil((double)count / GlobalVariable.DEAL_PER_PAGE_HOME);
+                if (pageCount <= GlobalVariable.MAX_PAGE) {
+                    for (int i = 0; i < pageCount; i++) {
+                        if (currentPage != i + 1) {
+                          %>
+                          <a href="smartconsumer.app?currentPage=<%=i + 1 %>"><%=i + 1 %></a> |
+                          <% 
+                        } else {
+                          %><%=i + 1%> |<%
+                        }
+                    }
+                } else {
+                    %>
+                    <a href="smartconsumer.app?currentPage=<%=1 %>"><%=1 %></a> |
+                    <a href="smartconsumer.app?currentPage=<%=2 %>"><%=2 %></a> |
+                    <a href="smartconsumer.app?currentPage=<%=3 %>"><%=3 %></a> |
+                    ...
+                    | <a href="smartconsumer.app?currentPage=<%=pageCount - 2 %>"><%=pageCount - 2 %></a>
+                    | <a href="smartconsumer.app?currentPage=<%=pageCount - 1 %>"><%=pageCount - 1 %></a>
+                    | <a href="smartconsumer.app?currentPage=<%=pageCount %>"><%=pageCount %></a>
+                    <%
+                }
+                
+                if (currentPage != pageCount) {
+                    %>
+                    <a href="smartconsumer.app?currentPage=<%=currentPage + 1 %>"><%=GlobalVariable.NEXT %>&gt;</a>
+                    <%
+                } else {
+                    %>
+                    <span class="disabled"><%=GlobalVariable.NEXT %>&gt;</span>
+                    <%
+                }
+                %>
+            </div>
             <div id="listdeal" style="margin-top:-35px;">
                 <%
                     String itemclass = "";
-                    for (int i = 0; i < listSubDeals.size(); i++) {
-                        Deal deal = listSubDeals.get(i);
+                    for (int i = 0; i < deals.size(); i++) {
+                        Deal deal = deals.get(i);
                         
                         //deal = GeneralUtil.decodeDeal(deals.get(i));
                         if (((i + 1) % 3) == 0) {
@@ -170,6 +223,7 @@
                                 </div>
                                 <div class="small-box-buyer">
                                     <span><%=GlobalVariable.DEAL_NUMBER_BUYER %></span>
+                                    <br />
                                     <span class="number"><%=deal.getNumberBuyer()%></span>
                                 </div>
                                 <div class="small-box-timer">
@@ -199,8 +253,8 @@
                   <span class="disabled">&lt;<%=GlobalVariable.PREVIOUS %></span> |
                   <%
               }
-              int count = deals.size();
-              int pageCount = (int)Math.ceil((double)count / GlobalVariable.DEAL_PER_PAGE_HOME);
+              /* int count = countOfActiveDeal;
+              int pageCount = (int)Math.ceil((double)count / GlobalVariable.DEAL_PER_PAGE_HOME); */
               if (pageCount <= GlobalVariable.MAX_PAGE) {
                   for (int i = 0; i < pageCount; i++) {
                       if (currentPage != i + 1) {

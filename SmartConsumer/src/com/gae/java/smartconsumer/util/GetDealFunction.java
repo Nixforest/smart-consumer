@@ -121,6 +121,7 @@ public class GetDealFunction {
                 tryNumber++;
                 data = new UtilHtmlToXML().readHtmlToBuffer(url).toString();
             } catch (java.net.SocketTimeoutException e) {
+                System.out.println("Failed: " + tryNumber + "!");
                 continue;
             }
         }
@@ -199,9 +200,8 @@ public class GetDealFunction {
                     }
                 }
             } catch (RuntimeException ex) {
-                
+                System.out.println(ex.toString());
             }
-            
             content += "\n" + itemContent;
         }
         return content;

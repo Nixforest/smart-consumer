@@ -40,8 +40,8 @@ public class SmartConsumerServlet extends Action {
             request.setAttribute("urlLinktext", GlobalVariable.LOGOUT);
             request.setAttribute("url", userService.createLogoutURL(request.getRequestURI()));
             request.setAttribute("nickName", user.getNickname());
-            if (user.getNickname().toLowerCase().contains("nixforest21991920")
-                    || user.getNickname().toLowerCase().contains("dkhoa47")) {
+            if (user.getNickname().toLowerCase().contains(GlobalVariable.NIXFOREST)
+                    || user.getNickname().toLowerCase().contains(GlobalVariable.DUYKHOA)) {
                 request.setAttribute("dealmanager", "/dealmanager");
             }
         } else {
@@ -49,14 +49,21 @@ public class SmartConsumerServlet extends Action {
             request.setAttribute("urlLinktext", GlobalVariable.LOGIN);
         }
         try {
-         // Get List Deal sort by Update Day
+            String strCurrentPage = request.getParameter("currentPage");
+            int currentPage = 1;
+            int countOfActiveDeal = DealBLO.INSTANCE.getCountOfActiveDeal();
+            if (strCurrentPage != null) {
+                currentPage = Integer.parseInt(strCurrentPage);
+            }
+            // Get List Deal sort by Update Day
             List<Deal> listDeal = new ArrayList<Deal>();
-            for (Deal item : DealBLO.INSTANCE.listDealsSellingSortByUpdateDate()) {
+            for (Deal item : DealBLO.INSTANCE.listDealsSellingSortByUpdateDate(currentPage)) {
                 listDeal.add(item);
             }
             // Reverse this list
             Collections.reverse(listDeal);
             request.setAttribute("listDeals", listDeal);
+            request.setAttribute("countOfActiveDeal", countOfActiveDeal);
         } catch (Exception ex) {
             request.setAttribute("error", ex.getMessage());
         }

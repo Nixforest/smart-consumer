@@ -27,6 +27,7 @@ public class AutoCollector extends Action {
             GetDealFunction.getFromHotDealVn("http://www.hotdeal.vn/ho-chi-minh/");
         } catch (Exception ex) {
             // No statement
+            System.out.print(ex.getLocalizedMessage());
         }
         return null;
     }

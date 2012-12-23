@@ -13,6 +13,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import com.gae.java.smartconsumer.util.GetDealFunction;
+import com.gae.java.smartconsumer.util.UtilHtmlToXML;
 
 /**
  * Deal collector.
@@ -40,8 +41,8 @@ public class DealCollector extends Action {
                 System.out.println(GetDealFunction.getFromNhomMuaCom());
             }
             if (request.getParameter("url") == "") {
-                //System.out.println(new UtilHtmlToXML().readHtmlToBuffer(request.getParameter("link")).toString());
-                System.out.println(GetDealFunction.getAddressFromHotDealVn(request.getParameter("link")).toString());
+                System.out.println(new UtilHtmlToXML().readHtmlToBuffer(request.getParameter("link")).toString());
+                //System.out.println(GetDealFunction.getAddressFromHotDealVn(request.getParameter("link")).toString());
             }
         } catch (Exception ex) {
             String error = ex.getMessage();
