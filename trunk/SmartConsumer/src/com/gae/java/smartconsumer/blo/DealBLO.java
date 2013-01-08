@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.List;
 
 import com.gae.java.smartconsumer.dao.DealDAO;
+import com.gae.java.smartconsumer.model.AddressDetail;
 import com.gae.java.smartconsumer.model.Deal;
 import com.gae.java.smartconsumer.model.DealSortByEndTime;
 import com.gae.java.smartconsumer.model.DealSortById;
@@ -47,14 +48,19 @@ public enum DealBLO {
      * @return List<Deal>
      */
     public List<Deal> listDealsLimit(int limit) {
-        List<Deal> listDealsSellingSortByUpdateDate = this.listDealsSellingSortByUpdateDate();
+        /*List<Deal> listDealsSellingSortByUpdateDate = this.listDealsSellingSortByUpdateDate();
         List<Deal> listDeal = new ArrayList<Deal>();
         for (Deal item : listDealsSellingSortByUpdateDate) {
             listDeal.add(item);
         }
         // Reverse this list
         Collections.reverse(listDeal);
-        return listDeal.subList(0, limit);
+        return listDeal.subList(0, limit);*/
+        int page = limit / GlobalVariable.DEAL_PER_PAGE_HOME;
+        if (page <= 0) {
+            page = 1;
+        }
+        return this.listDealsSellingSortByUpdateDate(page);
     }
     /**
      * Method get all deals sort by updateDate property.
@@ -147,7 +153,7 @@ public enum DealBLO {
      */
     public List<Deal> listDealsSellingSortByUpdateDate(int page) {
         List<Deal> result = DealDAO.INSTANCE.getListActiveDeals(page);
-        Collections.sort(result, new DealSortByUpdateDate());
+        //Collections.sort(result, new DealSortByUpdateDate());
         // List count < number of deal need
         if (result.size() < page * GlobalVariable.DEAL_PER_PAGE_HOME) {
             // List count < number of deal in a page
@@ -258,6 +264,22 @@ public enum DealBLO {
             throw new Exception("Id does not exist!");
         }
         DealDAO.INSTANCE.changeStatus(id, Status.DELETED.ordinal());
+    }
+    /**
+     * Delete a deal physical.
+     * @param id object's id
+     * @throws Exception Throw exception when Id does not exist
+     */
+    public void remove(long id) throws Exception {
+        if (!isIdExist(id)) {
+            throw new Exception("Id does not exist!");
+        }
+        // Delete address detail relate
+        for (AddressDetail detail : AddressDetailBLO.INSTANCE.getAddressDetailsByDealId(id)) {
+            AddressDetailBLO.INSTANCE.delete(detail.getId());
+        }
+        // Detele deal
+        DealDAO.INSTANCE.delete(id);
     }
     /**
      * Restore a deal.

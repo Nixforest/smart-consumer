@@ -12,4 +12,7 @@
       <datastore-index kind="AddressDetail" ancestor="false">
           <property name="__key__" direction="desc"/>
       </datastore-index>
+      <datastore-index kind="Category" ancestor="false">
+          <property name="__key__" direction="desc"/>
+      </datastore-index>
 </datastore-indexes>

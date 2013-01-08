@@ -78,6 +78,12 @@
         <forward name="success" redirect="true" path="dealmanager" />
         <forward name="failed" redirect="true" path="/smartconsumer.app" />
     </action>
+    <!-- Category manager -->
+    <action path="/categorymanager" type="com.gae.java.smartconsumer.action.admin.CategoryManager"
+        scope="request">
+        <forward name="success" redirect="true" path="categorymanager" />
+        <forward name="failed" redirect="true" path="/smartconsumer.app" />
+    </action>
     <!-- Search deal -->
     <action path="/searchdeal" type="com.gae.java.smartconsumer.action.customer.SearchDeal" scope="session">
         <forward name="success" redirect="true" path="searchdeal" />

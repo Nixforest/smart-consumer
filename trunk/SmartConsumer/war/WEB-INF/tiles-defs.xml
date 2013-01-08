@@ -73,4 +73,8 @@
     <put name="title" value="Quản lý danh sách Deal" />
     <put name="body" value="deal.jsp" />
   </definition>
+  <definition name="categorymanager" extends="admin">
+    <put name="title" value="Quản lý chuyên mục" />
+    <put name="body" value="category.jsp" />
+  </definition>
 </tiles-definitions>

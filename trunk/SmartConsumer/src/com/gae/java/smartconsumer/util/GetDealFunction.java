@@ -16,6 +16,7 @@ import java.util.regex.Pattern;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
+
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.NodeList;
@@ -23,9 +24,11 @@ import org.w3c.dom.Document;
 
 import com.gae.java.smartconsumer.blo.AddressBLO;
 import com.gae.java.smartconsumer.blo.AddressDetailBLO;
+import com.gae.java.smartconsumer.blo.CategoryBLO;
 import com.gae.java.smartconsumer.blo.DealBLO;
 import com.gae.java.smartconsumer.model.Address;
 import com.gae.java.smartconsumer.model.AddressDetail;
+import com.gae.java.smartconsumer.model.Category;
 import com.gae.java.smartconsumer.model.Deal;
 
 /**
@@ -34,8 +37,6 @@ import com.gae.java.smartconsumer.model.Deal;
  * @author Nixforest
  */
 public class GetDealFunction {
-    /** Voucher string. */
-    private static final String VOUCHER = "(Giao Voucher)";
     /**
      * Constructor.
      */
@@ -118,16 +119,22 @@ public class GetDealFunction {
         while (data.isEmpty()
                 && (tryNumber < GlobalVariable.MAX_TRY)) {
             try {
+                if (tryNumber == 0) {
+                    System.out.println("Đang connect tới server để lấy dữ liệu, bạn đợi chút nhé...");
+                }
                 tryNumber++;
                 data = new UtilHtmlToXML().readHtmlToBuffer(url).toString();
             } catch (java.net.SocketTimeoutException e) {
-                System.out.println("Failed: " + tryNumber + "!");
+                System.out.println("Tèo lần " + tryNumber + " rồi! Đang thử lại...");
                 continue;
             }
         }
         // Convert "Html Entities" character to Unicode
-        data = org.apache.commons.lang3.StringEscapeUtils.unescapeHtml3(data);
+        // NguyenPT - 2012/12/24 - No need remove unescape characters - Del Start
+        //data = org.apache.commons.lang3.StringEscapeUtils.unescapeHtml3(data);
+        // NguyenPT - 2012/12/24 - No need remove unescape characters - Del End
         if (!data.isEmpty()) {
+            System.out.println("Đã lấy dữ liệu thành công. Đừng nóng, đang lọc mớ hỗn độn đó đây. Plz wait...");
             Pattern patt = Pattern.compile(GlobalVariable.HOTDEAL_REGEX);
             //Matcher match = patt.matcher(data);
             Matcher match = GeneralUtil.createMatcherWithTimeout(data, patt, GlobalVariable.GET_DEAL_PAGE_TIMEOUT);
@@ -144,7 +151,7 @@ public class GetDealFunction {
                     title = match.group(7).trim();
                     // Isvoucher
                     String isVoucherString = match.group(8).trim();
-                    isVoucher = (isVoucherString.compareToIgnoreCase(VOUCHER) == 0);
+                    isVoucher = (isVoucherString.compareToIgnoreCase(GlobalVariable.VOUCHER) == 0);
                     // Description
                     description = match.group(9).trim();
                     // Price
@@ -160,8 +167,10 @@ public class GetDealFunction {
                     remainTime = match.group(14).trim();
                     endTime = GeneralUtil.getEndTime(remainTime);
                     // Address
+                    String contentHtml = "";
+                    contentHtml = getHtmlData(link);
                     try {
-                        addressString = getAddressFromHotDealVn(link);
+                        addressString = getAddressFromHotDealVn(contentHtml);
                     } catch (RuntimeException ex) {
                         continue;
                     }
@@ -180,8 +189,11 @@ public class GetDealFunction {
                     itemContent += "\nAddress: " + addressString;
                     count++;
                     System.out.println(itemContent);
-                    Deal deal = new Deal(title, description, link, imageLink, price, basicPrice, unitPrice, 0.0f,
-                            numberBuyer, endTime, isVoucher);
+                    Deal deal = new Deal(title, description, link,
+                            imageLink, price, basicPrice, unitPrice, 0.0f,
+                            numberBuyer, endTime, isVoucher,
+                            Status.SELLING.ordinal(),
+                            getCategoryFromHotDealVn(contentHtml));
                     Long dealId = DealBLO.INSTANCE.insert(deal);
                     // Convert to latitude and longitude
                     String latlng = GeneralUtil.convertAddressToLatitudeLongitude(addressString);
@@ -207,18 +219,14 @@ public class GetDealFunction {
         return content;
     }
     /**
-     * Get address from http://www.hotdeal.vn/ link.
-     * @param url link a deal from http://www.hotdeal.vn/
-     * @return a string represent address get from url
-     * @throws Exception Exception threw
+     * Get html content from an url.
+     * @param url Url to get content
+     * @return Html content from an url
+     * @throws Exception Exception
      */
-    public static String getAddressFromHotDealVn(String url) throws Exception {
-        String address = "";
+    public static String getHtmlData(String url) throws Exception {
         String data = "";
-        Pattern patt = null;
-        Matcher match = null;
         int tryNumber = 0;
-        int timeoutMillis = GlobalVariable.GET_ADDRESS_TIMEOUT;
         // Loop for get html content (try 5 times)
         while (data.isEmpty()
                 && (tryNumber < GlobalVariable.MAX_TRY)) {
@@ -229,6 +237,19 @@ public class GetDealFunction {
                 continue;
             }
         }
+        return data;
+    }
+    /**
+     * Get address from http://www.hotdeal.vn/ link.
+     * @param data Html content
+     * @return a string represent address get from url
+     * @throws Exception Exception threw
+     */
+    public static String getAddressFromHotDealVn(String data) throws Exception {
+        String address = "";
+        Pattern patt = null;
+        Matcher match = null;
+        int timeoutMillis = GlobalVariable.GET_ADDRESS_TIMEOUT;
         if (!data.isEmpty()) {
             int type = 0;
             String regexAddress = "";
@@ -346,6 +367,48 @@ public class GetDealFunction {
             // Write log
         }
         return address.trim();
+    }
+    /**
+     * Get category from hotdeal.
+     * @param data Html content
+     * @return Id of category
+     * @throws Exception Exception
+     */
+    public static Long getCategoryFromHotDealVn(String data) throws Exception {
+        Long categoryId = (long) 0;
+        String categoryName = "";
+        String description = "";
+        Long parentId = (long) 0;
+        String categoryLink = "";
+        Pattern patt = null;
+        Matcher match = null;
+        if (!data.isEmpty()) {
+            patt = Pattern.compile(GlobalVariable.HOTDEAL_REGEX_CATEGORY);
+            match = GeneralUtil.createMatcherWithTimeout(data, patt, GlobalVariable.GET_ADDRESS_TIMEOUT);
+            try {
+                while (match.find()) {
+                    // ----- Get Deal's info -----
+                    categoryLink = match.group(14).trim();
+                    categoryName = match.group(17).trim();
+                    System.out.println("Category Link: " + categoryLink);
+                    System.out.println("Category Name: " + categoryName);
+                    if (!categoryName.isEmpty()) {
+                        if (!CategoryBLO.INSTANCE.isCategoryNameExist(categoryName)) {
+                            Category category = new Category(categoryName, description, parentId, categoryLink);
+                            categoryId = CategoryBLO.INSTANCE.insert(category);
+                        } else {
+                            Category category = CategoryBLO.INSTANCE.getCategoryByName(categoryName);
+                            if (category != null) {
+                                categoryId = category.getId();
+                            }
+                        }
+                    }
+                }
+            } catch (RuntimeException ex) {
+                System.out.println(ex.toString());
+            }
+        }
+        return categoryId;
     }
     /**
      * Get deal information from http://www.nhommua.com.

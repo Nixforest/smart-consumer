@@ -13,8 +13,10 @@ import org.json.JSONObject;
 
 import com.gae.java.smartconsumer.blo.AddressBLO;
 import com.gae.java.smartconsumer.blo.AddressDetailBLO;
+import com.gae.java.smartconsumer.blo.CategoryBLO;
 import com.gae.java.smartconsumer.blo.DealBLO;
 import com.gae.java.smartconsumer.model.Address;
+import com.gae.java.smartconsumer.model.Category;
 import com.gae.java.smartconsumer.model.Deal;
 
 /**
@@ -68,6 +70,13 @@ public class DealMobileBLO {
         jsonObject.put("latitude", latitude);
         jsonObject.put("fullAddress", fullAddress);
         // NguyenPT - 2012/12/23 - End
+        jsonObject.put("categoryId", deal.getCategoryId());
+        Category category = CategoryBLO.INSTANCE.getCategoryById(deal.getCategoryId());
+        if (category != null) {
+            jsonObject.put("categoryName", category.getName());
+        } else {
+            jsonObject.put("categoryName", "");
+        }
         return jsonObject;
     }
     /**
@@ -102,7 +111,8 @@ public class DealMobileBLO {
                 if (AddressDetailBLO.INSTANCE.getAddressDetailsByDealId(listDeal.get(i).getId()).size() != 0) {
                     isExistAddress = true;
                     Address address = AddressBLO.INSTANCE.getAddressById(
-                            AddressDetailBLO.INSTANCE.getAddressDetailsByDealId(listDeal.get(i).getId()).get(0).getAddressId());
+                            AddressDetailBLO.INSTANCE.getAddressDetailsByDealId(
+                                    listDeal.get(i).getId()).get(0).getAddressId());
                     longitude = address.getLongitude();
                     latitude = address.getLatitude();
                     fullAddress = address.getFullAddress();
@@ -112,6 +122,13 @@ public class DealMobileBLO {
                 json.put("latitude", latitude);
                 json.put("fullAddress", fullAddress);
                 // NguyenPT - 2012/12/23 - End
+                json.put("categoryId", listDeal.get(i).getCategoryId());
+                Category category = CategoryBLO.INSTANCE.getCategoryById(listDeal.get(i).getCategoryId());
+                if (category != null) {
+                    json.put("categoryName", category.getName());
+                } else {
+                    json.put("categoryName", "");
+                }
                 listJson.add(json);
             }
         }
@@ -150,7 +167,8 @@ public class DealMobileBLO {
                 if (AddressDetailBLO.INSTANCE.getAddressDetailsByDealId(listDeal.get(i).getId()).size() != 0) {
                     isExistAddress = true;
                     Address address = AddressBLO.INSTANCE.getAddressById(
-                            AddressDetailBLO.INSTANCE.getAddressDetailsByDealId(listDeal.get(i).getId()).get(0).getAddressId());
+                            AddressDetailBLO.INSTANCE.getAddressDetailsByDealId(
+                                    listDeal.get(i).getId()).get(0).getAddressId());
                     longitude = address.getLongitude();
                     latitude = address.getLatitude();
                     fullAddress = address.getFullAddress();
@@ -160,6 +178,13 @@ public class DealMobileBLO {
                 json.put("latitude", latitude);
                 json.put("fullAddress", fullAddress);
                 // NguyenPT - 2012/12/23 - End
+                json.put("categoryId", listDeal.get(i).getCategoryId());
+                Category category = CategoryBLO.INSTANCE.getCategoryById(listDeal.get(i).getCategoryId());
+                if (category != null) {
+                    json.put("categoryName", category.getName());
+                } else {
+                    json.put("categoryName", "");
+                }
                 listJson.add(json);
             }
         }

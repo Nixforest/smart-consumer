@@ -91,13 +91,13 @@
             } else {
                 startRecord = 0;
             }
-            /*List<Deal> listSubDeals = new ArrayList<Deal>();
+            List<Deal> listSubDeals = new ArrayList<Deal>();
             for (int i = 0; i < deals.size(); i++) {
                 if ((i >= startRecord)
                         && (i < startRecord + GlobalVariable.DEAL_PER_PAGE_HOME)) {
                     listSubDeals.add(deals.get(i));
                 }
-            }*/
+            }
             %>
     <div id="doc">
       <div id="bdw" class="bdw">
@@ -114,7 +114,8 @@
                     <span class="disabled">&lt;<%=GlobalVariable.PREVIOUS %></span> |
                     <%
                 }
-                int count = countOfActiveDeal;
+                //int count = countOfActiveDeal;
+                int count = deals.size();
                 int pageCount = (int)Math.ceil((double)count / GlobalVariable.DEAL_PER_PAGE_HOME);
                 if (pageCount <= GlobalVariable.MAX_PAGE) {
                     for (int i = 0; i < pageCount; i++) {
@@ -152,8 +153,8 @@
             <div id="listdeal" style="margin-top:-35px;">
                 <%
                     String itemclass = "";
-                    for (int i = 0; i < deals.size(); i++) {
-                        Deal deal = deals.get(i);
+                    for (int i = 0; i < listSubDeals.size(); i++) {
+                        Deal deal = listSubDeals.get(i);
                         
                         //deal = GeneralUtil.decodeDeal(deals.get(i));
                         if (((i + 1) % 3) == 0) {

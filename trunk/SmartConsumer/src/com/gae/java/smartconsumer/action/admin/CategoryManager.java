@@ -1,13 +1,9 @@
 /**
- * DealManager.java
- * 28/05/2012
- * Smart Consumer project
+ * CategoryManager.java
+ * 25 Dec 2012
+ * SmartConsumer.
  */
 package com.gae.java.smartconsumer.action.admin;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,19 +13,19 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import com.gae.java.smartconsumer.blo.DealBLO;
-import com.gae.java.smartconsumer.model.Deal;
+import com.gae.java.smartconsumer.blo.CategoryBLO;
+import com.gae.java.smartconsumer.model.Category;
 import com.gae.java.smartconsumer.util.GlobalVariable;
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 
 /**
- * Controller dealmanager.
- * @version 1.0 28/5/2012
+ * Controller categorymanager.
+ * @version 1.0 24/12/2021
  * @author NguyenPT
  */
-public class DealManager extends Action {
+public class CategoryManager extends Action {
     @Override
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
             HttpServletResponse response) throws Exception {
@@ -51,22 +47,31 @@ public class DealManager extends Action {
             response.sendRedirect("/smartconsumer.app");
             return mapping.findForward("failed");
         }
+        // --- Add new category --- Start
+        String name = "";
+        String description = "";
+        Long parentId = (long) 0;
+        String link = "";
+        if (request.getParameter("name") != null) {
+            name = request.getParameter("name").toString();
+        }
+        if (request.getParameter("description") != null) {
+            description = request.getParameter("description").toString();
+        }
+        if (request.getParameter("parentId") != null) {
+            parentId = Long.parseLong(request.getParameter("parentId").toString());
+        }
+        if (request.getParameter("link") != null) {
+            link = request.getParameter("link").toString();
+        }
+        if (!name.isEmpty()) {
+            Category category = new Category(name, description, parentId, link);
+            CategoryBLO.INSTANCE.insert(category);
+        }
+        // --- Add new category --- End
+
         try {
-            /*String strCurrentPage = request.getParameter("currentPage");
-            int currentPage = 1;
-            int countOfAllDeals = DealBLO.INSTANCE.getCountOfAllDeals();
-            if (strCurrentPage != null) {
-                currentPage = Integer.parseInt(strCurrentPage);
-            }*/
-            // Get List Deal sort by Update Day
-            List<Deal> listDeal = new ArrayList<Deal>();
-            for (Deal item : DealBLO.INSTANCE.listDealsSortByUpdateDate()) {
-                listDeal.add(item);
-            }
-            // Reverse this list
-            Collections.reverse(listDeal);
-            request.setAttribute("listDeals", listDeal);
-            //request.setAttribute("countOfAllDeals", countOfAllDeals);
+            request.setAttribute("listCategories", CategoryBLO.INSTANCE.getListCategories());
         } catch (Exception ex) {
             request.setAttribute("error", ex.getMessage());
         }

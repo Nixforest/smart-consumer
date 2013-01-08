@@ -49,7 +49,7 @@ public enum DealDAO {
         if (this.listActiveDeals.isEmpty()) {
             EntityManager em = EMFService.get().createEntityManager();
             Query q = em.createQuery("select from " + Deal.class.getName() + " where status="
-                    + Status.SELLING.ordinal() + " order by updateDate asc");
+                    + Status.SELLING.ordinal() + " order by updateDate desc");
             List<Deal> deals = q.getResultList();
             for (Deal deal : deals) {
                 this.listActiveDeals.add(deal);
@@ -73,7 +73,7 @@ public enum DealDAO {
                 int count = page * GlobalVariable.DEAL_PER_PAGE_HOME - offset;
                 String queryString = "select from " + Deal.class.getName()
                         + " where status=" + Status.SELLING.ordinal()
-                        + " order by updateDate asc limit "
+                        + " order by updateDate desc limit "
                         + offset + ", " + count;
                 Query q = em.createQuery(queryString);
                 List<Deal> deals = q.getResultList();
@@ -178,21 +178,33 @@ public enum DealDAO {
         List<Deal> result = new ArrayList<Deal>();
         int offset = (page - 1) * GlobalVariable.DEAL_PER_PAGE_HOME;
         int count = page * GlobalVariable.DEAL_PER_PAGE_HOME - offset;
+        EntityManager em = EMFService.get().createEntityManager();
+        String queryString = "select from " + Deal.class.getName() + " order by updateDate desc limit "
+                + offset + ", " + count;
+        Query q = em.createQuery(queryString);
         try {
-            EntityManager em = EMFService.get().createEntityManager();
-            Query q = em.createQuery("select from " + Deal.class.getName() + " order by updateDate desc limit "
-                    + offset + ", " + count);
             List<Deal> deals = q.getResultList();
             for (Deal deal : deals) {
                 if (!this.isDealExistInList(this.listAllDeals, deal)) {
                     this.listAllDeals.add(deal);
-                    result.add(deal);
                 }
+                result.add(deal);
             }
         } catch (PersistenceException ex) {
             try {
-                return this.listAllDeals.subList(offset, count);
-            } catch (IndexOutOfBoundsException em) {
+                offset = this.listActiveDeals.size();
+                count = this.getCountOfAllDeals() - offset;
+                queryString = "select from " + Deal.class.getName() + " order by updateDate desc limit "
+                        + offset + ", " + count;
+                q = em.createQuery(queryString);
+                List<Deal> deals = q.getResultList();
+                for (Deal deal : deals) {
+                    if (!this.isDealExistInList(this.listAllDeals, deal)) {
+                        this.listAllDeals.add(deal);
+                    }
+                    result.add(deal);
+                }
+            } catch (IndexOutOfBoundsException exy) {
                 return result;
             }
         }
