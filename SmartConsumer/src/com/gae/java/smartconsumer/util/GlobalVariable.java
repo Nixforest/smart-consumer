@@ -63,6 +63,10 @@ public final class GlobalVariable {
 
     //----- Static string Vietnamese -------
     /**
+     * Category manager string.
+     */
+    public static final String CATEGORY_MANAGER = "Quản lý chuyên mục";
+    /**
      * Status of Deal string.
      */
     public static final String STATUS = "Trạng thái";
@@ -78,6 +82,38 @@ public final class GlobalVariable {
      * Update string.
      */
     public static final String UPDATE = "Cập nhật";
+    /**
+     * Serial number string.
+     */
+    public static final String SERIAL_NUMBER = "Số thứ tự";
+    /**
+     * Add category string.
+     */
+    public static final String ADD_CATEGORY = "Thêm chuyên mục";
+    /**
+     * Id string.
+     */
+    public static final String ID = "Id";
+    /**
+     * Category name string.
+     */
+    public static final String CATEGORY_NAME = "Tên chuyên mục";
+    /**
+     * Category name error string.
+     */
+    public static final String CATEGORY_NAME_ERROR = "Vui lòng nhập tên chuyên mục";
+    /**
+     * Category description string.
+     */
+    public static final String CATEGORY_DESCRIPTION = "Mô tả chuyên mục";
+    /**
+     * Category parent string.
+     */
+    public static final String CATEGORY_PARENT = "Chuyên mục cha";
+    /**
+     * Category remove string.
+     */
+    public static final String CATEGORY_REMOVE = "Xóa chuyên mục";
     /**
      * Deal Id string.
      */
@@ -411,6 +447,23 @@ public final class GlobalVariable {
             + ".*?</p>"
         + ".*?</div>";
     /**
+     * Regular expression get category from HotDeal.vn.
+     */
+    public static final String HOTDEAL_REGEX_CATEGORY = "<div\\s+class=\"breadcrumbs\".*?>"
+            + ".*?<a\\s+href=(\"([^\"]*\")|'[^']*'|([^'\">\\s]+)).*?>"
+            + ".*?"
+        + ".*?</a>"
+        + ".*?<img.*?src=(\"([^\"]*\")|'[^']*'|([^'\">\\s]+)).*?/>"
+        + ".*?<a\\s+href=(\"([^\"]*\")|'[^']*'|([^'\">\\s]+)).*?>"
+            + "(.*?)"
+        + "</a>"
+        + ".*?<img.*?src=(\"([^\"]*\")|'[^']*'|([^'\">\\s]+)).*?/>" // 11
+        + ".*?<a\\s+href=(\"([^\"]*\")|'[^']*'|([^'\">\\s]+)).*?>"  // 14
+            + "(.*?)"                                               // 17
+        + "</a>"
+        + ".*?<img.*?src=(\"([^\"]*\")|'[^']*'|([^'\">\\s]+)).*?/>"
+        + ".*?</div>";
+    /**
      * Timeout to get an address.
      */
     public static final int GET_ADDRESS_TIMEOUT = 5000;
@@ -450,6 +503,10 @@ public final class GlobalVariable {
      * Date time format use in this system.
      */
     public static final String DATE_TIME_FORMAT = "yyyy.MM.dd.HH.mm.ss";
+    /**
+     * Voucher string.
+     */
+    public static final String VOUCHER = "(Giao Voucher)";
 
     //----- Static string USER -------
     /**

@@ -52,7 +52,7 @@ public class Deal {
     /** Status of record. */
     private Integer status;
     /** Category of deal. */
-    private Integer categoryId;
+    private Long categoryId;
     /**
      * Empty constructor.
      */
@@ -88,7 +88,7 @@ public class Deal {
         this.isVoucher = isVoucher;
         this.setUpdateDate(java.util.Calendar.getInstance().getTime());
         this.status = Status.SELLING.ordinal();
-        this.categoryId = 1;
+        this.categoryId = (long) 0;
     }
     /**
      * Constructor of Deal class.
@@ -108,7 +108,7 @@ public class Deal {
      */
     public Deal(String title, String description, String link, String imageLink, double price,
             double basicPrice, String unitPrice, float save, int numberBuyer, Date endTime, boolean isVoucher,
-            int status, Integer categoryId) {
+            int status, Long categoryId) {
         this.title = title;
         this.description = description;
         this.link = link;
@@ -122,6 +122,7 @@ public class Deal {
         this.isVoucher = isVoucher;
         this.setUpdateDate(java.util.Calendar.getInstance().getTime());
         this.status = status;
+        this.categoryId = categoryId;
     }
 
     /**
@@ -352,7 +353,7 @@ public class Deal {
     * Get value of categoryId.
     * @return the categoryId
     */
-    public Integer getCategoryId() {
+    public Long getCategoryId() {
         return categoryId;
     }
 
@@ -360,7 +361,7 @@ public class Deal {
      * Set the value for categoryId.
      * @param categoryId the categoryId to set
      */
-    public void setCategoryId(Integer categoryId) {
+    public void setCategoryId(Long categoryId) {
         this.categoryId = categoryId;
     }
 }

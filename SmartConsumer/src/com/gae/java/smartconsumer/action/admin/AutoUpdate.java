@@ -32,7 +32,8 @@ public class AutoUpdate extends Action {
             // update status of deal
             for (Deal deal : DealBLO.INSTANCE.listDealsSellingSortByEndTime()) {
                 if (deal.getEndTime().before(Calendar.getInstance().getTime())) {
-                    DealBLO.INSTANCE.changeStatus(deal, Status.OUTOFTIME.ordinal());
+                    //DealBLO.INSTANCE.changeStatus(deal, Status.OUTOFTIME.ordinal());
+                    DealBLO.INSTANCE.remove(deal.getId());
                 }
             }
         } catch (Exception ex) {

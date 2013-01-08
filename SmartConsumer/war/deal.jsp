@@ -20,9 +20,9 @@
 
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-<title><%=GlobalVariable.DEAL_INFO %></title>
-<link rel="stylesheet"
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <title><%=GlobalVariable.DEAL_INFO %></title>
+  <link rel="stylesheet"
         type="text/css"
         href="css/main.css"/>
 <script type="text/javascript" language="javascript">
@@ -174,13 +174,13 @@ function setLinkUpdate(id) {
             } else {
                 startRecord = 0;
             }
-            /*List<Deal> listSubDeals = new ArrayList<Deal>();
+            List<Deal> listSubDeals = new ArrayList<Deal>();
             for (int i = 0; i < deals.size(); i++) {
                 if ((i >= startRecord)
                         && (i < startRecord + GlobalVariable.DEAL_PER_PAGE_DEALMANAGER)) {
                     listSubDeals.add(deals.get(i));
                 }
-            }*/
+            }
             %>
             <!-- Paginator -->
       <div class="paginator" align="center">
@@ -194,7 +194,8 @@ function setLinkUpdate(id) {
               <span class="disabled">&lt;<%=GlobalVariable.PREVIOUS %></span> |
               <%
           }
-          int count = countOfAllDeals;
+          //int count = countOfAllDeals;
+          int count = deals.size();
           int pageCount = (int)Math.ceil((double)count / GlobalVariable.DEAL_PER_PAGE_DEALMANAGER);
           if (pageCount <= GlobalVariable.MAX_PAGE) {
               for (int i = 0; i < pageCount; i++) {
@@ -246,7 +247,7 @@ function setLinkUpdate(id) {
               <th><%=GlobalVariable.DEAL_REMOVE %></th>
           </tr>
           <%
-              for (Deal deal : deals) {
+              for (Deal deal : listSubDeals) {
           %>
           <tr>
               <td><%=deal.getId() %></td>

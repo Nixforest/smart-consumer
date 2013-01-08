@@ -49,21 +49,22 @@ public class SmartConsumerServlet extends Action {
             request.setAttribute("urlLinktext", GlobalVariable.LOGIN);
         }
         try {
+            /*
             String strCurrentPage = request.getParameter("currentPage");
             int currentPage = 1;
             int countOfActiveDeal = DealBLO.INSTANCE.getCountOfActiveDeal();
             if (strCurrentPage != null) {
                 currentPage = Integer.parseInt(strCurrentPage);
-            }
+            }*/
             // Get List Deal sort by Update Day
             List<Deal> listDeal = new ArrayList<Deal>();
-            for (Deal item : DealBLO.INSTANCE.listDealsSellingSortByUpdateDate(currentPage)) {
+            for (Deal item : DealBLO.INSTANCE.listDealsSellingSortByUpdateDate()) {
                 listDeal.add(item);
             }
             // Reverse this list
             Collections.reverse(listDeal);
             request.setAttribute("listDeals", listDeal);
-            request.setAttribute("countOfActiveDeal", countOfActiveDeal);
+            //request.setAttribute("countOfActiveDeal", countOfActiveDeal);
         } catch (Exception ex) {
             request.setAttribute("error", ex.getMessage());
         }
