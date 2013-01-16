@@ -19,6 +19,11 @@
         <action path="/getAddressByDealId" type="com.gae.java.smartconsumer.mobile.action.GetAddressByDealId" scope="session" validate="false">
         </action>
         <action path="/getListAddress" type="com.gae.java.smartconsumer.mobile.action.GetListAddress" scope="session" validate="false"></action>
+        <action path="/getCommentsByDealId" type="com.gae.java.smartconsumer.mobile.action.GetCommentsByDealId" scope="session" validate="false"></action>
+        <action path="/submitComment" type="com.gae.java.smartconsumer.mobile.action.InsertComment" scope="session" validate="false"></action>
+        <action path="/deleteComment" type="com.gae.java.smartconsumer.mobile.action.DeleteCommentById" scope="session" validate="false"></action>
+        <action path="/getListCategories" type="com.gae.java.smartconsumer.mobile.action.GetListCategories" scope="session" validate="false"></action>
+        <action path="/getListDealByCategory" type="com.gae.java.smartconsumer.mobile.action.GetDealsByCategory" scope="session" validate="false"></action>
     </action-mappings>
 
 </struts-config>

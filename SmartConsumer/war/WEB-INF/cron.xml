@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cronentries>
+    <cron>
+        <url>/autocollector.app</url>
+        <description>Automatic run collector</description>
+        <schedule>every 6 hours</schedule>
+    </cron>
+    <cron>
+        <url>/autoupdate.app</url>
+        <description>Automatic update deal status</description>
+        <schedule>every 3 hours</schedule>
+    </cron>
+</cronentries>

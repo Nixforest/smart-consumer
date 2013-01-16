@@ -89,6 +89,7 @@ public enum CategoryBLO {
     public Long insert(Category category) {
         category.setId(getMaxId() + 1);
         CategoryDAO.INSTANCE.insert(category);
+        this.listCategories.add(category);
         return category.getId();
     }
     /**
@@ -129,7 +130,7 @@ public enum CategoryBLO {
      */
     public boolean isCategoryNameExist(String name) {
         for (Category item : this.getListCategories()) {
-            if (item.getName().toLowerCase().contains(name.toLowerCase())) {
+            if (item.getName().equals(name)) {
                 return true;
             }
         }

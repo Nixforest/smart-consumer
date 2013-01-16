@@ -40,6 +40,67 @@ public class DealMobileBLO {
     public static JSONObject getDealById(Long id) throws JSONException {
         Deal deal = DealBLO.INSTANCE.getDealById(id);
         JSONObject jsonObject = new JSONObject();
+        if (!deal.equals(null)) {
+            jsonObject = convertDealToJSONObject(deal);
+        }
+        return jsonObject;
+    }
+    /**
+     * Get list all selling deal.
+     * @return List<JSONObject>
+     * @throws JSONException Exception
+     */
+    public static List<JSONObject> getDealListAll() throws JSONException {
+        List<JSONObject> listJson = new ArrayList<JSONObject>();
+        List<Deal> listDeal = new ArrayList<Deal>();
+        listDeal = DealBLO.INSTANCE.getListAllDealsSelling();
+        if (!listDeal.isEmpty()) {
+            for (int i = 0; i < listDeal.size(); i++) {
+                listJson.add(convertDealToJSONObject(listDeal.get(i)));
+            }
+        }
+        return listJson;
+    }
+    /**
+     * Limit get deal.
+     * @param limit Limit
+     * @return List<JSONObject>
+     * @throws JSONException Exception
+     */
+    public static List<JSONObject> getDealLimit(int limit) throws JSONException {
+        List<JSONObject> listJson = new ArrayList<JSONObject>();
+        List<Deal> listDeal = new ArrayList<Deal>();
+        listDeal = DealBLO.INSTANCE.listDealsLimit(limit);
+        if (!listDeal.isEmpty()) {
+            for (int i = 0; i < listDeal.size(); i++) {
+                listJson.add(convertDealToJSONObject(listDeal.get(i)));
+            }
+        }
+        return listJson;
+    }
+    /**
+     * Get list deals by category id.
+     * @param categoryId Id of category
+     * @return List Deals by category id
+     * @throws JSONException Exception
+     */
+    public static List<JSONObject> getDealsByCategoryId(Long categoryId) throws JSONException {
+        List<JSONObject> listJson = new ArrayList<JSONObject>();
+        List<Deal> listDeal = new ArrayList<Deal>();
+        listDeal = DealBLO.INSTANCE.getDealsByCategoryId(categoryId);
+        for (Deal deal : listDeal) {
+            listJson.add(convertDealToJSONObject(deal));
+        }
+        return listJson;
+    }
+    /**
+     * Convert a deal to JSONObject.
+     * @param deal Deal object
+     * @return JSONObject
+     * @throws JSONException Exception
+     */
+    private static JSONObject convertDealToJSONObject(Deal deal) throws JSONException {
+        JSONObject jsonObject = new JSONObject();
         jsonObject.put("id", deal.getId());
         jsonObject.put("title", deal.getTitle());
         jsonObject.put("description", deal.getDescription());
@@ -78,116 +139,5 @@ public class DealMobileBLO {
             jsonObject.put("categoryName", "");
         }
         return jsonObject;
-    }
-    /**
-     * Get list all selling deal.
-     * @return List<JSONObject>
-     * @throws JSONException Exception
-     */
-    public static List<JSONObject> getDealListAll() throws JSONException {
-        List<JSONObject> listJson = new ArrayList<JSONObject>();
-        List<Deal> listDeal = new ArrayList<Deal>();
-        listDeal = DealBLO.INSTANCE.getListAllDealsSelling();
-        if (!listDeal.isEmpty()) {
-            for (int i = 0; i < listDeal.size(); i++) {
-                JSONObject json = new JSONObject();
-                json.put("id", listDeal.get(i).getId());
-                json.put("title", listDeal.get(i).getTitle());
-                json.put("description", listDeal.get(i).getDescription());
-                json.put("link", listDeal.get(i).getLink());
-                json.put("imageLink", listDeal.get(i).getImageLink());
-                json.put("price", listDeal.get(i).getPrice());
-                json.put("basicPrice", listDeal.get(i).getBasicPrice());
-                json.put("unitPrice", listDeal.get(i).getUnitPrice());
-                json.put("save", listDeal.get(i).getSave());
-                json.put("numberBuyer", listDeal.get(i).getNumberBuyer());
-                json.put("endTime", listDeal.get(i).getEndTime());
-                json.put("isVoucher", listDeal.get(i).getisVoucher());
-                // NguyenPT - 2012/12/23 - Start
-                boolean isExistAddress = false;
-                double longitude = 0.0;
-                double latitude = 0.0;
-                String fullAddress = "";
-                if (AddressDetailBLO.INSTANCE.getAddressDetailsByDealId(listDeal.get(i).getId()).size() != 0) {
-                    isExistAddress = true;
-                    Address address = AddressBLO.INSTANCE.getAddressById(
-                            AddressDetailBLO.INSTANCE.getAddressDetailsByDealId(
-                                    listDeal.get(i).getId()).get(0).getAddressId());
-                    longitude = address.getLongitude();
-                    latitude = address.getLatitude();
-                    fullAddress = address.getFullAddress();
-                }
-                json.put("isExistAddress", isExistAddress);
-                json.put("longitude", longitude);
-                json.put("latitude", latitude);
-                json.put("fullAddress", fullAddress);
-                // NguyenPT - 2012/12/23 - End
-                json.put("categoryId", listDeal.get(i).getCategoryId());
-                Category category = CategoryBLO.INSTANCE.getCategoryById(listDeal.get(i).getCategoryId());
-                if (category != null) {
-                    json.put("categoryName", category.getName());
-                } else {
-                    json.put("categoryName", "");
-                }
-                listJson.add(json);
-            }
-        }
-        return listJson;
-    }
-    /**
-     * Limit get deal.
-     * @param limit Limit
-     * @return List<JSONObject>
-     * @throws JSONException Exception
-     */
-    public static List<JSONObject> getDealLimit(int limit) throws JSONException {
-        List<JSONObject> listJson = new ArrayList<JSONObject>();
-        List<Deal> listDeal = new ArrayList<Deal>();
-        listDeal = DealBLO.INSTANCE.listDealsLimit(limit);
-        if (!listDeal.isEmpty()) {
-            for (int i = 0; i < listDeal.size(); i++) {
-                JSONObject json = new JSONObject();
-                json.put("id", listDeal.get(i).getId());
-                json.put("title", listDeal.get(i).getTitle());
-                json.put("description", listDeal.get(i).getDescription());
-                json.put("link", listDeal.get(i).getLink());
-                json.put("imageLink", listDeal.get(i).getImageLink());
-                json.put("price", listDeal.get(i).getPrice());
-                json.put("basicPrice", listDeal.get(i).getBasicPrice());
-                json.put("unitPrice", listDeal.get(i).getUnitPrice());
-                json.put("save", listDeal.get(i).getSave());
-                json.put("numberBuyer", listDeal.get(i).getNumberBuyer());
-                json.put("endTime", listDeal.get(i).getEndTime());
-                json.put("isVoucher", listDeal.get(i).getisVoucher());
-                // NguyenPT - 2012/12/23 - Start
-                boolean isExistAddress = false;
-                double longitude = 0.0;
-                double latitude = 0.0;
-                String fullAddress = "";
-                if (AddressDetailBLO.INSTANCE.getAddressDetailsByDealId(listDeal.get(i).getId()).size() != 0) {
-                    isExistAddress = true;
-                    Address address = AddressBLO.INSTANCE.getAddressById(
-                            AddressDetailBLO.INSTANCE.getAddressDetailsByDealId(
-                                    listDeal.get(i).getId()).get(0).getAddressId());
-                    longitude = address.getLongitude();
-                    latitude = address.getLatitude();
-                    fullAddress = address.getFullAddress();
-                }
-                json.put("isExistAddress", isExistAddress);
-                json.put("longitude", longitude);
-                json.put("latitude", latitude);
-                json.put("fullAddress", fullAddress);
-                // NguyenPT - 2012/12/23 - End
-                json.put("categoryId", listDeal.get(i).getCategoryId());
-                Category category = CategoryBLO.INSTANCE.getCategoryById(listDeal.get(i).getCategoryId());
-                if (category != null) {
-                    json.put("categoryName", category.getName());
-                } else {
-                    json.put("categoryName", "");
-                }
-                listJson.add(json);
-            }
-        }
-        return listJson;
     }
 }
