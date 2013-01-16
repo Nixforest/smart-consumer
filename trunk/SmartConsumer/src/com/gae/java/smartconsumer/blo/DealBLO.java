@@ -48,19 +48,19 @@ public enum DealBLO {
      * @return List<Deal>
      */
     public List<Deal> listDealsLimit(int limit) {
-        /*List<Deal> listDealsSellingSortByUpdateDate = this.listDealsSellingSortByUpdateDate();
+        List<Deal> listDealsSellingSortByUpdateDate = this.listDealsSellingSortByUpdateDate();
         List<Deal> listDeal = new ArrayList<Deal>();
         for (Deal item : listDealsSellingSortByUpdateDate) {
             listDeal.add(item);
         }
         // Reverse this list
         Collections.reverse(listDeal);
-        return listDeal.subList(0, limit);*/
-        int page = limit / GlobalVariable.DEAL_PER_PAGE_HOME;
+        return listDeal.subList(0, limit);
+        /*int page = limit / GlobalVariable.DEAL_PER_PAGE_HOME;
         if (page <= 0) {
             page = 1;
         }
-        return this.listDealsSellingSortByUpdateDate(page);
+        return this.listDealsSellingSortByUpdateDate(page);*/
     }
     /**
      * Method get all deals sort by updateDate property.
@@ -206,6 +206,20 @@ public enum DealBLO {
             }
         }
         return null;
+    }
+    /**
+     * Get list deals base on category id.
+     * @param categoryId Id of category
+     * @return List Deals base on category id
+     */
+    public List<Deal> getDealsByCategoryId(Long categoryId) {
+        List<Deal> results = new ArrayList<Deal>();
+        for (Deal item : DealDAO.INSTANCE.getListActiveDeals()) {
+            if (item.getCategoryId().equals(categoryId)) {
+                results.add(item);
+            }
+        }
+        return results;
     }
     /**
      * Insert a deal.
@@ -390,5 +404,19 @@ public enum DealBLO {
             }
         }
         return lst;
+    }
+    /**
+     * Check if a link string exist in list all deals.
+     * @param link Link string
+     * @return True if link string exist in list all deals,
+     * false otherwise
+     */
+    public boolean isLinkExist(String link) {
+        for (Deal item : DealDAO.INSTANCE.getListAllDeals()) {
+            if (item.getLink().equals(link)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

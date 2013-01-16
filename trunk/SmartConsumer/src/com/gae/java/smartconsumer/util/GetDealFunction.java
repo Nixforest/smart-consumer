@@ -145,6 +145,10 @@ public class GetDealFunction {
                     // ----- Get Deal's info -----
                     // Link
                     link = "http://www.hotdeal.vn" + match.group(1).trim().replace("\"", "");
+                    // Deal has exist in datastore
+                    if (DealBLO.INSTANCE.isLinkExist(link)) {
+                        continue;
+                    }
                     // Image link
                     imageLink = match.group(4).replace("\"", "").replace("'", "").trim();
                     // Title
