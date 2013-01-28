@@ -17,6 +17,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.UnknownServiceException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -1771,21 +1772,63 @@ public class UtilHtmlToXML {
     * Read Html to buffer.
     * @param address address of html
     * @return String Buffer
-    * @throws Exception Exception maybe happen when connect to Internet
     */
-   public StringBuffer readHtmlToBuffer(String address) throws Exception {
-       URL url = new URL(address);
-       URLConnection connection = url.openConnection();
-       connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded; charset=ISO-8859-1");
-       connection.setRequestProperty("Content-Encoding", "ISO-8859-1");
-
-       BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
+   public StringBuffer readHtmlToBuffer(String address) {
+       URL url = null;
+       try {
+           url = new URL(address);
+       } catch (MalformedURLException e) {
+           System.out.println("Address string specifies an unknown protocol!");
+           System.out.println("Exception: " + e.getMessage());
+           return new StringBuffer();
+       }
+       URLConnection connection = null;
+       try {
+           connection = url.openConnection();
+       } catch (IOException e) {
+           System.out.println("Can't open connection with " + address);
+           System.out.println("Exception: " + e.getMessage());
+           return new StringBuffer();
+       }
+       if (!connection.equals(null)) {
+           try {
+               connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded; charset=ISO-8859-1");
+               connection.setRequestProperty("Content-Encoding", "ISO-8859-1");
+           } catch (IllegalStateException e) {
+               System.out.println("This connection has already connected! Can not set properties!");
+               System.out.println("Exception: " + e.getMessage());
+               return new StringBuffer();
+           } catch (NullPointerException e) {
+               System.out.println("The key must not null!");
+               System.out.println("Exception: " + e.getMessage());
+               return new StringBuffer();
+           }
+       }
+       InputStreamReader inputStreamReader = null;
+       try {
+           inputStreamReader = new InputStreamReader(connection.getInputStream(), "UTF-8");
+       } catch (UnknownServiceException ex) {
+           System.out.println("Problem when get input stream!");
+           System.out.println("Exception: " + ex.getMessage());
+           return new StringBuffer();
+       } catch (IOException ex) {
+           System.out.println("Problem when get input stream!");
+           System.out.println("Exception: " + ex.getMessage());
+           return new StringBuffer();
+       }
+       BufferedReader br = new BufferedReader(inputStreamReader);
        String temp = "";
        StringBuffer stringHtml = new StringBuffer();
-       while ((temp = br.readLine()) != null) {
-           stringHtml.append(temp);
+       try {
+           while ((temp = br.readLine()) != null) {
+               stringHtml.append(temp);
+           }
+           br.close();
+       } catch (IOException ex) {
+           System.out.println("Problem when read input stream");
+           System.out.println("Exception: " + ex.getMessage());
+           return new StringBuffer();
        }
-       br.close();
        return stringHtml;
    }
    /**

@@ -24,7 +24,8 @@ public class AutoCollector extends Action {
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
             HttpServletResponse response) throws Exception {
         try {
-            GetDealFunction.getFromHotDealVn("http://www.hotdeal.vn/ho-chi-minh/");
+            // For u-smarconsumer host
+            //GetDealFunction.getFromHotDealVn("http://www.hotdeal.vn/ho-chi-minh/");
         } catch (Exception ex) {
             // No statement
             System.out.print(ex.getLocalizedMessage());

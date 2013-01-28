@@ -124,7 +124,7 @@ public class GetDealFunction {
                 }
                 tryNumber++;
                 data = new UtilHtmlToXML().readHtmlToBuffer(url).toString();
-            } catch (java.net.SocketTimeoutException e) {
+            } catch (Exception e) {
                 System.out.println("Tèo lần " + tryNumber + " rồi! Đang thử lại...");
                 continue;
             }
@@ -237,7 +237,7 @@ public class GetDealFunction {
             try {
                 tryNumber++;
                 data = new UtilHtmlToXML().readHtmlToBuffer(url).toString();
-            } catch (SocketTimeoutException ex) {
+            } catch (Exception ex) {
                 continue;
             }
         }
@@ -686,7 +686,7 @@ public class GetDealFunction {
                         try {
                             stringHtml = new UtilHtmlToXML().readHtmlToBuffer(
                                     match.group(9).replace("\"", "").trim()).toString();
-                        } catch (java.net.SocketTimeoutException e) {
+                        } catch (Exception e) {
                             continue;
                         }
                     }
@@ -792,6 +792,129 @@ public class GetDealFunction {
                     }
                 }
             } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+        return content;
+    }
+    /**
+     * Get deal from dealvip.vn.
+     * @param url Url
+     * @return Content
+     */
+    public static String getFromDealVip(String url) {
+        String content = "";
+        String itemContent = "";
+        String title = "";
+        String description = "";
+        String link = "";
+        String imageLink = "";
+        double price = 0;
+        double basicPrice = 0;
+        String unitPrice = "";
+        int numberBuyer = 0;
+        String remainTime = "";
+        java.util.Date endTime = Calendar.getInstance().getTime();
+        boolean isVoucher = true;
+        String addressString = "";
+        String addressDescription = "";
+        String data = new String();
+        int tryNumber = 0;
+        // Loop for get html content (try 5 times)
+        while (data.isEmpty()
+                && (tryNumber < GlobalVariable.MAX_TRY)) {
+            try {
+                if (tryNumber == 0) {
+                    System.out.println("Đang connect tới server để lấy dữ liệu, bạn đợi chút nhé...");
+                }
+                tryNumber++;
+                data = new UtilHtmlToXML().readHtmlToBuffer(url).toString();
+            } catch (Exception e) {
+                System.out.println("Tèo lần " + tryNumber + " rồi! Đang thử lại...");
+                continue;
+            }
+        }
+        if (!data.isEmpty()) {
+            System.out.println("Đã lấy dữ liệu thành công. Đừng nóng, đang lọc mớ hỗn độn đó đây. Plz wait...");
+            Pattern patt = Pattern.compile(GlobalVariable.DEALVIP_REGEX);
+            //Matcher match = patt.matcher(data);
+            Matcher match = GeneralUtil.createMatcherWithTimeout(data, patt, GlobalVariable.GET_DEAL_PAGE_TIMEOUT);
+            int count = 0;
+            // Find matcher
+            try {
+                while (match.find()) {
+                    // ----- Get Deal's info -----
+                    // Link
+                    link = "http://www.dealvip.vn" + match.group(1).trim().replace("\"", "");
+                    // Deal has exist in datastore
+                    /*if (DealBLO.INSTANCE.isLinkExist(link)) {
+                        continue;
+                    }*/
+                    // Image link
+                    imageLink = match.group(12).replace("\"", "").trim();
+                    // Title
+                    title = match.group(4).trim();
+                    // Isvoucher
+                    String isVoucherString = match.group(8).trim();
+                    //isVoucher = (isVoucherString.compareToIgnoreCase(GlobalVariable.VOUCHER) == 0);
+                    // Description
+                    description = match.group(15).trim();
+                    // Price
+                    String priceString = match.group(17).trim();
+                    //price = GeneralUtil.getPriceFromString(match.group(10).trim());
+                    // Basic price
+                    String basicPriceString = match.group(16).trim();
+                    //basicPrice = GeneralUtil.getPriceFromString(basicPriceString.trim());
+                    // Unit price
+                    unitPrice = GlobalVariable.VND;
+                    // Number buyer
+                    numberBuyer = Integer.parseInt(match.group(23).trim());
+                    // EndTime
+                    String remainTimeString = match.group(24).trim();
+                    /*remainTime = match.group(14).trim();
+                    endTime = GeneralUtil.getEndTime(remainTime);*/
+                    // Address
+                    String contentHtml = "";
+                    //contentHtml = getHtmlData(link);
+                    
+                    // ----- Write log Deal's info -----
+                    itemContent = "+ Deal thứ: " + String.valueOf(count + 1);
+                    itemContent += "\n Title: " + title;
+                    itemContent += "\n Description: " + description;
+                    itemContent += "\n URl: " + link;
+                    itemContent += "\n Link image: " + imageLink;
+                    itemContent += "\n Price: " + priceString;
+                    itemContent += "\n Basic price: " + basicPriceString;
+                    itemContent += "\n Unit: " + unitPrice;
+                    itemContent += "\n Time: " + remainTimeString;
+                    itemContent += "\n Is voucher: " + isVoucherString;
+                    itemContent += "\n Sold: " + numberBuyer;
+                    //itemContent += "\nAddress: " + addressString;
+                    count++;
+                    System.out.println(itemContent);
+                    /*Deal deal = new Deal(title, description, link,
+                            imageLink, price, basicPrice, unitPrice, 0.0f,
+                            numberBuyer, endTime, isVoucher,
+                            Status.SELLING.ordinal(),
+                            getCategoryFromHotDealVn(contentHtml));
+                    Long dealId = DealBLO.INSTANCE.insert(deal);
+                    // Convert to latitude and longitude
+                    String latlng = GeneralUtil.convertAddressToLatitudeLongitude(addressString);
+                    if (!latlng.equals("")) {   // Convert success
+                        double lat = Double.parseDouble(latlng.substring(0, latlng.indexOf(",")));
+                        double lng = Double
+                                .parseDouble(latlng.substring(latlng.indexOf(",") + 1, latlng.length()));
+                        Address address = new Address(addressString, lng, lat, addressDescription);
+                        // Insert address to data store
+                        Long addressId = AddressBLO.INSTANCE.insert(address);
+                        if (addressId != 0) {
+                            AddressDetail addressDetail = new AddressDetail(dealId, addressId);
+                            // Insert address detail to data store
+                            AddressDetailBLO.INSTANCE.insert(addressDetail);
+                        }
+                    }*/
+                }
+            } catch (RuntimeException ex) {
                 ex.printStackTrace();
             }
         }
