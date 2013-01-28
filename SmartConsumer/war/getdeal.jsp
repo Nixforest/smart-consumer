@@ -1,4 +1,5 @@
 <!-- Get deal from hotdeal/muachung... -->
+<%@page import="com.gae.java.smartconsumer.util.GlobalVariable.LIST_LINKS_ID"%>
 <%@page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8" %>
 <%@page import="com.google.appengine.api.users.UserServiceFactory"%>
 <%@page import="com.google.appengine.api.users.User"%>
@@ -54,7 +55,7 @@
     <div class="linkchoose">
         <form action="/getdeal.app" method="post" accept-charset="utf-8">
           <table>
-              <tr>
+              <%-- <tr>
                   <td><input type="checkbox" id="123do" name="123do" value="" disabled="disabled"/><%=GlobalVariable.LINK_123DO %></td>
               </tr>
               <tr>
@@ -68,7 +69,32 @@
               </tr>
               <tr>
                   <td><input type="checkbox" id="cungmua" name="cungmua" value="" disabled="disabled"/><%=GlobalVariable.LINK_CUNGMUA %></td>
-              </tr>
+              </tr> --%>
+              <%
+              for (int i = 0; i < GlobalVariable.LIST_LINKS.length - 1; i += 4) {
+                  %>
+                  <tr>
+                    <td>
+                        <input type="checkbox" id="<%=LIST_LINKS_ID.values()[i] %>" name="<%=LIST_LINKS_ID.values()[i] %>" value=""/><%=GlobalVariable.LIST_LINKS[i] %>
+                    </td>
+                    <td>
+                        <input type="checkbox" id="<%=LIST_LINKS_ID.values()[i + 1] %>" name="<%=LIST_LINKS_ID.values()[i + 1] %>" value=""/><%=GlobalVariable.LIST_LINKS[i + 1] %>
+                    </td>
+                    <td>
+                        <input type="checkbox" id="<%=LIST_LINKS_ID.values()[i + 2] %>" name="<%=LIST_LINKS_ID.values()[i + 2] %>" value=""/><%=GlobalVariable.LIST_LINKS[i + 2] %>
+                    </td>
+                    <td>
+                        <input type="checkbox" id="<%=LIST_LINKS_ID.values()[i + 3] %>" name="<%=LIST_LINKS_ID.values()[i + 3] %>" value=""/><%=GlobalVariable.LIST_LINKS[i + 3] %>
+                    </td>
+                  </tr>
+                  <%
+              }
+              %>
+              <tr>
+                    <td>
+                        <input type="checkbox" id="<%=LIST_LINKS_ID.DEALVIP.toString() %>" name="<%=LIST_LINKS_ID.DEALVIP.toString() %>" value=""/><%=GlobalVariable.LIST_LINKS[LIST_LINKS_ID.DEALVIP.ordinal()] %>
+                    </td>
+                  </tr>
               <tr>
                   <td>
                     <input type="checkbox" id="url" name="url" value=""/>

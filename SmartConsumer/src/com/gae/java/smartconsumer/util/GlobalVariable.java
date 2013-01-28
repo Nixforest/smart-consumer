@@ -229,6 +229,201 @@ public final class GlobalVariable {
      */
     public static final String LINK_CUNGMUA = "http://www.cungmua.com/";
     /**
+     * List link get deal from.
+     */
+    public static final String[] LIST_LINKS = new String[] {
+        "http://51deal.vn/",                // DEAL51           0
+        "http://babydeal.vn/",              // BABYDEAL         1
+        "http://www.congdongmua.com",       // CONGDONGMUA      2
+        "http://www.crazydeal.vn/",         // CRAZYDEAL        3
+        "http://cucre.vn",                  // CUCRE            4
+        "http://www.cungdep.vn/",           // CUNGDEP          5
+        "http://www.cungmua.com/",          // CUNGMUA          6
+        "http://cungmuasam.net/",           // CUNGMUASAM       7
+        "http://cungsam.com/",              // CUNGSAM          8
+        "http://datmua.vn/",                // DATMUA           9
+        "http://deal1.vn",                  // DEAL1            10
+        "http://deal14.vn/",                // DEAL14           11
+        "http://deal18.vn/",                // DEAL18           12
+        "http://deal8.vn/",                 // DEAL8            13
+        "http://dealmoi.vn",                // DEALMOI          14
+        "http://dealshop.vn/",              // DEALSHOP         15
+        "http://www.dealsoc.vn/",           // DEALSOC          16
+        "http://dealtravel.vn/",            // DEALTRAVEL       17
+        "http://dealzone.vn/",              // DEALZONE         18
+        "http://diadiemvang.net/",          // DIADIEMVANG      19
+        "http://www.dienmay.com/",          // DIENMAY          20
+        "http://everyday.vn/",              // EVERYDAY         21
+        "http://www.ewinwin.vn/",           // EWINWIN          22
+        "http://giagood.vn/",               // GIAGOOD          23
+        "http://hoadeal.vn/",               // HOADEAL          24
+        "http://hocbong.loidich.com/",      // LOIDICH          25
+        "http://www.hoinhapdeal.vn",        // HOINHAPDEAL      26
+        "http://hoishopping.com/",          // HOISHOPPING      27
+        "http://www.hotdeal.vn",            // HOTDEAL          28
+        "http://hottour.vn",                // HOTTOUR          29
+        "http://kenhmua.com",               // KENHMUA          30
+        "http://muachung.vn",               // MUACHUNG         31
+        "http://muamoingay.com",            // MUAMOINGAY       32
+        "http://muanhanh.vn/",              // MUANHANH         33
+        "http://necdeal.com/",              // NECDEAL          34
+        "http://nhanhmua.vn/",              // NHANHMUA         35
+        "http://nhommuare.com/",            // NHOMMUARE        36
+        "http://nhommuasam.vn",             // NHOMMUASAM       37
+        "http://oladeal.vn/",               // OLADEAL          38
+        "http://qbata.com/",                // QBATA            39
+        "http://remoingay.com/",            // REMOINGAY        40
+        "http://retunggiay.vn/",            // RETUNGGIAY       41
+        "http://www.runhau.vn/",            // RUNHAU           42
+        "http://saigonmua.vn",              // SAIGONMUA        43
+        "http://www.sieumua.com/",          // SIEUMUA          44
+        "http://smartdeal.vn/",             // SMARTDEAL        45
+        "http://sucmanhnhom.com/",          // SUCMANHNHOM      46
+        "http://travelpon.com/",            // TRAVELPON        47
+        "http://uudaigia.com",              // UUDAIGIA         48
+        "http://www.shop360plus.com/",      // SHOP360PLUS      49
+        "http://vinadeal.vn/",              // VINADEAL         50
+        "http://deal.vivumuasam.com/",      // VIVUMUASAM       51
+        "http://vndeal.net/",               // VNDEAL           52
+        "http://vndoan.com/",               // VNDOAN           53
+        "http://voucherhot.com",            // VOUCHERHOT       54
+        "http://windeal.vn/",               // WINDEAL          55
+        "https://xdeal.vn/",                // XDEAL            56
+        "http://yeah1deal.vn",              // YEAH1DEAL        57
+        "http://yesdeal.vn",                // YESDEAL          58
+        "http://www.nhommua.com",           // NHOMMUA          59
+        "http://www.dealvip.vn/"            // DEALVIP          60
+    };
+    /**
+     * Enum list link id.
+     * @version 1.0 27/01/2013
+     * @author NguyenPT
+     */
+    public static enum LIST_LINKS_ID {
+        /** http://51deal.vn/. */
+        DEAL51,
+        /** http://babydeal.vn/. */
+        BABYDEAL,
+        /** http://www.congdongmua.com. */
+        CONGDONGMUA,
+        /** http://www.crazydeal.vn/. */
+        CRAZYDEAL,
+        /** http://cucre.vn. */
+        CUCRE,
+        /** http://www.cungdep.vn/. */
+        CUNGDEP,
+        /** http://www.cungmua.com/. */
+        CUNGMUA,
+        /** http://cungmuasam.net/. */
+        CUNGMUASAM,
+        /** http://cungsam.com/. */
+        CUNGSAM,
+        /** http://datmua.vn/. */
+        DATMUA,
+        /** http://deal1.vn. */
+        DEAL1,
+        /** http://deal14.vn/. */
+        DEAL14,
+        /** http://deal18.vn/. */
+        DEAL18,
+        /** http://deal8.vn/. */
+        DEAL8,
+        /** http://dealmoi.vn. */
+        DEALMOI,
+        /** http://dealshop.vn/. */
+        DEALSHOP,
+        /** http://www.dealsoc.vn/. */
+        DEALSOC,
+        /** http://dealtravel.vn/. */
+        DEALTRAVEL,
+        /** http://dealzone.vn/. */
+        DEALZONE,
+        /** http://diadiemvang.net/. */
+        DIADIEMVANG,
+        /** http://www.dienmay.com/. */
+        DIENMAY,
+        /** http://everyday.vn/. */
+        EVERYDAY,
+        /** http://www.ewinwin.vn/. */
+        EWINWIN,
+        /** http://giagood.vn/. */
+        GIAGOOD,
+        /** http://hoadeal.vn/. */
+        HOADEAL,
+        /** http://hocbong.loidich.com/. */
+        LOIDICH,
+        /** http://www.hoinhapdeal.vn. */
+        HOINHAPDEAL,
+        /** http://hoishopping.com/. */
+        HOISHOPPING,
+        /** http://www.hotdeal.vn. */
+        HOTDEAL,
+        /** http://hottour.vn. */
+        HOTTOUR,
+        /** http://kenhmua.com. */
+        KENHMUA,
+        /** http://muachung.vn. */
+        MUACHUNG,
+        /** http://muamoingay.com. */
+        MUAMOINGAY,
+        /** http://muanhanh.vn/. */
+        MUANHANH,
+        /** http://necdeal.com/. */
+        NECDEAL,
+        /** http://nhanhmua.vn/. */
+        NHANHMUA,
+        /** http://nhommuare.com/. */
+        NHOMMUARE,
+        /** http://nhommuasam.vn. */
+        NHOMMUASAM,
+        /** http://oladeal.vn/. */
+        OLADEAL,
+        /** http://qbata.com/. */
+        QBATA,
+        /** http://remoingay.com/. */
+        REMOINGAY,
+        /** http://retunggiay.vn/. */
+        RETUNGGIAY,
+        /** http://www.runhau.vn/. */
+        RUNHAU,
+        /** http://saigonmua.vn. */
+        SAIGONMUA,
+        /** http://www.sieumua.com/. */
+        SIEUMUA,
+        /** http://smartdeal.vn/. */
+        SMARTDEAL,
+        /** http://sucmanhnhom.com/. */
+        SUCMANHNHOM,
+        /** http://travelpon.com/. */
+        TRAVELPON,
+        /** http://uudaigia.com. */
+        UUDAIGIA,
+        /** http://www.shop360plus.com/. */
+        SHOP360PLUS,
+        /** http://vinadeal.vn/. */
+        VINADEAL,
+        /** http://deal.vivumuasam.com/. */
+        VIVUMUASAM,
+        /** http://vndeal.net/. */
+        VNDEAL,
+        /** http://vndoan.com/. */
+        VNDOAN,
+        /** http://voucherhot.com. */
+        VOUCHERHOT,
+        /** http://windeal.vn/. */
+        WINDEAL,
+        /** https://xdeal.vn/. */
+        XDEAL,
+        /** http://yeah1deal.vn. */
+        YEAH1DEAL,
+        /** http://yesdeal.vn. */
+        YESDEAL,
+        /** http://www.nhommua.com. */
+        NHOMMUA,
+        /** http://www.dealvip.vn/. */
+        DEALVIP
+    };
+    /**
      * Home page string.
      */
     public static final String HOME_PAGE = "Trang chủ";
@@ -463,6 +658,121 @@ public final class GlobalVariable {
         + "</a>"
         + ".*?<img.*?src=(\"([^\"]*\")|'[^']*'|([^'\">\\s]+)).*?/>"
         + ".*?</div>";
+    public static final String DEALVIP_REGEX1 = "<div\\s+class=\"index_title\".*?>"
+                        + ".*?<a\\s+href=(\"([^\"]*\")|'[^']*'|([^'\">\\s]+)).*?>" // Link 1
+                            + "(.*?)"       // Title 4
+                        + "</a>"
+                    + ".*?</div>";
+    public static final String DEALVIP_REGEX2 = "<div\\s+style=\"position:relative\".*?>"
+                            + ".*?<span.*?>"
+                                + ".*?<img.*?src=(\"([^\"]*\")|'[^']*'|([^'\">\\s]+)).*?/>"
+                                + "(.*?)"   // Voucher 8
+                            + "</span>"
+                            + ".*?<a\\s+href=(\"([^\"]*\")|'[^']*'|([^'\">\\s]+)).*?>"
+                                + ".*?<img.*?src=(\"([^\"]*\")|'[^']*'|([^'\">\\s]+)).*?/>" // ImageLink 12
+                            + ".*?</a>"
+                        + ".*?</div>";
+    public static final String DEALVIP_REGEX3 = "<div\\s+style=\"color:#666; padding:10px 0 0 0; font-size:80%\".*?>"
+                        + "(.*?)"       // Description 15
+                    + "</div>";
+    public static final String DEALVIP_REGEX4 = "<ul\\s+class=\"index_price\".*?>"
+                        + ".*?<li.*?>"
+                            + "(.*?)"   // Basic price 16
+                        + "</li>"
+                        + ".*?<li.*?>"
+                            + "(.*?)"   // Price 17
+                        + "</li>"
+                    + ".*?</ul>";
+    public static final String DEALVIP_REGEX5 = "<p\\s+class=\"btn-small2 btn-right\".*?>"
+                        + ".*?<a.*?href=(\"([^\"]*\")|'[^']*'|([^'\">\\s]+)).*?title=\"(.*?)\".*?>" // Description_2 21
+                        + ".*?</a>"
+                    + ".*?</p>";
+    public static final String DEALVIP_REGEX6 = "<ul.*?style=\"position:relative\".*?class=\"index_note\".*?>"
+                        + ".*?<li>"
+                            + ".*?<p>"
+                            + ".*?</p>"
+                            + ".*?<span>"
+                                + "(.*?)"   // Save 22
+                            + "</span>"
+                        + ".*?</li>"
+                        + ".*?<li>"
+                            + ".*?<p>"
+                            + ".*?</p>"
+                            + ".*?<span>"
+                                + "(.*?)"   // Number Buyer 23
+                            + "</span>"
+                        + ".*?</li>"
+                        + ".*?<li>"
+                            + ".*?<p>"
+                            + ".*?</p>"
+                            + ".*?<span>"
+                                + "(.*?)"   // Remain Time 24
+                            + "</span>"
+                        + ".*?</li>"
+                    + ".*?</ul>";
+    /**
+     * DealVip regular expression string.
+     */
+    public static final String DEALVIP_REGEX = "<div.*?class=\"index_default\".*?>"
+                + ".*?<div.*?class=\"index_feature\".*?>"
+                    + ".*?<div\\s+class=\"index_title\".*?>"
+                        + ".*?<a\\s+href=(\"([^\"]*\")|'[^']*'|([^'\">\\s]+)).*?>" // Link 1
+                            + "(.*?)"       // Title 4
+                        + "</a>"
+                    + ".*?</div>"
+                    + ".*?<div.*?class=\"index_img\".*?>"
+                        + ".*?<div\\s+style=\"position:relative\".*?>"
+                            + ".*?<span.*?>"
+                                + ".*?<img.*?src=(\"([^\"]*\")|'[^']*'|([^'\">\\s]+)).*?/>"
+                                + "(.*?)"   // Voucher 8
+                            + "</span>"
+                            + ".*?<a\\s+href=(\"([^\"]*\")|'[^']*'|([^'\">\\s]+)).*?>"
+                                + ".*?<img.*?src=(\"([^\"]*\")|'[^']*'|([^'\">\\s]+)).*?/>" // ImageLink 12
+                            + ".*?</a>"
+                        + ".*?</div>"
+                    + ".*?</div>"
+                    + ".*<div\\s+style=\"color:#666; padding:10px 0 0 0; font-size:80%\".*?>"
+                        + "(.*?)"       // Description 15
+                    + "</div>"
+                    + ".*?<ul\\s+class=\"index_price_s\".*?>"
+                        + ".*?<li.*?>"
+                            + ".*?"
+                        + "</li>"
+                        + ".*?<li.*?>"
+                            + ".*?"
+                        + "</li>"
+                    + ".*?</ul>"
+                    + ".*?<ul\\s+class=\"index_price\".*?>"
+                        + ".*?<li.*?>"
+                            + "(.*?)"   // Basic price 16
+                        + "</li>"
+                        + ".*?<li.*?>"
+                            + "(.*?)"   // Price 17
+                        + "</li>"
+                    + ".*?</ul>"
+                    + ".*?<p\\s+class=\"btn-small2 btn-right\".*?>"
+                        + ".*?<a.*?href=(\"([^\"]*\")|'[^']*'|([^'\">\\s]+)).*?title=\"(.*?)\".*?>" // Description_2 21
+                        + ".*?</a>"
+                    + ".*?</p>"
+                    + ".*?<ul.*?>"
+                        + ".*?<li>"
+                            + ".*?<span>"
+                                + "(.*?)"   // Save 22
+                            + "</span>"
+                        + ".*?</li>"
+                        + ".*?<li>"
+                            + ".*?<span>"
+                                + "(.*?)"   // Number Buyer 23
+                            + "</span>"
+                        + ".*?</li>"
+                        + ".*?<li>"
+                            + ".*?<span>"
+                                + "(.*?)"   // Remain Time 24
+                            + "</span>"
+                        + ".*?</li>"
+                    + ".*?</ul>"
+                + ".*?</div>"
+            + ".*?</div>";
     /**
      * Timeout to get an address.
      */
