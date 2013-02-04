@@ -658,7 +658,7 @@ public final class GlobalVariable {
         + "</a>"
         + ".*?<img.*?src=(\"([^\"]*\")|'[^']*'|([^'\">\\s]+)).*?/>"
         + ".*?</div>";
-    public static final String DEALVIP_REGEX1 = "<div\\s+class=\"index_title\".*?>"
+    /*public static final String DEALVIP_REGEX1 = "<div\\s+class=\"index_title\".*?>"
                         + ".*?<a\\s+href=(\"([^\"]*\")|'[^']*'|([^'\">\\s]+)).*?>" // Link 1
                             + "(.*?)"       // Title 4
                         + "</a>"
@@ -686,8 +686,50 @@ public final class GlobalVariable {
     public static final String DEALVIP_REGEX5 = "<p\\s+class=\"btn-small2 btn-right\".*?>"
                         + ".*?<a.*?href=(\"([^\"]*\")|'[^']*'|([^'\">\\s]+)).*?title=\"(.*?)\".*?>" // Description_2 21
                         + ".*?</a>"
-                    + ".*?</p>";
-    public static final String DEALVIP_REGEX6 = "<ul.*?style=\"position:relative\".*?class=\"index_note\".*?>"
+                    + ".*?</p>";*/
+    /**
+     * DealVip regular expression string.
+     */
+    public static final String DEALVIP_REGEX = "<div\\s+class=\"index_title\".*?>"
+                            + ".*?<a\\s+href=(\"([^\"]*\")|'[^']*'|([^'\">\\s]+)).*?>" // Link 1
+                                + "(.*?)"       // Title 4
+                            + "</a>"
+                        + ".*?</div>"
+                        + ".*?<div\\s+class=\"index_img\"\\s+id=\".*?\".*?>"
+                            + ".*?<div\\s+style=\"position:relative\".*?>"
+                                + ".*?<span\\s+class=\"trans\"\\s+align=\"center\".*?>"
+                                    + ".*?<img\\s+src=(\"([^\"]*\")|'[^']*'|([^'\">\\s]+)).*?/>"    // 5
+                                    + "(.*?)"   // Voucher 8
+                                + "</span>"
+                                + ".*?<a\\s+href=(\"([^\"]*\")|'[^']*'|([^'\">\\s]+)).*?>"
+                                    + ".*?<img\\s+src=(\"([^\"]*\")|'[^']*'|([^'\">\\s]+)).*?/>" // ImageLink 12
+                                + ".*?</a>"
+                            + ".*?</div>"
+                        + ".*?</div>"
+                        + ".*?<div\\s+style=\"color:#666; padding:10px 0 0 0; font-size:80%\".*?>"
+                            + "(.*?)"       // Description 15
+                        + "</div>"
+                        + ".*?<ul\\s+class=\"index_price_s\".*?>"
+                            + ".*?<li>"
+                                + ".*?"
+                            + "</li>"
+                            + ".*?<li>"
+                                + ".*?"
+                            + "</li>"
+                        + ".*?</ul>"
+                        + ".*?<ul\\s+class=\"index_price\".*?>"
+                            + ".*?<li.*?>"
+                            + "(.*?)"   // Basic price 16
+                        + "</li>"
+                        + ".*?<li.*?>"
+                            + "(.*?)"   // Price 17
+                        + "</li>"
+                    + ".*?</ul>"
+                    + ".*?<p\\s+class=\"btn-small2 btn-right\".*?>"
+                        + ".*?<a.*?href=(\"([^\"]*\")|'[^']*'|([^'\">\\s]+)).*?title=\"(.*?)\".*?>" // Description_2 21
+                        + ".*?</a>"
+                    + ".*?</p>"
+                    + ".*?<ul\\s+class=\"index_note\"\\s+style=\"position:relative\".*?>"
                         + ".*?<li>"
                             + ".*?<p>"
                             + ".*?</p>"
@@ -711,68 +753,9 @@ public final class GlobalVariable {
                         + ".*?</li>"
                     + ".*?</ul>";
     /**
-     * DealVip regular expression string.
+     * Voucher string in DealVip.
      */
-    public static final String DEALVIP_REGEX = "<div.*?class=\"index_default\".*?>"
-                + ".*?<div.*?class=\"index_feature\".*?>"
-                    + ".*?<div\\s+class=\"index_title\".*?>"
-                        + ".*?<a\\s+href=(\"([^\"]*\")|'[^']*'|([^'\">\\s]+)).*?>" // Link 1
-                            + "(.*?)"       // Title 4
-                        + "</a>"
-                    + ".*?</div>"
-                    + ".*?<div.*?class=\"index_img\".*?>"
-                        + ".*?<div\\s+style=\"position:relative\".*?>"
-                            + ".*?<span.*?>"
-                                + ".*?<img.*?src=(\"([^\"]*\")|'[^']*'|([^'\">\\s]+)).*?/>"
-                                + "(.*?)"   // Voucher 8
-                            + "</span>"
-                            + ".*?<a\\s+href=(\"([^\"]*\")|'[^']*'|([^'\">\\s]+)).*?>"
-                                + ".*?<img.*?src=(\"([^\"]*\")|'[^']*'|([^'\">\\s]+)).*?/>" // ImageLink 12
-                            + ".*?</a>"
-                        + ".*?</div>"
-                    + ".*?</div>"
-                    + ".*<div\\s+style=\"color:#666; padding:10px 0 0 0; font-size:80%\".*?>"
-                        + "(.*?)"       // Description 15
-                    + "</div>"
-                    + ".*?<ul\\s+class=\"index_price_s\".*?>"
-                        + ".*?<li.*?>"
-                            + ".*?"
-                        + "</li>"
-                        + ".*?<li.*?>"
-                            + ".*?"
-                        + "</li>"
-                    + ".*?</ul>"
-                    + ".*?<ul\\s+class=\"index_price\".*?>"
-                        + ".*?<li.*?>"
-                            + "(.*?)"   // Basic price 16
-                        + "</li>"
-                        + ".*?<li.*?>"
-                            + "(.*?)"   // Price 17
-                        + "</li>"
-                    + ".*?</ul>"
-                    + ".*?<p\\s+class=\"btn-small2 btn-right\".*?>"
-                        + ".*?<a.*?href=(\"([^\"]*\")|'[^']*'|([^'\">\\s]+)).*?title=\"(.*?)\".*?>" // Description_2 21
-                        + ".*?</a>"
-                    + ".*?</p>"
-                    + ".*?<ul.*?>"
-                        + ".*?<li>"
-                            + ".*?<span>"
-                                + "(.*?)"   // Save 22
-                            + "</span>"
-                        + ".*?</li>"
-                        + ".*?<li>"
-                            + ".*?<span>"
-                                + "(.*?)"   // Number Buyer 23
-                            + "</span>"
-                        + ".*?</li>"
-                        + ".*?<li>"
-                            + ".*?<span>"
-                                + "(.*?)"   // Remain Time 24
-                            + "</span>"
-                        + ".*?</li>"
-                    + ".*?</ul>"
-                + ".*?</div>"
-            + ".*?</div>";
+    public static final String DEALVIP_GIAOVOUCHER = "Giao Voucher tận nơi";
     /**
      * Timeout to get an address.
      */
@@ -780,7 +763,7 @@ public final class GlobalVariable {
     /**
      * Timeout to get a page.
      */
-    public static final int GET_DEAL_PAGE_TIMEOUT = 300000;
+    public static final int GET_DEAL_PAGE_TIMEOUT = 30000;
     /**
      * HotDeal default address.
      */
