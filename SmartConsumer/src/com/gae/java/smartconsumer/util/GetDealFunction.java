@@ -835,9 +835,10 @@ public class GetDealFunction {
             }
         }
         if (!data.isEmpty()) {
+        data = data.replace("<!--<span class=\"time\" style=\"color:#999;\"> - 01/01/1970</span>-->", "");
+        data = data.replace("<!--end feature-->", "");
             System.out.println("Đã lấy dữ liệu thành công. Đừng nóng, đang lọc mớ hỗn độn đó đây. Plz wait...");
             Pattern patt = Pattern.compile(GlobalVariable.DEALVIP_REGEX);
-            //Matcher match = patt.matcher(data);
             Matcher match = GeneralUtil.createMatcherWithTimeout(data, patt, GlobalVariable.GET_DEAL_PAGE_TIMEOUT);
             int count = 0;
             // Find matcher
@@ -856,21 +857,24 @@ public class GetDealFunction {
                     title = match.group(4).trim();
                     // Isvoucher
                     String isVoucherString = match.group(8).trim();
-                    //isVoucher = (isVoucherString.compareToIgnoreCase(GlobalVariable.VOUCHER) == 0);
+                    isVoucher = (isVoucherString.compareToIgnoreCase(GlobalVariable.DEALVIP_GIAOVOUCHER) == 0);
                     // Description
+                    //description = match.group(21).trim();
                     description = match.group(15).trim();
                     // Price
                     String priceString = match.group(17).trim();
-                    //price = GeneralUtil.getPriceFromString(match.group(10).trim());
+                    price = GeneralUtil.getPriceFromString(priceString);
                     // Basic price
                     String basicPriceString = match.group(16).trim();
-                    //basicPrice = GeneralUtil.getPriceFromString(basicPriceString.trim());
+                    basicPrice = GeneralUtil.getPriceFromString(basicPriceString);
                     // Unit price
                     unitPrice = GlobalVariable.VND;
                     // Number buyer
                     numberBuyer = Integer.parseInt(match.group(23).trim());
+                    //numberBuyer = Integer.parseInt(match.group(9).trim());
                     // EndTime
                     String remainTimeString = match.group(24).trim();
+                    //String remainTimeString = match.group(10).trim();
                     /*remainTime = match.group(14).trim();
                     endTime = GeneralUtil.getEndTime(remainTime);*/
                     // Address
@@ -883,11 +887,16 @@ public class GetDealFunction {
                     itemContent += "\n Description: " + description;
                     itemContent += "\n URl: " + link;
                     itemContent += "\n Link image: " + imageLink;
-                    itemContent += "\n Price: " + priceString;
-                    itemContent += "\n Basic price: " + basicPriceString;
+                    //itemContent += "\n Price: " + priceString;
+                    priceString = String.valueOf(price);
+                    itemContent += "\n Price: " + priceString.replace(".0", "");
+                    //itemContent += "\n Basic price: " + basicPriceString;
+                    basicPriceString = String.valueOf(basicPrice);
+                    itemContent += "\n Basic price: " + basicPriceString.replace(".0", "");
                     itemContent += "\n Unit: " + unitPrice;
                     itemContent += "\n Time: " + remainTimeString;
-                    itemContent += "\n Is voucher: " + isVoucherString;
+                    //itemContent += "\n Is voucher: " + isVoucherString;
+                    itemContent += "\n Is voucher: " + isVoucher;
                     itemContent += "\n Sold: " + numberBuyer;
                     //itemContent += "\nAddress: " + addressString;
                     count++;
@@ -918,6 +927,7 @@ public class GetDealFunction {
                 ex.printStackTrace();
             }
         }
+        //System.out.println(data);
         return content;
     }
 }
