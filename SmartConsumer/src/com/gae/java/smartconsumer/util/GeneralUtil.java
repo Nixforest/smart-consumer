@@ -142,6 +142,28 @@ public final class GeneralUtil {
     }
 
     /**
+     * Method get the EndTime of Deal from string remainTime (from DealVip).
+     * @param remainTime String represent remain time get from deal (x ngày)
+     * @return a Date object represent EndTime of Deal
+     */
+    public static java.util.Date getEndTimeFromDealVip(String remainTime) {
+        Calendar calendar = Calendar.getInstance();
+        Date result = calendar.getTime();
+        if (remainTime.contains(GlobalVariable.DEALVIP_DAY)) {
+            remainTime = remainTime.replace(GlobalVariable.DEALVIP_DAY, "");
+            int numberOfDay = 0;
+            try {
+                numberOfDay = Integer.parseInt(remainTime.trim());
+            } catch (NumberFormatException ex) {
+                System.out.println("Number of day is invalid!");
+            }
+            calendar.add(Calendar.DATE, numberOfDay);
+            result = calendar.getTime();
+        }
+        return result;
+    }
+
+    /**
      * Method get string is value sub operation of two date.
      * @param d1 Date one
      * @param d2 Date two
