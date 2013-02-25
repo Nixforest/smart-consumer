@@ -198,7 +198,7 @@
                             <div style="width:150px; float:left;">
                                 <div class="deal_list_view_price">
                                     <div class="number">
-                                        <%=String.valueOf(deal.getPrice()).replace(".0", "")) %>
+                                        <%=String.valueOf(deal.getPrice()).replace(".0", "") %>
                                         <span><%=deal.getUnitPrice() %></span>
                                     </div>
                                 </div>

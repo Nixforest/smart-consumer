@@ -8,6 +8,7 @@ package com.gae.java.smartconsumer.util;
 import java.net.SocketTimeoutException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -226,18 +227,21 @@ public class GetDealFunction {
      * Get html content from an url.
      * @param url Url to get content
      * @return Html content from an url
-     * @throws Exception Exception
      */
-    public static String getHtmlData(String url) throws Exception {
-        String data = "";
+    public static String getHtmlData(String url) {
+        String data = new String();
         int tryNumber = 0;
         // Loop for get html content (try 5 times)
         while (data.isEmpty()
                 && (tryNumber < GlobalVariable.MAX_TRY)) {
             try {
+                if (tryNumber == 0) {
+                    System.out.println("Đang connect tới server để lấy dữ liệu, bạn đợi chút nhé...");
+                }
                 tryNumber++;
                 data = new UtilHtmlToXML().readHtmlToBuffer(url).toString();
-            } catch (Exception ex) {
+            } catch (Exception e) {
+                System.out.println("Tèo lần " + tryNumber + " rồi! Đang thử lại...");
                 continue;
             }
         }
@@ -818,25 +822,10 @@ public class GetDealFunction {
         boolean isVoucher = true;
         String addressString = "";
         String addressDescription = "";
-        String data = new String();
-        int tryNumber = 0;
-        // Loop for get html content (try 5 times)
-        while (data.isEmpty()
-                && (tryNumber < GlobalVariable.MAX_TRY)) {
-            try {
-                if (tryNumber == 0) {
-                    System.out.println("Đang connect tới server để lấy dữ liệu, bạn đợi chút nhé...");
-                }
-                tryNumber++;
-                data = new UtilHtmlToXML().readHtmlToBuffer(url).toString();
-            } catch (Exception e) {
-                System.out.println("Tèo lần " + tryNumber + " rồi! Đang thử lại...");
-                continue;
-            }
-        }
+        String data = getHtmlData(url);
         if (!data.isEmpty()) {
-        data = data.replace("<!--<span class=\"time\" style=\"color:#999;\"> - 01/01/1970</span>-->", "");
-        data = data.replace("<!--end feature-->", "");
+        data = data.replace(GlobalVariable.DEALVIP_SPAN, "");
+        data = data.replace(GlobalVariable.DEALVIP_ENDFEATURE, "");
             System.out.println("Đã lấy dữ liệu thành công. Đừng nóng, đang lọc mớ hỗn độn đó đây. Plz wait...");
             Pattern patt = Pattern.compile(GlobalVariable.DEALVIP_REGEX);
             Matcher match = GeneralUtil.createMatcherWithTimeout(data, patt, GlobalVariable.GET_DEAL_PAGE_TIMEOUT);
@@ -848,9 +837,9 @@ public class GetDealFunction {
                     // Link
                     link = "http://www.dealvip.vn" + match.group(1).trim().replace("\"", "");
                     // Deal has exist in datastore
-                    /*if (DealBLO.INSTANCE.isLinkExist(link)) {
+                    if (DealBLO.INSTANCE.isLinkExist(link)) {
                         continue;
-                    }*/
+                    }
                     // Image link
                     imageLink = match.group(12).replace("\"", "").trim();
                     // Title
@@ -859,7 +848,6 @@ public class GetDealFunction {
                     String isVoucherString = match.group(8).trim();
                     isVoucher = (isVoucherString.compareToIgnoreCase(GlobalVariable.DEALVIP_GIAOVOUCHER) == 0);
                     // Description
-                    //description = match.group(21).trim();
                     description = match.group(15).trim();
                     // Price
                     String priceString = match.group(17).trim();
@@ -871,15 +859,12 @@ public class GetDealFunction {
                     unitPrice = GlobalVariable.VND;
                     // Number buyer
                     numberBuyer = Integer.parseInt(match.group(23).trim());
-                    //numberBuyer = Integer.parseInt(match.group(9).trim());
                     // EndTime
                     String remainTimeString = match.group(24).trim();
-                    //String remainTimeString = match.group(10).trim();
-                    /*remainTime = match.group(14).trim();
-                    endTime = GeneralUtil.getEndTime(remainTime);*/
+                    endTime = GeneralUtil.getEndTimeFromDealVip(remainTimeString);
                     // Address
                     String contentHtml = "";
-                    //contentHtml = getHtmlData(link);
+                    contentHtml = getHtmlData(link);
                     
                     // ----- Write log Deal's info -----
                     itemContent = "+ Deal thứ: " + String.valueOf(count + 1);
@@ -901,19 +886,20 @@ public class GetDealFunction {
                     //itemContent += "\nAddress: " + addressString;
                     count++;
                     System.out.println(itemContent);
-                    /*Deal deal = new Deal(title, description, link,
+                    System.out.println(getCategoryFromDealVip(contentHtml));
+                    Deal deal = new Deal(title, description, link,
                             imageLink, price, basicPrice, unitPrice, 0.0f,
                             numberBuyer, endTime, isVoucher,
                             Status.SELLING.ordinal(),
-                            getCategoryFromHotDealVn(contentHtml));
+                            getCategoryFromDealVip(contentHtml));
                     Long dealId = DealBLO.INSTANCE.insert(deal);
                     // Convert to latitude and longitude
-                    String latlng = GeneralUtil.convertAddressToLatitudeLongitude(addressString);
+                    String latlng = getAddressFromDealVip(contentHtml);
                     if (!latlng.equals("")) {   // Convert success
                         double lat = Double.parseDouble(latlng.substring(0, latlng.indexOf(",")));
                         double lng = Double
                                 .parseDouble(latlng.substring(latlng.indexOf(",") + 1, latlng.length()));
-                        Address address = new Address(addressString, lng, lat, addressDescription);
+                        Address address = new Address("", lng, lat, "");
                         // Insert address to data store
                         Long addressId = AddressBLO.INSTANCE.insert(address);
                         if (addressId != 0) {
@@ -921,13 +907,103 @@ public class GetDealFunction {
                             // Insert address detail to data store
                             AddressDetailBLO.INSTANCE.insert(addressDetail);
                         }
-                    }*/
+                    }
                 }
             } catch (RuntimeException ex) {
+                ex.printStackTrace();
+            } catch (Exception ex) {
                 ex.printStackTrace();
             }
         }
         //System.out.println(data);
         return content;
+    }
+    /**
+     * Get category content from DealVip.
+     * @param data Html content
+     * @return Id of category
+     */
+    public static Long getCategoryFromDealVip(String data) {
+        Long categoryId = (long) 0;
+        Pattern patt = null;
+        Matcher match = null;
+        if (!data.isEmpty()) {
+            patt = Pattern.compile(GlobalVariable.DEALVIP_REGEX_CATEGORY);
+            match = GeneralUtil.createMatcherWithTimeout(data, patt, GlobalVariable.GET_ADDRESS_TIMEOUT);
+            try {
+                while (match.find()) {
+                    String content = match.group(1).trim();
+                    System.out.println(" Category: " + content);
+                    if (content.contains(GlobalVariable.DEALVIP_CATEGORY_FOOD)) {
+                        return (long) 1;
+                    } else if (content.contains(GlobalVariable.DEALVIP_CATEGORY_PREEN)) {
+                        return (long) 2;
+                    } else if (content.contains(GlobalVariable.DEALVIP_CATEGORY_FASHION)) {
+                        return (long) 3;
+                    } else if (content.contains(GlobalVariable.DEALVIP_CATEGORY_TECHNOLOGY)) {
+                        return (long) 4;
+                    } else if (content.contains(GlobalVariable.DEALVIP_CATEGORY_HOUSEHOLD)) {
+                        return (long) 5;
+                    } else if (content.contains(GlobalVariable.DEALVIP_CATEGORY_CHILDREN)) {
+                        return (long) 6;
+                    } else if (content.contains(GlobalVariable.DEALVIP_CATEGORY_TETHOLIDAY)) {
+                        return (long) 7;
+                    } else if (content.contains(GlobalVariable.DEALVIP_CATEGORY_TRAVEL)) {
+                        return (long) 8;
+                    } else if (content.contains(GlobalVariable.DEALVIP_CATEGORY_OTHER)) {
+                        return (long) 9;
+                    } else {
+                        return (long) 0;
+                    }
+                    /*String regex = "|\\s(.*?)\\s+|";
+                    Pattern pattX = Pattern.compile(regex);
+                    Matcher matchX = pattX.matcher(content);
+                    while (matchX.find()) {
+                        categoryName = matchX.group(1);
+                        break;
+                    }*/
+                    /*String[] listString = categoryName.split(" | ");
+                    if (listString.length > 1) {
+                        categoryName = listString[1];
+                    }*/
+                    /*if (!categoryName.isEmpty()) {
+                        if (!CategoryBLO.INSTANCE.isCategoryNameExist(categoryName)) {
+                            Category category = new Category(categoryName, description, parentId, categoryLink);
+                            categoryId = CategoryBLO.INSTANCE.insert(category);
+                        } else {
+                            Category category = CategoryBLO.INSTANCE.getCategoryByName(categoryName);
+                            if (category != null) {
+                                categoryId = category.getId();
+                            }
+                        }
+                    }*/
+                }
+            } catch (RuntimeException ex) {
+                //System.out.println(ex.toString());
+                ex.printStackTrace();
+            }
+        }
+        return categoryId;
+    }
+    public static String getAddressFromDealVip(String data) {
+        String addressString = "";
+        Pattern patt = null;
+        Matcher match = null;
+        if (!data.isEmpty()) {
+            data.replace(GlobalVariable.DEALVIP_VIEWMAP, "");
+            patt = Pattern.compile(GlobalVariable.DEALVIP_REGEX_ADDRESS);
+            match = GeneralUtil.createMatcherWithTimeout(data, patt, GlobalVariable.GET_ADDRESS_TIMEOUT);
+            try {
+                while (match.find()) {
+                    addressString = match.group(1).trim();
+                    addressString = addressString.substring(addressString.lastIndexOf(GlobalVariable.DEALVIP_MARKER) + GlobalVariable.DEALVIP_MARKER.length(), addressString.lastIndexOf(GlobalVariable.DEALVIP_SENSOR));
+                    System.out.println(addressString);
+                }
+            } catch (RuntimeException ex) {
+                //System.out.println(ex.toString());
+                ex.printStackTrace();
+            }
+        }
+        return addressString;
     }
 }

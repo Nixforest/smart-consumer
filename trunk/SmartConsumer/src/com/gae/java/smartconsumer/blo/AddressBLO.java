@@ -74,7 +74,7 @@ public enum AddressBLO {
         address.setId(getMaxId() + 1);
         // Check full address can not be empty
         if (address.getFullAddress().isEmpty()) {
-            throw new Exception("Address can not empty");
+            //throw new Exception("Address can not empty");
         }
         // Check address is exist
         Long addressExist = isAddressExist(address.getFullAddress());

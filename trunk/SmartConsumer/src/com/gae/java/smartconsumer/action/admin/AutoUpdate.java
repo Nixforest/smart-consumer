@@ -5,6 +5,8 @@
  */
 package com.gae.java.smartconsumer.action.admin;
 
+import java.util.Calendar;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -30,16 +32,16 @@ public class AutoUpdate extends Action {
         try {
             // update status of deal
             //for (Deal deal : DealBLO.INSTANCE.listDealsSellingSortByEndTime()) {
-            for (Deal deal : DealBLO.INSTANCE.listDealsSortByEndTime()) {
-                /*if (deal.getEndTime().before(Calendar.getInstance().getTime())) {
+            for (Deal deal : DealBLO.INSTANCE.listDealsSellingSortByUpdateDate()) {
+                if (deal.getEndTime().before(Calendar.getInstance().getTime())) {
                     //DealBLO.INSTANCE.changeStatus(deal, Status.OUTOFTIME.ordinal());
                     DealBLO.INSTANCE.remove(deal.getId());
-                }*/
-                DealBLO.INSTANCE.remove(deal.getId());
+                }
+                //DealBLO.INSTANCE.remove(deal.getId());
             }
-            for (AddressDetail address : AddressDetailBLO.INSTANCE.getAllAddressDetails()) {
+            /*for (AddressDetail address : AddressDetailBLO.INSTANCE.getAllAddressDetails()) {
                 AddressDetailBLO.INSTANCE.delete(address.getId());
-            }
+            }*/
         } catch (Exception ex) {
             ex.printStackTrace();
         }

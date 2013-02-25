@@ -757,13 +757,71 @@ public final class GlobalVariable {
      */
     public static final String DEALVIP_GIAOVOUCHER = "Giao Voucher tận nơi";
     /**
+     * Span string need remove in Dealvip html content.
+     */
+    public static final String DEALVIP_SPAN = "<!--<span class=\"time\" style=\"color:#999;\"> - 01/01/1970</span>-->";
+    /**
+     * End feature string need remove in Dealvip html content.
+     */
+    public static final String DEALVIP_ENDFEATURE = "<!--end feature-->";
+    /**
+     * Day string from Dealvip.
+     */
+    public static final String DEALVIP_DAY = "ngày";
+    /**
+     * Regular expression for get Category from DealVip.
+     */
+    public static final String DEALVIP_REGEX_CATEGORY = "<title>(.*?)</title>";
+    /**
+     * Food category.
+     */
+    public static final String DEALVIP_CATEGORY_FOOD = "Ăn Uống";               // 1
+    /**
+     * Preen category.
+     */
+    public static final String DEALVIP_CATEGORY_PREEN = "Làm Đẹp";              // 2
+    /**
+     * Fashion category.
+     */
+    public static final String DEALVIP_CATEGORY_FASHION = "Thời Trang";         // 3
+    /**
+     * Technology category.
+     */
+    public static final String DEALVIP_CATEGORY_TECHNOLOGY = "Công Nghệ";       // 4
+    /**
+     * House hold category.
+     */
+    public static final String DEALVIP_CATEGORY_HOUSEHOLD = "Gia Dụng";         // 5
+    /**
+     * Children category.
+     */
+    public static final String DEALVIP_CATEGORY_CHILDREN = "Trẻ Em";            // 6
+    /**
+     * Tet holiday category.
+     */
+    public static final String DEALVIP_CATEGORY_TETHOLIDAY = "Hàng bán tết";    // 7
+    /**
+     * Travel category.
+     */
+    public static final String DEALVIP_CATEGORY_TRAVEL = "Deal Du Lịch";        // 8
+    /**
+     * Other category.
+     */
+    public static final String DEALVIP_CATEGORY_OTHER = "Deal khuyến mãi khác"; // 9
+    public static final String DEALVIP_REGEX_ADDRESS = "<div\\s+class=\"mapbody map\">"
+                + "<img\\s+src=(\"([^\"]*\")|'[^']*'|([^'\">\\s]+)).*?/>"
+            + "(.*?)</div>";
+    public static final String DEALVIP_VIEWMAP = "<!--<a class=\"link\" href=\"javascript:;\" onclick=\"X.misc.showgooglemap();\" title=\"click to check the complete map\">Xem Bản đồ lớn</a>-->";
+    public static final String DEALVIP_MARKER = "markers=";
+    public static final String DEALVIP_SENSOR = "&sensor";
+    /**
      * Timeout to get an address.
      */
     public static final int GET_ADDRESS_TIMEOUT = 5000;
     /**
      * Timeout to get a page.
      */
-    public static final int GET_DEAL_PAGE_TIMEOUT = 30000;
+    public static final int GET_DEAL_PAGE_TIMEOUT = 300000;
     /**
      * HotDeal default address.
      */

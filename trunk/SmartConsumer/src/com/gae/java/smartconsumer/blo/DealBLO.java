@@ -55,7 +55,10 @@ public enum DealBLO {
         }
         // Reverse this list
         Collections.reverse(listDeal);
-        return listDeal.subList(0, limit);
+        if (listDeal.size() < limit) {
+            limit = listDeal.size();
+        }
+        return listDeal.subList(0, limit - 1);
         /*int page = limit / GlobalVariable.DEAL_PER_PAGE_HOME;
         if (page <= 0) {
             page = 1;

@@ -70,7 +70,8 @@ public class AddressMobileBLO {
     public static List<JSONObject> getListAddressLimit(int limit) {
         List<JSONObject> listJson = new ArrayList<JSONObject>();
         List<Deal> listDeal = new ArrayList<Deal>();
-        listDeal = DealBLO.INSTANCE.listDealsLimit(limit);
+        //listDeal = DealBLO.INSTANCE.listDealsLimit(limit);
+        listDeal = DealBLO.INSTANCE.listDealsSellingSortByUpdateDate();
         if (!listDeal.isEmpty()) {
             try {
                 Address address = new Address();
