@@ -8,7 +8,6 @@ package com.gae.java.smartconsumer.util;
 import java.net.SocketTimeoutException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -817,11 +816,8 @@ public class GetDealFunction {
         double basicPrice = 0;
         String unitPrice = "";
         int numberBuyer = 0;
-        String remainTime = "";
         java.util.Date endTime = Calendar.getInstance().getTime();
         boolean isVoucher = true;
-        String addressString = "";
-        String addressDescription = "";
         String data = getHtmlData(url);
         if (!data.isEmpty()) {
         data = data.replace(GlobalVariable.DEALVIP_SPAN, "");
@@ -865,7 +861,7 @@ public class GetDealFunction {
                     // Address
                     String contentHtml = "";
                     contentHtml = getHtmlData(link);
-                    
+
                     // ----- Write log Deal's info -----
                     itemContent = "+ Deal thứ: " + String.valueOf(count + 1);
                     itemContent += "\n Title: " + title;
@@ -985,6 +981,11 @@ public class GetDealFunction {
         }
         return categoryId;
     }
+    /**
+     * Get address string from DealVip.
+     * @param data Html content
+     * @return String of address
+     */
     public static String getAddressFromDealVip(String data) {
         String addressString = "";
         Pattern patt = null;
@@ -996,7 +997,10 @@ public class GetDealFunction {
             try {
                 while (match.find()) {
                     addressString = match.group(1).trim();
-                    addressString = addressString.substring(addressString.lastIndexOf(GlobalVariable.DEALVIP_MARKER) + GlobalVariable.DEALVIP_MARKER.length(), addressString.lastIndexOf(GlobalVariable.DEALVIP_SENSOR));
+                    addressString = addressString.substring(
+                            addressString.lastIndexOf(GlobalVariable.DEALVIP_MARKER)
+                            + GlobalVariable.DEALVIP_MARKER.length(),
+                            addressString.lastIndexOf(GlobalVariable.DEALVIP_SENSOR));
                     System.out.println(addressString);
                 }
             } catch (RuntimeException ex) {

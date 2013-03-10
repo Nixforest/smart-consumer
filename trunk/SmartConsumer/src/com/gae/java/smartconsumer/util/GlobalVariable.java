@@ -808,11 +808,25 @@ public final class GlobalVariable {
      * Other category.
      */
     public static final String DEALVIP_CATEGORY_OTHER = "Deal khuyến mãi khác"; // 9
+    /**
+     * Dealvip regular expression for address.
+     */
     public static final String DEALVIP_REGEX_ADDRESS = "<div\\s+class=\"mapbody map\">"
                 + "<img\\s+src=(\"([^\"]*\")|'[^']*'|([^'\">\\s]+)).*?/>"
             + "(.*?)</div>";
-    public static final String DEALVIP_VIEWMAP = "<!--<a class=\"link\" href=\"javascript:;\" onclick=\"X.misc.showgooglemap();\" title=\"click to check the complete map\">Xem Bản đồ lớn</a>-->";
+    /**
+     * View map dealvip html content.
+     */
+    public static final String DEALVIP_VIEWMAP = "<!--<a class=\"link\" href=\"javascript:;\""
+            + " onclick=\"X.misc.showgooglemap();\""
+            + " title=\"click to check the complete map\">Xem Bản đồ lớn</a>-->";
+    /**
+     * Marker string in dealvip.
+     */
     public static final String DEALVIP_MARKER = "markers=";
+    /**
+     * Sensor string in dealvip.
+     */
     public static final String DEALVIP_SENSOR = "&sensor";
     /**
      * Timeout to get an address.

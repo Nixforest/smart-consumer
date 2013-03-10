@@ -206,7 +206,7 @@
                                     <span style="font-size:13px;">
                                         <%=GlobalVariable.DEAL_BASIC_PRICE %>:
                                         <em style="text-decoration:line-through;font-size:13px; color:#666; font-style:normal; ">
-                                            <%=deal.getBasicPrice() + " " + deal.getUnitPrice() %>
+                                            <%=String.valueOf(deal.getBasicPrice()).replace(".0", "") + " " + deal.getUnitPrice() %>
                                         </em> 
                                     </span>
                                 </div>

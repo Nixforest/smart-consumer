@@ -15,9 +15,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import com.gae.java.smartconsumer.blo.AddressDetailBLO;
 import com.gae.java.smartconsumer.blo.DealBLO;
-import com.gae.java.smartconsumer.model.AddressDetail;
 import com.gae.java.smartconsumer.model.Deal;
 
 /**
