@@ -27,7 +27,10 @@ public class AutoCollector extends Action {
             // For u-smarconsumer host
             //GetDealFunction.getFromHotDealVn("http://www.hotdeal.vn/ho-chi-minh/");
             // For airsmartconsumer host
-            GetDealFunction.getFromDealVip("http://www.dealvip.vn/tp-ho-chi-minh/cung-mua-chung-nhom-mua-hot-deal-khuyen-mai/");
+            GetDealFunction.
+                getFromDealVip(
+                        "http://www.dealvip.vn/tp-ho-chi-minh/"
+                                + "cung-mua-chung-nhom-mua-hot-deal-khuyen-mai/");
         } catch (Exception ex) {
             // No statement
             System.out.print(ex.getLocalizedMessage());
