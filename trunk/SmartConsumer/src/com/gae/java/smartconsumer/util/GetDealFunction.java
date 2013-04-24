@@ -1010,4 +1010,50 @@ public class GetDealFunction {
         }
         return addressString;
     }
+    public static void getCommentFromDealVip(String data) {
+        Pattern patt = null;
+        Matcher match = null;
+        if (!data.isEmpty()) {
+            //String regex = ""
+        }
+        System.out.println(getHtmlData("http://www.dealvip.vn/tra-giam-can-green-coffee-1864.html"));
+    }
+
+    public static void getCommentFromHotDeal(String data) {
+        Pattern patt = null;
+        Matcher match = null;
+        if (!data.isEmpty()) {
+            String regex = "<li\\s+class=\"post-comment\".*?>"
+                        + ".*?<div\\s+class=\"box-question-top\">"
+                        + ".*?</div>"
+                        + ".*?<div\\s+class=\"box-question-mid\">"
+                            + ".*?<div\\s+class=\"icon_merchant\">"
+                                + ".*?<img\\s+src=(\"([^\"]*\")|'[^']*'|([^'\">\\s]+)).*?/>"
+                            + ".*?</div>"
+                            + ".*?<div\\s+class=\"text\">"
+                                + "<p\\s+class=\"p5b\">"
+                                    + ".*?<img\\s+src=\"/skins/hotdeal/customer/images/icons/star_full.gif\".*?/>"
+                                    + ".*?<img\\s+src=\"/skins/hotdeal/customer/images/icons/star_full.gif\".*?/>"
+                                    + ".*?<img\\s+src=\"/skins/hotdeal/customer/images/icons/star_full.gif\".*?/>"
+                                    + ".*?<img\\s+src=\"/skins/hotdeal/customer/images/icons/star_full.gif\".*?/>"
+                                    + ".*?<img\\s+src=\"/skins/hotdeal/customer/images/icons/star_full.gif\".*?/>"
+                                + ".*?</p>"
+                                + "<span\\s+class=\"name_1\".*?>"
+                                    + "(.*?)"   // Name
+                                + "</span>"
+                                + "<span\\s+class=\"day-times\".*?>"
+                                    + "(.*?)"   // Commit time
+                                + "</span>"
+                                + "<div\\s+class=\"text\">"
+                                    + "(.*?)"   // Content
+                                + "</div>"
+                            + ".*?</div>"
+                            + "<a\\s+class=\"bt_note drop_comment\".*?>.*?</a>"
+                            + "<div\\s+class=\"cb\".*?>.*?</div>"
+                            
+                        + ".*?</div>"
+                    + ".*?</li>";
+        }
+        System.out.println(getHtmlData("http://www.hotdeal.vn/ho-chi-minh/banh-kem-y-nelly-pinky-19942.html"));
+    }
 }
