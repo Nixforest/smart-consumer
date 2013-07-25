@@ -23,7 +23,7 @@ public final class GlobalVariable {
 	 * List deals link.
 	 */
 	public static final String GET_LIST_DEALS =
-			"/getListDeals.app?limit=";
+			"/getListDeal.app?limit=";
 	/**
 	 * Number of deals on a load time.
 	 */

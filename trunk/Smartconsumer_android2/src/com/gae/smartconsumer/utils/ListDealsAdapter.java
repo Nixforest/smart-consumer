@@ -9,25 +9,28 @@ package com.gae.smartconsumer.utils;
 import java.util.ArrayList;
 
 import com.gae.smartconsumer.R;
+import com.gae.smartconsumer.activity.ViewDealActivity;
 import com.gae.smartconsumer.model.Deal;
 
 import android.content.Context;
-import android.view.LayoutInflater;
+import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
+import android.view.View.OnClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * Adapter for list deals items.
  * @author NguyenPT
  *
  */
-public class ListDealsAdapter extends BaseAdapter {
+public class ListDealsAdapter extends ArrayAdapter<Deal> {
 	/**
-	 * Titles array.
+	 * Deals array.
 	 */
 	private ArrayList<Deal> mListDeals;
 	/**
@@ -50,38 +53,10 @@ public class ListDealsAdapter extends BaseAdapter {
 	public ListDealsAdapter(Context context,
 			ArrayList<Deal> listDeals,
 			int resourceId) {
+		super(context, resourceId, listDeals);
 		this.mContext = context;
 		this.mListDeals = listDeals;
 		this.mResourceId = resourceId;
-	}
-	/**
-	 * Get count of items.
-	 * @return Count of items
-	 */
-	@Override
-	public int getCount() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-	/**
-	 * Get item in a position.
-	 * @param position position of item
-	 * @return Object at position
-	 */
-	@Override
-	public Object getItem(int position) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	/**
-	 * Get item id.
-	 * @param arg0 id
-	 * @return Item id
-	 */
-	@Override
-	public long getItemId(int arg0) {
-		// TODO Auto-generated method stub
-		return 0;
 	}
 	/**
 	 * Get view adapter.
@@ -92,38 +67,55 @@ public class ListDealsAdapter extends BaseAdapter {
 	 */
 	@Override
 	public View getView(int position, View convertView, ViewGroup arg2) {
-		DealItemHolder viewHolder = null;
+		// Create deal item holder
+		//DealItemHolder viewHolder = null;
+		View dealView = convertView;
+		if (dealView == null) {
+			dealView = new DealItemLayout(mContext);
+		}
+		// Get Current deal
 		final Deal deal = this.mListDeals.get(position);
-		if (convertView == null) {
-			convertView = LayoutInflater.from(mContext).inflate(com.gae.smartconsumer.R.layout.activity_listdeals, null);
-			viewHolder = new DealItemHolder();
-			viewHolder.mTxtVTitle = (TextView) convertView.findViewById(com.gae.smartconsumer.R.id.title_listdeal);
-			viewHolder.mImgVoucher = (ImageView) convertView.findViewById(R.id.isvoucherimage_listdeal);
-			viewHolder.mTxtVVoucherTitle = (TextView) convertView.findViewById(R.id.isvouchertitle_listdeal);
-			viewHolder.mImgMain = (ImageView) convertView.findViewById(R.id.image_listdeal);
-			viewHolder.mTxtVDescription = (TextView) convertView.findViewById(R.id.descripttion_listdeal);
-			viewHolder.mTxtVPrice = (TextView) convertView.findViewById(R.id.price_listdeal);
-			viewHolder.mTxtVBasicPrice = (TextView) convertView.findViewById(R.id.basicprice_listdeal);
-			viewHolder.mBtnView = (Button) convertView.findViewById(R.id.btnview_listdeal);
-			
-			convertView.setTag(viewHolder);
-		} else {
-			viewHolder = (DealItemHolder) convertView.getTag();
+		if (deal != null) {
+			TextView txtTitle = ((DealItemLayout)dealView).mTxtVTitle;
+			ImageView imgVoucher = ((DealItemLayout)dealView).mImgVoucher;
+			TextView txtVoucherTitle = ((DealItemLayout)dealView).mTxtVVoucherTitle;
+			ImageView img = ((DealItemLayout)dealView).mImgMain;
+			TextView txtDescription = ((DealItemLayout)dealView).mTxtVDescription;
+			TextView txtPrice = ((DealItemLayout)dealView).mTxtVPrice;
+			TextView txtBasicPrice = ((DealItemLayout)dealView).mTxtVBasicPrice;
+			//Button btnView = ((DealItemLayout)dealView).mBtnView;
+			dealView.findViewById(R.id.btnview_listdeal).setOnClickListener(new OnClickListener() {
+                
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(mContext, "View map", Toast.LENGTH_SHORT).show();
+                }
+            });
+			dealView.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					//Toast.makeText(mContext, "View Deal", Toast.LENGTH_SHORT).show();
+					Intent intent = new Intent(mContext, ViewDealActivity.class);
+					intent.putExtra("link", deal.getLink());
+					mContext.startActivity(intent);
+				}
+			});
+			txtTitle.setText(deal.getTitle());
+			if (deal.isVoucher()) {
+				imgVoucher.setImageResource(R.drawable.isvoucher_icon1);
+				txtVoucherTitle.setText(GlobalVariable.VOUCHER);
+			} else {
+				imgVoucher.setImageResource(R.drawable.isvoucher_icon);
+				txtVoucherTitle.setText(GlobalVariable.PRODUCT);
+			}
+			new LoadImagesTask(img).execute(deal.getImageLink());
+			//convertView.setTag(viewHolder);
+			txtDescription.setText(deal.getDescription());
+			txtPrice.setText(GlobalVariable.PRICE + String.valueOf(deal.getPrice()) + GlobalVariable.UNIT);
+			txtBasicPrice.setText(GlobalVariable.PRICE + String.valueOf(deal.getBasicPrice()) + GlobalVariable.UNIT);
 		}
-		// Set value
-		viewHolder.mTxtVTitle.setText(deal.getTitle());
-		if (deal.isVoucher()) {
-			viewHolder.mImgVoucher.setImageResource(R.drawable.isvoucher_icon1);
-			viewHolder.mTxtVVoucherTitle.setText(GlobalVariable.VOUCHER);
-		} else {
-			viewHolder.mImgVoucher.setImageResource(R.drawable.isvoucher_icon);
-			viewHolder.mTxtVVoucherTitle.setText(GlobalVariable.PRODUCT);
-		}
-		new LoadImagesTask(viewHolder.mImgMain).execute(deal.getImageLink());
-		viewHolder.mTxtVDescription.setText(deal.getDescription());
-		viewHolder.mTxtVPrice.setText(GlobalVariable.PRICE + String.valueOf(deal.getPrice()) + GlobalVariable.UNIT);
-		viewHolder.mTxtVBasicPrice.setText(GlobalVariable.PRICE + String.valueOf(deal.getBasicPrice()) + GlobalVariable.UNIT);
-		return convertView;
+		return dealView;
 	}
 	/**
 	 * Class hold deal item content.

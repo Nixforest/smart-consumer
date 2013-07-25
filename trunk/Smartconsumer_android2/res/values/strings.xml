@@ -4,6 +4,8 @@
     <string name="app_name">Smart Consumer</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
-    <string name="btnview_listdeal">Xem</string>
+    <string name="btnview_listdeal">Xem danh sách Deal</string>
+    <string name="btnview_map">Xem Bản đồ</string>
+    <string name="btnview_about">Giới thiệu</string>
 
 </resources>
