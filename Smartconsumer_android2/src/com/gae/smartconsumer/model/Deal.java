@@ -1,8 +1,16 @@
+/**
+ * SmartConsumer_Fsoft
+ * com.gae.smartconsumer.model
+ * Jul 13, 2013
+ * NguyenPT
+ */
 package com.gae.smartconsumer.model;
 
-
-
-
+/**
+ * Class model of Deal object.
+ * @author NguyenPT
+ *
+ */
 public class Deal {
     private Long id;
     /** Title of deal. */
@@ -55,9 +63,9 @@ public class Deal {
         this.imageLink = imageLink;
         this.price = price;
         this.basicPrice = basicPrice;
-        this.unitPrice = unitPrice;
-        this.save = save;
-        this.numberBuyer = numberBuyer;
+        this.setUnitPrice(unitPrice);
+        this.setSave(save);
+        this.setNumberBuyer(numberBuyer);
         this.setEndTime(endTime);
         this.isVoucher = isVoucher;
         this.setCategoryId(categoryId);
@@ -207,6 +215,48 @@ public class Deal {
 	 */
 	public void setCategoryId(Long categoryId) {
 		this.categoryId = categoryId;
+	}
+
+	/**
+	 * @return the unitPrice
+	 */
+	public String getUnitPrice() {
+		return unitPrice;
+	}
+
+	/**
+	 * @param unitPrice the unitPrice to set
+	 */
+	public void setUnitPrice(String unitPrice) {
+		this.unitPrice = unitPrice;
+	}
+
+	/**
+	 * @return the save
+	 */
+	public double getSave() {
+		return save;
+	}
+
+	/**
+	 * @param save the save to set
+	 */
+	public void setSave(double save) {
+		this.save = save;
+	}
+
+	/**
+	 * @return the numberBuyer
+	 */
+	public int getNumberBuyer() {
+		return numberBuyer;
+	}
+
+	/**
+	 * @param numberBuyer the numberBuyer to set
+	 */
+	public void setNumberBuyer(int numberBuyer) {
+		this.numberBuyer = numberBuyer;
 	}
     
 }

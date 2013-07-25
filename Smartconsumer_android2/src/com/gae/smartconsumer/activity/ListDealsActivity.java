@@ -18,7 +18,6 @@ import com.gae.smartconsumer.utils.GlobalVariable;
 import com.gae.smartconsumer.utils.JSONParser;
 import com.gae.smartconsumer.utils.ListDealsAdapter;
 
-import android.R;
 import android.app.Activity;
 import android.os.Bundle;
 import android.widget.ListView;
@@ -74,7 +73,9 @@ public class ListDealsActivity extends Activity {
 			if (jsonArr.length() > 0) {
 				for (int i = 0; i < jsonArr.length(); i++) {
 					JSONObject obj = jsonArr.getJSONObject(i);
+					@SuppressWarnings("deprecation")
 					Date date = new Date(obj.getString("endTime"));
+					
 					Deal deal = new Deal(obj.getLong("id"),
 							obj.getString("title"),
 							obj.getString("description"),
@@ -92,6 +93,8 @@ public class ListDealsActivity extends Activity {
 				}
 			}
 		} catch (JSONException ex) {
+			ex.printStackTrace();
+		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 		return arrDeal;

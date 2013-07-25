@@ -15,7 +15,8 @@
             android:layout_height="wrap_content"
             android:textColor="@android:color/black"
             android:textStyle="bold"
-            android:textSize="18dp" />    
+            android:textSize="18sp"
+            android:textIsSelectable="true" />    
     </LinearLayout>
     <LinearLayout 
         android:layout_width="fill_parent"
@@ -31,7 +32,8 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:textColor="@android:color/holo_red_light"
-            android:textSize="10dp" />    
+            android:textSize="12sp"
+            android:textIsSelectable="true" />    
     </LinearLayout>
     <LinearLayout 
         android:layout_width="fill_parent"
@@ -45,7 +47,8 @@
            android:id="@+id/descripttion_listdeal"
            android:layout_width="fill_parent"
            android:layout_height="wrap_content"
-           android:textColor="@android:color/black" />
+           android:textColor="@android:color/black"
+            android:textIsSelectable="true" />
     </LinearLayout>
     <LinearLayout
         android:layout_width="fill_parent"
@@ -59,12 +62,14 @@
               android:id="@+id/price_listdeal"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
-              android:textColor="@android:color/holo_orange_light" />
+              android:textColor="@android:color/holo_orange_light"
+            android:textIsSelectable="true" />
           <TextView 
               android:id="@+id/basicprice_listdeal"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
-              android:textColor="@android:color/holo_orange_light" />
+              android:textColor="@android:color/holo_orange_light"
+            android:textIsSelectable="true" />
         </LinearLayout>
         <Button 
             android:id="@+id/btnview_listdeal"
