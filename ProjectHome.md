@@ -1,0 +1,1 @@
+A system with a Website for deal and an Android Application for address of deal.
